@@ -1,0 +1,90 @@
+.garis:hover {
+    transform: translateY(5px);
+    transition-duration: 0.5s;
+    cursor: pointer;
+    border-top: 3px solid red;
+    border-bottom: 0px;
+}
+
+.garis {
+    border-bottom: 2px solid red;
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.jagoan {
+    cursor: grab;
+}
+
+body {
+    background-color: white;
+    font-size: 12px;
+}
+
+span {
+    font-size: 12px;
+    padding-top: 12px;
+}
+
+#info {
+    font-weight: bold;
+    font-size: 12px;
+    padding: 5px;
+    border: 1px solid lightgrey;
+    border-radius: 10px;
+    background-color: lightgreen;
+}
+
+a {
+    font-size: 12px;
+}
+
+#search,
+#search:active {
+    border-right: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: 0px;
+    width: 80%;
+}
+
+.search-icon {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    color: grey;
+    border-left: 1px solid lightgrey;
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+}
+
+.search-box {
+    width: calc(100% - 200px);
+    height: 300px;
+    border: 1px solid lightgrey;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    border-radius: 10px;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.category-box {
+    width: calc(50%);
+    height: 300px;
+    border: 1px solid lightgrey;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    border-radius: 10px;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
