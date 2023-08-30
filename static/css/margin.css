@@ -64,9 +64,12 @@ a {
 }
 
 .search-box {
-    width: calc(100% - 200px);
+    width: 400px;
     height: 300px;
-    border: 1px solid lightgrey;
+    max-width: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border: 1px solid red;
     box-shadow: 2px 2px solid lightgrey;
     position: absolute;
     border-radius: 10px;
@@ -77,9 +80,13 @@ a {
 }
 
 .category-box {
-    width: calc(50%);
-    height: 300px;
-    border: 1px solid lightgrey;
+    width: 50%;
+    max-width: 50%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 70%;
+    max-height: 70%;
+    border: 1px solid red;
     box-shadow: 2px 2px solid lightgrey;
     position: absolute;
     border-radius: 10px;

@@ -1,6 +1,7 @@
-from django.urls import path, re_path, include
+from django.urls import path
 from administrasi.views import dashboard
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
+
 ]
