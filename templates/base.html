@@ -15,7 +15,7 @@
 
 <body>
     {% csrf_token %}
-    <div class="container">
+    <div class="container fixed-top bg-white">
         <div class="p-2 border-bottom border-danger m-2">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 jagoan  d-flex align-items-center" title="jagoanhelm.com">
@@ -33,10 +33,42 @@
                                 <div>{% lorem 1 %}</div>
                             </div>
                         </div>
-                        <div class="my-3 garis"><i class="fa fa-cart-arrow-down mx-2"></i>Shopping Cart</div>
-                        <div class="my-3 garis"><i class="fa fa-heartbeat mx-2"></i>Wishlist</div>
-                        <div class="my-3 garis"><i class="fa fa-bell-o mx-2"></i>Notification</div>
-                        <div class="my-3 garis"><i class="fa fa-user-circle mx-2"></i>Account</div>
+                        <div class="my-3">
+                            <div class="garis" onclick="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>Shopping Cart</div>                        
+                            <div class="shoppingcart-box" onmouseleave="hide_shoppingcart()">
+                                <div><strong>ITEM Shopping Chart1</strong></div>
+                                <div>{% lorem 1 %}</div>
+                                <div><strong>ITEM Shopping Chart2</strong></div>
+                                <div>{% lorem 1 %}</div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <div class="garis" onclick="show_wishlist()"><i class="fa fa-heartbeat mx-2"></i>Wishlist</div>
+                            <div class="wishlist-box" onmouseleave="hide_wishlist()">
+                                <div><strong>ITEM Wishlist1</strong></div>
+                                <div>{% lorem 1 %}</div>
+                                <div><strong>ITEM Wishlist2</strong></div>
+                                <div>{% lorem 1 %}</div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <div class="garis" onclick="show_notification()"><i class="fa fa-bell-o mx-2"></i>Notification</div>
+                            <div class="notification-box" onmouseleave="hide_notification()">
+                                <div><strong>My Notification1</strong></div>
+                                <div>{% lorem 1 %}</div>
+                                <div><strong>My Notification2</strong></div>
+                                <div>{% lorem 1 %}</div>
+                            </div>
+                        </div>
+                        <div class="my-3">
+                            <div class="garis" onclick="show_account()"><i class="fa fa-user-circle mx-2"></i>Account</div>
+                            <div class="account-box" onmouseleave="hide_account()">
+                                <div><strong>My Account Info1</strong></div>
+                                <div>{% lorem 1 %}</div>
+                                <div><strong>My Account Info2</strong></div>
+                                <div>{% lorem 1 %}</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="d-flex d-sm-flex d-md-flex d-lg-none d-xl-none d-xxl-none justify-content-end">
                         <button type="button" class="btn btn-default btn-lg">
@@ -67,7 +99,14 @@
                 <div class="text-center w-100" id="info">jagoanhelm.com pusatnya helm!</div>
             </div>
         </div>
-        <h1>Hallo</h1>
+        <hr class="text-white">
+    </div>
+    <div class="container">
+        {% block contents%}{% endblock%}
+        {% lorem 10 %}
+    </div>
+    <div class="footer">
+        Footer Men
     </div>
     <script>
         let csrfmiddlewaretokennya = $("input[name=csrfmiddlewaretoken]").val();
@@ -109,7 +148,7 @@
                 success: function(data) {
                     $("#usual_search").empty();
                     data.keyword.forEach(function(info) {
-                        htmlnya = "<a href='#' id='keyword_"+ info.keyword +"' class='mx-2'>"+ info.keyword+"</a>";
+                        htmlnya = "<a href='#' id='keyword_"+ info.keyword +"' class='search-frequent'>"+ info.keyword+"</a>";
                         $("#usual_search").append(htmlnya);
                         $("#keyword_" + info.keyword).click(function() {
                             $("#search").val(info.keyword);
@@ -122,11 +161,65 @@
         }
 
         function show_category() {
-            $(".category-box").slideDown("slow");
+            $(".category-box").slideToggle("slow");
+            $(".shoppingcart-box").slideUp();
+            $(".wishlist-box").slideUp();
+            $(".notification-box").slideUp();
+            $(".account-box").slideUp();
+        }
+
+        function show_shoppingcart() {
+            $(".shoppingcart-box").slideToggle("slow");
+            $(".wishlist-box").slideUp();
+            $(".notification-box").slideUp();
+            $(".account-box").slideUp();
+            $(".category-box").slideUp();
+        }
+
+        function hide_shoppingcart() {
+            $(".shoppingcart-box").slideUp("slow");
         }
 
         function hide_category() {
             $(".category-box").slideUp("slow");
+        }
+
+        function show_wishlist() {
+            $(".wishlist-box").slideToggle("slow");
+            $(".category-box").slideUp();
+            $(".shoppingcart-box").slideUp();
+            $(".notification-box").slideUp();
+            $(".account-box").slideUp();
+        }
+
+        function hide_wishlist() {
+            $(".wishlist-box").slideUp("slow");
+        }
+
+        function show_notification() {
+            $(".notification-box").slideToggle("slow");
+            $(".category-box").slideUp();
+            $(".shoppingcart-box").slideUp();
+            $(".wishlist-box").slideUp();
+            $(".account-box").slideUp();
+        }
+
+        function hide_notification() {
+            $(".notification-box").slideUp("slow");
+        }
+
+    
+
+        function show_account() {
+            $(".account-box").slideToggle("slow");
+            $(".category-box").slideUp();
+            $(".shoppingcart-box").slideUp();
+            $(".wishlist-box").slideUp();
+            $(".notification-box").slideUp();
+        }
+
+        function hide_account() {
+            $(".account-box").slideUp("slow");
         }
     </script>
 </body>
