@@ -2,9 +2,9 @@
     transform: translateY(2px);
     transition-duration: 0.2s;
     cursor: pointer;
-    border-top: 3px solid red;
+    border-top: 3px solid blue;
     border-bottom: 0px;
-    color: red;
+    color: blue;
 }
 
 .garis {
@@ -33,7 +33,7 @@ span {
     padding: 5px;
     border: 1px solid lightgrey;
     border-radius: 10px;
-    background-color: lightgreen;
+    background-color: lightblue;
 }
 
 a {
@@ -177,4 +177,13 @@ a {
     border: 1px solid grey;
     text-decoration: none;
     color: red
+}
+
+.footer {
+    font-size: 12px;
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    background-color: transparent;
+    border-radius: 30px;
 }

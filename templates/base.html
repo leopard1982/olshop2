@@ -101,12 +101,32 @@
         </div>
         <hr class="text-white">
     </div>
-    <div class="container" onscroll="myFunction()">
+    <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-top:150px;">
         {% block contents%}{% endblock%}
         {% lorem 20 %}{% lorem 20 %}{% lorem 20 %}
     </div>
-    <div class="footer">
-        Footer Men
+    <div class="container" style="margin-bottom:50px">
+        <div class="d-flex row justify-content-center">
+            <div class="col-4 p-2" style="border-right:1px solid grey;">
+                <strong>Our Store:</strong><br>
+                Ruko Arcadia Blok BD No. 120<br>
+                Jl. Pulo Sirih Utama, RT.004/RW.015<br>
+                Jaka Setia, Bekasi Selatan, Kota Bekasi<br>
+                Jawa Barat 17148<br><br>
+                <iframe class="w-100" style="height:200px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0085656979195!2d106.97028017380322!3d-6.262600993725997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698db00b8eacf9%3A0x7ee3fad755f1e152!2sJagoan%20Helm!5e0!3m2!1sid!2sid!4v1693393950234!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="col-8">
+    
+            </div>
+        </div>
+    
+    </div>
+    <div class="footer container fixed-bottom w-50 " id="the_footer">
+        <div class="d-flex justify-content-center">
+            <div class="rounded-pill shadow"><img src="{% static 'img/jagoanhelm.png'%}" style="height:50px;weight:60px" alt=""></div>
+            <h3 class="text-danger fw-bold my-1 mx-2"> jagoanhelm.com</h3>
+        </div>
+        
     </div>
     <script>
         let csrfmiddlewaretokennya = $("input[name=csrfmiddlewaretoken]").val();
@@ -131,8 +151,10 @@
         function cek_scroll() {
             if($(window).scrollTop()>last_position) {
                 $("#the_header").slideUp("fast");
+                $("#the_footer").slideDown("fast");
             } else {
                 $("#the_header").slideDown("fast");
+                $("#the_footer").slideUp("fast");
             }
             last_position=$(window).scrollTop();
         }
