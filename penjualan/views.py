@@ -23,7 +23,7 @@ def set_search_keyword(request):
             if(keywordnya[len(keywordnya) - 1] ==" " and keywordnya[len(keywordnya) -2]==" "):
                 pass
             else:
-                keywordnya = request.data['keyword'].split(' ')
+                keywordnya = request.data['keyword'].lower().split(' ')
                 jumlah=len(keywordnya)
                 
                 if(jumlah>1):

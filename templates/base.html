@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
-<body>
+<body onscroll="cek_scroll()">
     {% csrf_token %}
-    <div class="container fixed-top bg-white">
+    <div class="container fixed-top bg-white" id="the_header"  style="height:150px;border:2px solid white">
         <div class="p-2 border-bottom border-danger m-2">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 jagoan  d-flex align-items-center" title="jagoanhelm.com">
@@ -101,15 +101,16 @@
         </div>
         <hr class="text-white">
     </div>
-    <div class="container">
+    <div class="container" onscroll="myFunction()">
         {% block contents%}{% endblock%}
-        {% lorem 10 %}
+        {% lorem 20 %}{% lorem 20 %}{% lorem 20 %}
     </div>
     <div class="footer">
         Footer Men
     </div>
     <script>
         let csrfmiddlewaretokennya = $("input[name=csrfmiddlewaretoken]").val();
+        let last_position=0;
         $(document).ready(function() {
             let infonya =[];
             let i=0;
@@ -124,7 +125,18 @@
                 }
             },5000);
             searchkeyword();
+           
         });
+
+        function cek_scroll() {
+            if($(window).scrollTop()>last_position) {
+                $("#the_header").slideUp("fast");
+            } else {
+                $("#the_header").slideDown("fast");
+            }
+            last_position=$(window).scrollTop();
+        }
+        
 
         function tampilsearch() {
             $(".search-box").slideDown("slow");
