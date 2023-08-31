@@ -41,6 +41,8 @@ class masterBarang(models.Model):
     barang_ongkir_aktif = models.BooleanField(default=False,verbose_name="Gratis Ongkir diaktifkan?")
     barang_kategori = models.ForeignKey(kategoriBarang,on_delete=models.RESTRICT,verbose_name="Kategori Barang")
     barang_etalase = models.ForeignKey(etalase, on_delete=models.RESTRICT,verbose_name="Etalase Barang")
+    barang_terjual = models.PositiveIntegerField(default=0,verbose_name="Barang Jumlah Terjual")
+    barang_dicari = models.PositiveIntegerField(default=0,verbose_name="Jumlah HIT")
 
     class Meta:
         ordering = ['barang_nama','barang_sku']

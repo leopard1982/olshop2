@@ -12,7 +12,7 @@ from django.db.models import F
 
 # Create your views here.
 def dashboard(request):
-    return render(request,'base.html')
+    return render(request,'penjualan/dashboard.html')
 
 
 @api_view(['POST'])

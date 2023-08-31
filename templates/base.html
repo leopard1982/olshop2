@@ -74,7 +74,7 @@
     <div class="container-fluid fixed-top d-none" id="mypromo">
         <img src="{% static 'img/jagoanhelm.png'%}" alt="">
     </div>
-    <div class="container fixed-top bg-white" id="the_header"  style="height:150px;border:2px solid white">
+    <div class="container fixed-top bg-white" id="the_header"  style="height:150px;">
         <div class="p-2 border-bottom border-danger m-2">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 jagoan  d-flex align-items-center" title="jagoanhelm.com">
@@ -84,7 +84,10 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-8 col-xl-9 col-xxl-9">
                     <div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">
                         <div class="my-3">
-                            <div class=" garis" onclick="modal_kategori_show()" ><i class="fa fa-filter mx-2"></i>Category</div>
+                            <div class=" garis" onclick="show_category()" ><i class="fa fa-filter mx-2"></i>Category</div>
+                            <div class="category-box " onmouseleave="hide_category()">
+                                hallo
+                            </div>
                         </div>
                         <div class="my-3">
                             <div class="garis" onclick="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>Shopping Cart</div>                        
@@ -152,11 +155,10 @@
                 <div class="text-center w-100" id="info">jagoanhelm.com pusatnya helm!</div>
             </div>
         </div>
-        <hr class="text-white">
+        <div class="my-2"></div>
     </div>
     <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-top:150px;">
         {% block contents%}{% endblock%}
-        {% lorem 20 %}{% lorem 20 %}{% lorem 20 %}
     </div>
     <div class="container" style="margin-bottom:50px">
         <div class="d-flex row justify-content-center">
@@ -200,6 +202,11 @@
     <script>
         let csrfmiddlewaretokennya = $("input[name=csrfmiddlewaretoken]").val();
         let last_position=0;
+
+        function set_kategori_page(kategori) {
+            window.location.href = "/?cat=" + kategori;
+        }
+
         $(document).ready(function() {
             let infonya =[];
             let i=0;
@@ -264,6 +271,28 @@
         }
 
         function show_category() {
+            $(".category-box").empty();
+            let hasil = "<div title='Tampilkan Semua Barang' class='box-isi-kategori' id='kat_com_semua'><img src='/static/img/all.jpeg' class='w-100 rounded' style='width:150px;height:150px'><div class='position-absolute d-flex justify-content-center  p-1 bg-secondary rounded fw-bold text-white' style='width:170px'>Semua Kategori</div></div>";
+            $(".category-box").append(hasil);
+            $("#kat_com_semua").click(function() {
+                set_kategori_page('');
+            });
+            $.ajax({
+                type: "POST",
+                url: "/api/get/kategori/",
+                data: {
+                    'csrfmiddlewaretoken':csrfmiddlewaretokennya
+                },
+                success: function(data) {
+                    data.forEach(function(mydata) {
+                        hasil = "<div title='"+ mydata.barang_kategori +"'' class='box-isi-kategori' id='kat_comp_" + mydata.barang_kategori +"'><img src='" + mydata.barang_kategori_gambar +"' class='w-100 rounded' style='width:150px;height:150px'><div class='position-absolute d-flex justify-content-center  p-1 bg-secondary rounded fw-bold text-white' style='width:170px'>" + mydata.barang_kategori+"</div></div>";
+                        $(".category-box").append(hasil);
+                        $("#kat_comp_" + mydata.barang_kategori).click(function() {
+                            set_kategori_page(mydata.barang_kategori);
+                        });
+                    });
+                }
+            });
             $(".category-box").slideToggle("slow");
             $(".shoppingcart-box").slideUp();
             $(".wishlist-box").slideUp();
@@ -355,9 +384,7 @@
             $("#modalkategori").modal("show");
         }
 
-        function set_kategori_page(kategori) {
-            window.location.href = "/?cat=" + kategori;
-        }
+        
 
     </script>
 </body>
