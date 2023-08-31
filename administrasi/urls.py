@@ -3,5 +3,4 @@ from administrasi.views import dashboard
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
-
 ]

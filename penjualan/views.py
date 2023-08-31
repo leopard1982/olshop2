@@ -1,8 +1,8 @@
 from django.shortcuts import render
 
-from administrasi.serializersnya import serialSearchKeyword
+from administrasi.serializersnya import serialSearchKeyword, serialKategori
 
-from administrasi.models import searchKeyword
+from administrasi.models import searchKeyword, kategoriBarang
 
 from rest_framework.decorators import api_view
 
@@ -45,3 +45,9 @@ def set_search_keyword(request):
         'keyword': serialnya
     }
     return Response(context)
+
+@api_view(['POST'])
+def get_kategori(request):
+    kategori = kategoriBarang.objects.all()
+    serial = serialKategori(kategori,many=True)
+    return Response(serial.data)

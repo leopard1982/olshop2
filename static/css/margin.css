@@ -187,3 +187,97 @@ a {
     background-color: transparent;
     border-radius: 30px;
 }
+
+.wa-admin:hover {
+    transition-duration: 0.5s;
+    transform: scale(1.1, 1.1);
+    background-color: lightgreen;
+
+}
+
+.sample:hover {
+    transform: scale(2, 2);
+    transition-duration: 1s;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: white;
+
+}
+
+
+
+@keyframes goyang-header-promo {
+    from {
+        transform: rotate(-30deg);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: rotate(30deg);
+        transition-duration: 1s;
+    }
+}
+
+.promo {
+    animation-duration: 2s;
+    animation-name: goyang-header-promo;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.promo:hover,
+.promo2:hover {
+    cursor: pointer;
+}
+
+@keyframes perbesar {
+    from {
+        transform: scale(1, 1);
+        transition-duration: 0.5s;
+    }
+
+    to {
+        transform: scale(1.05, 1.05);
+        transition-duration: 0.5s;
+    }
+}
+
+.promo2 {
+    animation-duration: 2s;
+    animation-name: perbesar;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.box-isi-kategori {
+    width: 180px;
+    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 180px;
+    max-width: 180px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 20px;
+    background-color: white;
+    display: inline-flex;
+}
+
+.box-isi-kategori:hover {
+    transform: scale(1.2, 1.2);
+    transition-duration: 0.5s;
+    cursor: pointer;
+}
+
+.box-bingkai-kategori {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 500px;
+    min-height: 500px;
+    max-height: 500px;
+    justify-content: space-between;
+    overflow: auto;
+
+}
