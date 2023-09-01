@@ -65,12 +65,6 @@
         </div>
     </div>
 
-    <div class="container-fluid fixed-top">
-        <img src="{% static 'img/promo-header.jpeg' %}"  class="promo" style="width:70px;height:40px;margin-top:100px" alt="">  
-    </div>
-    <div class="container-fluid fixed-top">
-        <img src="{% static 'img/17an.jpg' %}" class="promo2" onmouseover="remove_dnone()" onclick="show_promo()"  style="width:70px;height:130px;margin-top:150px" alt="">
-    </div>
     <div class="container-fluid fixed-top d-none" id="mypromo">
         <img src="{% static 'img/jagoanhelm.png'%}" alt="">
     </div>
@@ -157,7 +151,7 @@
         </div>
         <div class="my-2"></div>
     </div>
-    <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-top:150px;">
+    <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-top:160px;">
         {% block contents%}{% endblock%}
     </div>
     <div class="container" style="margin-bottom:50px">
@@ -171,7 +165,7 @@
                 <iframe class="w-100" style="height:200px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0085656979195!2d106.97028017380322!3d-6.262600993725997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698db00b8eacf9%3A0x7ee3fad755f1e152!2sJagoan%20Helm!5e0!3m2!1sid!2sid!4v1693393950234!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="col-8">
-                <img src="{% static 'img/jagoanhelm.png'%}" class="w-25 promo" alt="">
+                
             </div>
         </div>
     
@@ -354,6 +348,7 @@
             $(".account-box").slideUp("slow");
         }
 
+        
         function show_promo() {
             $("#modalpromo").modal("show");
         }

@@ -2,27 +2,62 @@
 {% load static %}
 {% block contents%}
 
-<div style="background-color:whitesmoke;border-radius:5px">
-    <div class="box-sering-dicari-header">
+<div style="background-color:whitesmoke;border-radius:5px;margin-top:20px" >
+    <div class="box-sering-dicari-header d-flex align-items-center">
         <img src="{% static 'img/DILIHAT.png'%}" class="w-100 rounded"/>
+        <div class='position-absolute'>
+            <div class="panah-kanan rounded-circle px-2  text-white fw-bold d-flex justify-content-center align-items-center bg-secondary h1" style="padding-bottom:5px;margin-left:170px">&rarr;</div>
+        </div>
     </div>
-    <div class="position-absolute d-flex justify-content-evenly" style="margin-left:180px">
-        <div class="box-sering-dicari">
-            Hallo
-        </div>
-        <div class="box-sering-dicari">
-            Hallo
-        </div>
-        <div class="box-sering-dicari">
-            Hallo
-        </div>
-        <div class="box-sering-dicari">
-            Hallo
-        </div>
-        <div class="box-sering-dicari">
-            Hallo
-        </div>
+    <div class="position-absolute d-flex justify-content-evenly" style="margin-left:230px" id="box_sering_dicari_5">
+        
     </div>
 </div>
+
+<script>
+    function ubahKeUang(data) {
+        let x = data.toString();
+        let lebar = x.length-1;
+        let counter=1;
+        let lebar2 = lebar;
+        let uangku = "";
+        while(lebar>-1) {
+            uangku = x[lebar] + uangku;
+            if(counter==3 && lebar!=0) {
+                uangku = "." + uangku;
+                counter=1;
+            } else {
+                counter++;
+            }
+            lebar-=1;
+        }
+        return "Rp. " + uangku + ",00";
+    }
+    $(document).ready(function() {
+        $.ajax({
+            type: "POST",
+            url: 'api/get/barang/cari5/',
+            data: {
+                'csrfmiddlewaretoken': csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                data.result.forEach(function(mydata){
+                    console.log(mydata);
+                    
+                    tampilkan = "<div class='box-sering-dicari'>"+
+                        "<img src='"    + mydata.barang_foto1 + "' alt='' class='w-100 rounded myimg'><div style='font-size:10px;font-weight:bold;'><div class='position-absolute' style='margin-top:-20px'><span class='badge bg-danger mx-1' style='font-size:10px;'>NEW</span><span class='badge bg-success mx-1' style='font-size:10px'>FREE ONGKIR!</span></div>"+
+                        mydata.barang_nama.toUpperCase()+"</div><div style='font-size:12px;color:green'>Harga: <strong>" + ubahKeUang(mydata.barang_harga) + "</strong></div>" +
+                        "<div style='font-size:12px;color:blue;'>Lokasi: <strong>"+ mydata.barang_etalase.etalase_nama.toUpperCase()+"</strong></div>"+
+                        "<div><span class='badge bg-info' style='font-size:10px'>DISC 15%</span></div></div>";
+                    $("#box_sering_dicari_5").append(tampilkan);
+                })
+            }
+        });
+    });
+
+    function test() {
+        alert("hohoho");
+    }
+</script>
 
 {% endblock%}
