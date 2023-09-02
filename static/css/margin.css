@@ -140,18 +140,14 @@ a {
 }
 
 .panah-kiri:hover {
-    animation-name: panah-kiri-jalan;
-    animation-duration: 1s;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
+    transform: translateX(-10px);
+    transition-duration: 1s;
     cursor: pointer;
 }
 
 .panah-kanan:hover {
-    animation-name: panah-kanan-jalan;
-    animation-duration: 1s;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
+    transform: translateX(10px);
+    transition-duration: 1s;
     cursor: pointer;
 }
 
@@ -451,24 +447,7 @@ a {
 
 
 
-@keyframes kanan {
-    from {
-        transform: translateX(0px);
-        transition-duration: 1s;
-    }
 
-    to {
-        transform: translateX(5px);
-        transition-duration: 2s;
-    }
-}
-
-.panah-kanan {
-    animation-duration: 1s;
-    animation-name: kanan;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
 
 @keyframes bawah {
     from {
