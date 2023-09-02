@@ -14,13 +14,7 @@
 </head>
 
 <body onscroll="cek_scroll()">
-    <div class="container-fluid d-block justify-content-start fixed-top" style="width:80px;margin-left:-10px !important">
-        <div class="gambar-voucher-goyang1" style="margin-top:50px"><img src="{% static 'img/promo.png'%}" onclick="show_promo()" class="w-100"></div>
-        <div class="gambar-voucher-bawah" style="margin-top:40px;"><img src="{% static 'img/voucher_disc.png'%}" class="w-100"></div>
-        <div class="gambar-voucher-goyang2" style="margin-top:60px"><img src="{% static 'img/gratis_ongkir.png'%}" class="w-100"></div>
-        
-    </div>
-    
+       
     {% csrf_token %}
 
     <div class="modal" tabindex="-1" id="modalkategori">
@@ -81,15 +75,15 @@
                     <h3 class="text-danger fw-bold my-1 mx-2"> jagoanhelm.com</h3>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-8 col-xl-9 col-xxl-9">
-                    <div class="d-flex justify-content-evenly">
+                    <div class="d-flex justify-content-end">
                     <!--<div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">-->
-                        <div class="my-3">
+                        <div class="m-3">
                             <div class=" garis" onclick="show_category()" ><i class="fa fa-filter mx-2"></i>Category</div>
                             <div class="category-box " onmouseleave="hide_category()">
                                 hallo
                             </div>
                         </div>
-                        <div class="my-3">
+                        <div class="m-3">
                             <div class="garis" onclick="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>Shopping Cart</div>                        
                             <div class="shoppingcart-box" onmouseleave="hide_shoppingcart()">
                                 <div><strong>ITEM Shopping Chart1</strong></div>
@@ -98,7 +92,7 @@
                                 <div>{% lorem 1 %}</div>
                             </div>
                         </div>
-                        <div class="my-3">
+                        <div class="m-3">
                             <div class="garis" onclick="show_wishlist()"><i class="fa fa-heartbeat mx-2"></i>Wishlist</div>
                             <div class="wishlist-box" onmouseleave="hide_wishlist()">
                                 <div><strong>ITEM Wishlist1</strong></div>
@@ -107,7 +101,8 @@
                                 <div>{% lorem 1 %}</div>
                             </div>
                         </div>
-                        <div class="my-3">
+
+                        <div class="m-3">
                             <div class="garis" onclick="show_notification()"><i class="fa fa-bell-o mx-2"></i>Notification</div>
                             <div class="notification-box" onmouseleave="hide_notification()">
                                 <div><strong>My Notification1</strong></div>
@@ -116,7 +111,16 @@
                                 <div>{% lorem 1 %}</div>
                             </div>
                         </div>
-                        <div class="my-3">
+                        <div class="m-3">
+                            <div class="garis" onclick="show_promo_menu()"><i class="fa fa-handshake-o mx-2"></i> PROMO </div>
+                            <div class="notification-box" onmouseleave="hide_notification()">
+                                <div><strong>My Notification1</strong></div>
+                                <div>{% lorem 1 %}</div>
+                                <div><strong>My Notification2</strong></div>
+                                <div>{% lorem 1 %}</div>
+                            </div>
+                        </div>
+                        <div class="m-3">
                             <div class="garis" onclick="show_account()"><i class="fa fa-user-circle mx-2"></i>Account</div>
                             <div class="account-box" onmouseleave="hide_account()">
                                 <div><strong>My Account Info1</strong></div>
