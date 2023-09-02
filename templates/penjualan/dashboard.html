@@ -14,7 +14,18 @@
         
     </div>
 </div>
-<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:50px;margin-bottom:170px" >
+<div class="container d-flex justify-content-center align-items-center p-2 bg-danger rounded-pill text-center text-white fw-bold" style="margin-top:30px">
+    <div class="px-2 h5">PILIHAN ETALASE:</div> 
+    <div>
+        <select id="select_etalase" class="form-select" style="width:200px">
+            <option value="">--------</option>
+            {% for etalase in etalasenya %}
+            <option value="{{etalase.etalase_kode}}">{{etalase.etalase_nama}}</option>
+            {% endfor%}
+        </select>
+    </div>
+</div>
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-bottom:170px" >
     <div class="p-2 box-bawah" style="width:1120px">
         <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background:linear-gradient(to right,rgba(0,0,0,0.6),rgb(255,255,255),rgba(0,0,0,0.2)">
             <span class="text-start fw-bold" style="font-size:20px;margin-bottom:10px;margin-left:10px">BEST BUDGET PRODUCT</span>

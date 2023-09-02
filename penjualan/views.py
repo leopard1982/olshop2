@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from administrasi.serializersnya import serialSearchKeyword, serialKategori, serialMasterBarang
 
-from administrasi.models import searchKeyword, kategoriBarang, masterBarang
+from administrasi.models import searchKeyword, kategoriBarang, masterBarang, etalase
 
 from rest_framework.decorators import api_view
 
@@ -12,7 +12,8 @@ from django.db.models import F, Q
 
 # Create your views here.
 def dashboard(request):
-    return render(request,'penjualan/dashboard.html')
+    etalasenya = etalase.objects.all()
+    return render(request,'penjualan/dashboard.html',{'etalasenya':etalasenya})
 
 
 @api_view(['POST'])
