@@ -1,14 +1,15 @@
 .garis:hover {
-    transform: translateY(5px);
-    transition-duration: 0.5s;
+    transform: translateY(2px);
+    transition-duration: 0.2s;
     cursor: pointer;
-    border-top: 3px solid red;
+    border-top: 3px solid blue;
     border-bottom: 0px;
+    color: blue;
 }
 
 .garis {
     border-bottom: 2px solid red;
-    transition-duration: 0.5s;
+    transition-duration: 0.2s;
     cursor: pointer;
 }
 
@@ -32,7 +33,7 @@ span {
     padding: 5px;
     border: 1px solid lightgrey;
     border-radius: 10px;
-    background-color: lightgreen;
+    background-color: lightblue;
 }
 
 a {
@@ -41,9 +42,9 @@ a {
 
 #search,
 #search:active {
-    border-right: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
-    border-bottom: 1px solid lightgrey;
+    border-right: 1px solid grey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     border-left: 0px;
@@ -58,33 +59,293 @@ a {
     padding-top: 5px;
     padding-bottom: 5px;
     color: grey;
-    border-left: 1px solid lightgrey;
-    border-top: 1px solid lightgrey;
-    border-bottom: 1px solid lightgrey;
+    border-left: 1px solid grey;
+    border-top: 1px solid grey;
+    border-bottom: 1px solid grey;
 }
 
 .search-box {
-    width: calc(100% - 200px);
+    width: 400px;
     height: 300px;
-    border: 1px solid lightgrey;
-    box-shadow: 2px 2px solid lightgrey;
+    min-height: 300px;
+    max-height: 300px;
+    max-width: 400px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    border: 1px solid grey;
+    box-shadow: 2px 2px solid grey;
     position: absolute;
-    border-radius: 10px;
     background-color: white;
     display: none;
     padding: 10px;
     cursor: pointer;
 }
 
+.search-box-hasil {
+    width: 360px;
+    margin-left: 10px;
+    border-radius: 10px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 1px solid grey;
+    box-shadow: 2px 2px lightgrey;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
 .category-box {
-    width: calc(50%);
+    width: 500px;
+    max-width: 500px;
+    min-width: 500px;
+    overflow-x: hidden;
+    overflow-y: scroll;
     height: 300px;
-    border: 1px solid lightgrey;
+    min-height: 300px;
+    max-height: 300px;
+    border: 1px solid red;
     box-shadow: 2px 2px solid lightgrey;
     position: absolute;
-    border-radius: 10px;
     background-color: white;
     display: none;
     padding: 10px;
     cursor: pointer;
+}
+
+.shoppingcart-box {
+    width: 30%;
+    max-width: 30%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.wishlist-box {
+    width: 30%;
+    max-width: 30%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+.notification-box {
+    width: 30%;
+    max-width: 30%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.account-box {
+    width: 30%;
+    max-width: 30%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-left: -200px;
+}
+
+.search-frequent {
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-radius: 5px;
+    border: 1px solid grey;
+    text-decoration: none;
+    color: red
+}
+
+.footer {
+    font-size: 12px;
+    height: 50px;
+    min-height: 50px;
+    max-height: 50px;
+    background-color: transparent;
+    border-radius: 30px;
+}
+
+.wa-admin:hover {
+    transition-duration: 0.5s;
+    transform: scale(1.1, 1.1);
+    background-color: lightgreen;
+
+}
+
+.sample:hover {
+    transform: scale(2, 2);
+    transition-duration: 1s;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 10px;
+    background-color: white;
+
+}
+
+
+
+@keyframes goyang-header-promo {
+    from {
+        transform: rotate(-30deg);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: rotate(30deg);
+        transition-duration: 1s;
+    }
+}
+
+.promo {
+    animation-duration: 2s;
+    animation-name: goyang-header-promo;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.box-sering-dicari:hover,
+.promo:hover,
+.promo2:hover {
+    cursor: pointer;
+}
+
+@keyframes perbesar {
+    from {
+        transform: scale(1, 1);
+        transition-duration: 0.5s;
+    }
+
+    to {
+        transform: scale(1.05, 1.05);
+        transition-duration: 0.5s;
+    }
+}
+
+.promo2 {
+    animation-duration: 2s;
+    animation-name: perbesar;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.box-isi-kategori {
+    width: 180px;
+    height: 200px;
+    min-height: 200px;
+    max-height: 200px;
+    min-width: 180px;
+    max-width: 180px;
+    border-radius: 10px;
+    padding: 5px;
+    margin: 20px;
+    background-color: white;
+    display: inline-flex;
+}
+
+.box-bingkai-kategori {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    height: 500px;
+    min-height: 500px;
+    max-height: 500px;
+    justify-content: space-between;
+    overflow: auto;
+
+}
+
+.box-sering-dicari {
+    width: 170px;
+    min-width: 170px;
+    max-width: 170px;
+    height: 290px;
+    min-height: 290px;
+    max-height: 290px;
+    border-radius: 10px;
+    margin-top: -290px;
+    margin-bottom: 10px;
+    margin-right: 20px;
+    padding: 10px;
+    border: 2px solid grey;
+    background-color: white;
+}
+
+.box-sering-dicari:hover {
+    transform: scale(1.05, 1.05);
+    transition-duration: 0.5s;
+    cursor: pointer;
+    animation-name: kanan;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+.box-sering-dicari-header {
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+    height: 290px;
+    min-height: 290px;
+    max-height: 290px;
+    border: 1px solid grey;
+    border-radius: 20px;
+    box-shadow: 2px 2px lightgrey;
+}
+
+
+@keyframes kanan {
+    from {
+        transform: translateX(0px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateX(5px);
+        transition-duration: 2s;
+    }
+}
+
+.panah-kanan {
+    animation-duration: 1s;
+    animation-name: kanan;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
 }

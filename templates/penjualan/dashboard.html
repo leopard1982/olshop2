@@ -7,10 +7,70 @@
         <img src="{% static 'img/DILIHAT.png'%}" class="w-100 rounded"/>
         <div class='position-absolute'>
             <div class="panah-kanan rounded-circle px-2  text-white fw-bold d-flex justify-content-center align-items-center bg-secondary h1" style="padding-bottom:5px;margin-left:170px">&rarr;</div>
+            <div class="panah-kanan rounded-circle px-2  text-white fw-bold d-flex justify-content-center align-items-center bg-secondary h1" style="padding-bottom:5px;margin-left:170px;margin-top:100px">&rarr;</div>
         </div>
     </div>
     <div class="position-absolute d-flex justify-content-evenly" style="margin-left:230px" id="box_sering_dicari_5">
         
+    </div>
+</div>
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-bottom:20px" >
+    <div class="p-2 box-bawah" style="width:1120px">
+        <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:SILVER">
+            <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px">BUDGET PRODUCT</span>
+            <span class="text-end" style="margin-bottom:10px;margin-right:10px">KATEGORI: <span id="kat_budget" class="fw-bold">SEMUA</span></span>
+        </div>
+    </div>
+    <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>  
+    </div>
+    <div style="margin-top:320px;text-align:center;width:1120px;">
+        Halaman: 1 2 3 4 5 6 7 8
+    </div>
+</div>
+<hr/>
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-bottom:20px" >
+    <div class="p-2 box-bawah" style="width:1120px">
+        <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:gold">
+            <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px">PREMIUM PRODUCT</span>
+            <span class="text-end" style="margin-bottom:10px;margin-right:10px">KATEGORI: <span id="kat_premium" class="fw-bold">SEMUA</span></span>
+        </div>
+    </div>
+    <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>  
+    </div>
+    <div style="margin-top:320px;text-align:center;width:1120px;">
+        Halaman: 1 2 3 4 5 6 7 8
+    </div>
+</div>
+<hr/>
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-bottom:20px" >
+    <div class="p-2 box-bawah" style="width:1120px">
+        <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:lightgreen">
+            <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px">PROMO GAJIAN!</span>
+            <span class="text-end" style="margin-bottom:10px;margin-right:10px">KATEGORI: <span id="kat_gajian" class="fw-bold">SEMUA</span></span>
+        </div>
+    </div>
+    <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>
+        <div class="box-sering-dicari">test</div>  
+    </div>
+    <div style="margin-top:320px;text-align:center;width:1120px;">
+        Halaman: 1 2 3 4 5 6 7 8
     </div>
 </div>
 
@@ -34,29 +94,54 @@
         return "Rp. " + uangku + ",00";
     }
     $(document).ready(function() {
-        $.ajax({
-            type: "POST",
-            url: 'api/get/barang/cari5/',
-            data: {
-                'csrfmiddlewaretoken': csrfmiddlewaretokennya
-            },
-            success: function(data) {
-                data.result.forEach(function(mydata){
-                    console.log(mydata);
-                    
-                    tampilkan = "<div class='box-sering-dicari'>"+
-                        "<img src='"    + mydata.barang_foto1 + "' alt='' class='w-100 rounded myimg'><div style='font-size:10px;font-weight:bold;'><div class='position-absolute' style='margin-top:-20px'><span class='badge bg-danger mx-1' style='font-size:10px;'>NEW</span><span class='badge bg-success mx-1' style='font-size:10px'>FREE ONGKIR!</span></div>"+
-                        mydata.barang_nama.toUpperCase()+"</div><div style='font-size:12px;color:green'>Harga: <strong>" + ubahKeUang(mydata.barang_harga) + "</strong></div>" +
-                        "<div style='font-size:12px;color:blue;'>Lokasi: <strong>"+ mydata.barang_etalase.etalase_nama.toUpperCase()+"</strong></div>"+
-                        "<div><span class='badge bg-info' style='font-size:10px'>DISC 15%</span></div></div>";
-                    $("#box_sering_dicari_5").append(tampilkan);
-                })
-            }
-        });
+        isi_seringdicari();
     });
 
     function test() {
         alert("hohoho");
+    }
+
+    function new_produk() {
+        freq_search();
+        /* tampilkan hasil*/
+        
+        if($("#keyword").text().trim().length>0) {
+            $("#hasil_pencarian").empty();
+            $.ajax({
+                type: "POST",
+                url: '/api/get/search/',
+                data : {
+                    'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                    'keyword':  $("#keyword").text(),
+                    'kategori': kategori
+                },
+                success : function (data) {
+                    data.result.forEach(function (mydata){
+                        tampilan = "<div id='cari_" + mydata.barang_sku +"' class='search-box-hasil d-flex justify-content-start align-items-center'>" +
+                            "<img src='" + mydata.barang_foto1+"' style='margin-right:10px;width:50px;height:50px;border-radius:25px;margin-bottom:5px'>" +
+                            "<div style='font-size:12px;font-weight:bold;'>" + mydata.barang_nama.toUpperCase() +"</div></div>";
+                        $("#hasil_pencarian").append(tampilan);
+                        $("#cari_" + mydata.barang_sku).click(function() {
+                            $.ajax({
+                                type: "POST",
+                                url: '/api/get/search/hasil/',
+                                data: {
+                                    'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                                    'kode_sku':  mydata.barang_sku
+                                },
+                                success: function(data) {
+                                    console.log("pencarian di klik " + data);
+                                    isi_seringdicari();
+                                }
+                            });
+                        });
+                    });
+
+
+                }
+            });
+        }
+
     }
 </script>
 

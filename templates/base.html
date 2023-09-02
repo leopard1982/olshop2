@@ -14,6 +14,13 @@
 </head>
 
 <body onscroll="cek_scroll()">
+    <div class="container-fluid d-block justify-content-start fixed-top" style="width:80px;margin-left:-10px !important">
+        <div class="gambar-voucher-goyang1" style="margin-top:50px"><img src="{% static 'img/promo.png'%}" onclick="show_promo()" class="w-100"></div>
+        <div class="gambar-voucher-bawah" style="margin-top:40px;"><img src="{% static 'img/voucher_disc.png'%}" class="w-100"></div>
+        <div class="gambar-voucher-goyang2" style="margin-top:60px"><img src="{% static 'img/gratis_ongkir.png'%}" class="w-100"></div>
+        
+    </div>
+    
     {% csrf_token %}
 
     <div class="modal" tabindex="-1" id="modalkategori">
@@ -65,10 +72,8 @@
         </div>
     </div>
 
-    <div class="container-fluid fixed-top d-none" id="mypromo">
-        <img src="{% static 'img/jagoanhelm.png'%}" alt="">
-    </div>
-    <div class="container fixed-top bg-white" id="the_header"  style="height:150px;">
+    
+    <div class="container-fluid fixed-top bg-white" id="the_header"  style="height:150px;width:1120px">
         <div class="p-2 border-bottom border-danger m-2">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 jagoan  d-flex align-items-center" title="jagoanhelm.com">
@@ -76,7 +81,8 @@
                     <h3 class="text-danger fw-bold my-1 mx-2"> jagoanhelm.com</h3>
                 </div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-8 col-xl-9 col-xxl-9">
-                    <div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">
+                    <div class="d-flex justify-content-evenly">
+                    <!--<div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">-->
                         <div class="my-3">
                             <div class=" garis" onclick="show_category()" ><i class="fa fa-filter mx-2"></i>Category</div>
                             <div class="category-box " onmouseleave="hide_category()">
@@ -120,14 +126,19 @@
                             </div>
                         </div>
                     </div>
+                    <!--
                     <div class="d-flex d-sm-flex d-md-flex d-lg-none d-xl-none d-xxl-none justify-content-end">
                         <button type="button" class="btn btn-default btn-lg">
                             <i class="fa fa-navicon my-1 text-danger fw-bold"></i>
                         </button>
                     </div>
+                    -->
                 </div>
             </div>
+           
+            
         </div>
+        
         <div class="row px-2">
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8">
                 <div class="row ">
@@ -137,6 +148,8 @@
                             <div>Pencarian: "<span id="keyword" class="fw-bold"></span>"
                                 <div class="spinner-border text-secondary" style="width:10px;height:10px" role="status">
                                     <span class="visually-hidden" >Loading...</span>
+                                </div>
+                                <div id="hasil_pencarian" class="overflow-y-auto">
                                 </div>
                             </div>
                         </div>
@@ -151,6 +164,7 @@
         </div>
         <div class="my-2"></div>
     </div>
+    
     <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-top:160px;">
         {% block contents%}{% endblock%}
     </div>
@@ -196,6 +210,7 @@
     <script>
         let csrfmiddlewaretokennya = $("input[name=csrfmiddlewaretoken]").val();
         let last_position=0;
+        let kategori="semua";
 
         function set_kategori_page(kategori) {
             window.location.href = "/?cat=" + kategori;
@@ -214,8 +229,8 @@
                     i=0;
                 }
             },5000);
-            searchkeyword();
-           
+            /*searchkeyword();*/
+           freq_search();
         });
 
         function cek_scroll() {
@@ -239,15 +254,40 @@
             
         }
 
-        function searchkeyword() {
+        function isi_seringdicari() {
+            $.ajax({
+                type: "POST",
+                url: 'api/get/barang/cari5/',
+                data: {
+                    'csrfmiddlewaretoken': csrfmiddlewaretokennya
+                },
+                success: function(data) {
+                    $("#box_sering_dicari_5").empty();
+                    data.result.forEach(function(mydata){
+                        console.log(mydata);
+                        
+                        tampilkan = "<div class='box-sering-dicari'>"+
+                            "<img src='"    + mydata.barang_foto1 + "' alt='' class='w-100 rounded myimg'><div style='font-size:10px;font-weight:bold;'><div class='position-absolute' style='margin-top:-20px'><span class='badge bg-danger mx-1' style='font-size:10px;'>NEW</span><span class='badge bg-success mx-1' style='font-size:10px'>FREE ONGKIR!</span></div>"+
+                            mydata.barang_nama.toUpperCase()+"</div><div style='font-size:12px;color:green'>Harga: <strong>" + ubahKeUang(mydata.barang_harga) + "</strong></div>" +
+                            "<div style='font-size:12px;color:blue;'>Lokasi: <strong>"+ mydata.barang_etalase.etalase_nama.toUpperCase()+"</strong></div>"+
+                            "<div><span class='badge bg-info' style='font-size:10px'>DISC 15%</span></div></div>";
+                        $("#box_sering_dicari_5").append(tampilkan);
+                    })
+                }
+            });
+        }
+
+        function freq_search() {
             $("#keyword").text($("#search").val());
 
+            /* set frequently keyword */
             $.ajax({
                 type: "POST",
                 url: '/api/set/search/',
                 data: {
                     'csrfmiddlewaretoken':csrfmiddlewaretokennya,
                     'keyword':$("#search").val(),
+                    'kategori':kategori,
                 },
                 success: function(data) {
                     $("#usual_search").empty();
@@ -264,12 +304,62 @@
             });
         }
 
+        function set_kategori() {
+            $("#kat_premium").text(kategori.toUpperCase());
+            $("#kat_gajian").text(kategori.toUpperCase());
+            $("#kat_budget").text(kategori.toUpperCase());
+        }
+
+        function searchkeyword() {
+
+            freq_search();
+            /* tampilkan hasil*/
+            
+            if($("#keyword").text().trim().length>0) {
+                $("#hasil_pencarian").empty();
+                $.ajax({
+                    type: "POST",
+                    url: '/api/get/search/',
+                    data : {
+                        'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                        'keyword':  $("#keyword").text(),
+                        'kategori': kategori
+                    },
+                    success : function (data) {
+                        data.result.forEach(function (mydata){
+                            tampilan = "<div id='cari_" + mydata.barang_sku +"' class='search-box-hasil d-flex justify-content-start align-items-center'>" +
+                                "<img src='" + mydata.barang_foto1+"' style='margin-right:10px;width:50px;height:50px;border-radius:25px;margin-bottom:5px'>" +
+                                "<div style='font-size:12px;font-weight:bold;'>" + mydata.barang_nama.toUpperCase() +"</div></div>";
+                            $("#hasil_pencarian").append(tampilan);
+                            $("#cari_" + mydata.barang_sku).click(function() {
+                                $.ajax({
+                                    type: "POST",
+                                    url: '/api/get/search/hasil/',
+                                    data: {
+                                        'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                                        'kode_sku':  mydata.barang_sku
+                                    },
+                                    success: function(data) {
+                                        console.log("pencarian di klik " + data);
+                                        isi_seringdicari();
+                                    }
+                                });
+                            });
+                        });
+    
+    
+                    }
+                });
+            }
+
+        }
+
         function show_category() {
             $(".category-box").empty();
             let hasil = "<div title='Tampilkan Semua Barang' class='box-isi-kategori' id='kat_com_semua'><img src='/static/img/all.jpeg' class='w-100 rounded' style='width:150px;height:150px'><div class='position-absolute d-flex justify-content-center  p-1 bg-secondary rounded fw-bold text-white' style='width:170px'>Semua Kategori</div></div>";
             $(".category-box").append(hasil);
             $("#kat_com_semua").click(function() {
-                set_kategori_page('');
+                kategori="semua";
             });
             $.ajax({
                 type: "POST",
@@ -282,7 +372,8 @@
                         hasil = "<div title='"+ mydata.barang_kategori +"'' class='box-isi-kategori' id='kat_comp_" + mydata.barang_kategori +"'><img src='" + mydata.barang_kategori_gambar +"' class='w-100 rounded' style='width:150px;height:150px'><div class='position-absolute d-flex justify-content-center  p-1 bg-secondary rounded fw-bold text-white' style='width:170px'>" + mydata.barang_kategori+"</div></div>";
                         $(".category-box").append(hasil);
                         $("#kat_comp_" + mydata.barang_kategori).click(function() {
-                            set_kategori_page(mydata.barang_kategori);
+                            kategori=mydata.barang_kategori;
+                            set_kategori();
                         });
                     });
                 }
