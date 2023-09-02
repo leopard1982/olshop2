@@ -113,11 +113,34 @@
                         </div>
                         <div >
                             <div class="garis" onclick="show_promo_menu()"><i class="fa fa-handshake-o"></i> PROMO </div>
-                            <div class="notification-box" onmouseleave="hide_notification()">
-                                <div><strong>My Notification1</strong></div>
-                                <div>{% lorem 1 %}</div>
-                                <div><strong>My Notification2</strong></div>
-                                <div>{% lorem 1 %}</div>
+                            <div class="promo-box" onmouseleave="hide_promo_menu()">
+                                <div class="d-block w-100  my-3 border border-success p-2">
+                                    <div class="d-flex row justify-content-center">
+                                        <div class="col-2 text-center bg-success p-2"><i class="fa fa-paper-plane-o bg-success " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
+                                        <div class="col-10 bg-success">
+                                            <div style="font-size:15px;color:white;text-align:center;padding-top:10px;font-weight:bold;">VOUCHER GRATIS ONGKIR</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center my-1" ><button class="btn" >Klik untuk Klaim Sekarang!</button></div>
+                                </div>
+                                <div class="d-block w-100  my-3 border border-danger p-2" >
+                                    <div class="d-flex row justify-content-center">
+                                        <div class="col-2 text-center bg-danger p-2"><i class="fa fa-money bg-danger " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
+                                        <div class="col-10 bg-danger">
+                                            <div style="font-size:15px;color:white;text-align:center;padding-top:10px;font-weight:bold;">VOUCHER DISCOUNT %</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center my-1" ><button class="btn" >Klik untuk Klaim Sekarang!</button></div>
+                                </div>
+                                <div class="d-block w-100 my-3 border border-warning p-2">
+                                    <div class="d-flex row justify-content-center">
+                                        <div class="col-2 text-center bg-warning p-2"><i class="fa fa-thumbs-o-up bg-warning " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
+                                        <div class="col-10 bg-warning">
+                                            <div style="font-size:15px;color:white;text-align:center;padding-top:10px;font-weight:bold;">PROMO BULAN INI!</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-center my-1" ><button class="btn" onclick="show_promo()">Klik untuk Melihat Detail Promo!</button></div>
+                                </div>
                             </div>
                         </div>
                         <div >
@@ -382,65 +405,83 @@
                     });
                 }
             });
-            $(".category-box").slideToggle("slow");
+            $(".category-box").slideToggle("fast");
             $(".shoppingcart-box").slideUp();
             $(".wishlist-box").slideUp();
             $(".notification-box").slideUp();
             $(".account-box").slideUp();
+            $(".promo-box").slideUp();
         }
 
         function show_shoppingcart() {
-            $(".shoppingcart-box").slideToggle("slow");
+            $(".shoppingcart-box").slideToggle("fast");
             $(".wishlist-box").slideUp();
             $(".notification-box").slideUp();
             $(".account-box").slideUp();
             $(".category-box").slideUp();
+            $(".promo-box").slideUp();
+        }
+
+        function show_promo_menu() {
+            $(".account-box").slideUp();
+            $(".category-box").slideUp();
+            $(".shoppingcart-box").slideUp();
+            $(".wishlist-box").slideUp();
+            $(".notification-box").slideUp();
+            $(".promo-box").slideToggle("fast");
         }
 
         function hide_shoppingcart() {
-            $(".shoppingcart-box").slideUp("slow");
+            $(".shoppingcart-box").slideUp("fast");
+        }
+
+        function hide_promo_menu() {
+            $(".promo-box").slideUp("fast");
         }
 
         function hide_category() {
-            $(".category-box").slideUp("slow");
+            $(".category-box").slideUp("fast");
         }
 
         function show_wishlist() {
-            $(".wishlist-box").slideToggle("slow");
+            $(".wishlist-box").slideToggle("fast");
             $(".category-box").slideUp();
             $(".shoppingcart-box").slideUp();
             $(".notification-box").slideUp();
             $(".account-box").slideUp();
+            $(".promo-box").slideUp();
         }
 
         function hide_wishlist() {
-            $(".wishlist-box").slideUp("slow");
+            $(".wishlist-box").slideUp("fast");
         }
 
         function show_notification() {
-            $(".notification-box").slideToggle("slow");
+            $(".notification-box").slideToggle("fast");
             $(".category-box").slideUp();
             $(".shoppingcart-box").slideUp();
             $(".wishlist-box").slideUp();
             $(".account-box").slideUp();
+            $(".promo-box").slideUp();
         }
 
         function hide_notification() {
-            $(".notification-box").slideUp("slow");
+            $(".notification-box").slideUp("fast");
         }
 
     
 
         function show_account() {
-            $(".account-box").slideToggle("slow");
+            $(".account-box").slideToggle("fast");
             $(".category-box").slideUp();
             $(".shoppingcart-box").slideUp();
             $(".wishlist-box").slideUp();
             $(".notification-box").slideUp();
+            $(".promo-box").slideUp();
         }
 
         function hide_account() {
-            $(".account-box").slideUp("slow");
+            $(".account-box").slideUp("fast");
         }
 
         

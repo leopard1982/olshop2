@@ -89,6 +89,72 @@ a {
     cursor: pointer;
 }
 
+@keyframes panah-kiri-jalan {
+    from {
+        transform: translateX(-5px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateX(0px);
+        transition-duration: 1s;
+    }
+}
+
+@keyframes panah-kanan-jalan {
+    from {
+        transform: translateX(5px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateX(0px);
+        transition-duration: 1s;
+    }
+}
+
+.panah-kiri {
+    font-size: 60px;
+    font-weight: bold;
+    margin-left: -50px;
+    margin-top: 85px;
+    color: white;
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 30px;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.panah-kanan {
+    font-size: 60px;
+    font-weight: bold;
+    margin-right: -50px;
+    margin-top: 85px;
+    color: white;
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 30px;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.panah-kiri:hover {
+    animation-name: panah-kiri-jalan;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
+.panah-kanan:hover {
+    animation-name: panah-kanan-jalan;
+    animation-duration: 1s;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    cursor: pointer;
+}
+
 .search-box-hasil {
     width: 360px;
     margin-left: 10px;
@@ -155,6 +221,21 @@ a {
     cursor: pointer;
 }
 
+.promo-box {
+    width: 350px;
+    max-width: 350px;
+    min-width: 350px;
+    height: 410px;
+    min-height: 410px;
+    max-height: 410px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
 
 .notification-box {
     width: 30%;
