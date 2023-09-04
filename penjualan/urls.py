@@ -1,6 +1,7 @@
 from django.urls import path
 from penjualan.views import dashboard, set_search_keyword, get_kategori, get_barang_cari5
-from penjualan.views import cari_keyword, hasil_cari, tampil_barang_budget
+from penjualan.views import cari_keyword, hasil_cari, tampil_barang_budget, tampil_barang_premium
+from penjualan.views import tampil_barang_disc
 urlpatterns = [
     path('',dashboard,name="dashboard"),
     path('api/set/search/',set_search_keyword, name="set_search_keyword"),
@@ -9,4 +10,6 @@ urlpatterns = [
     path('api/get/kategori/',get_kategori,name="get_kategori"),
     path('api/get/barang/cari5/',get_barang_cari5,name="get_barang_cari5"),
     path('api/get/barang/budget/',tampil_barang_budget,name="tampil_barang_budget"),
+    path('api/get/barang/premium/',tampil_barang_premium,name="tampil_barang_premium"),
+    path('api/get/barang/discount/',tampil_barang_disc,name="tampil_barang_disc")
 ]

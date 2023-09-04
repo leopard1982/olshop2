@@ -2,7 +2,7 @@
 {% load static %}
 {% block contents%}
 
-<div style="background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-left:-20px;" >
+<div style="background-color:whitesmoke;border-radius:5px;margin-top:70px;margin-left:-20px;" >
     <div class="box-sering-dicari-header d-flex align-items-center">
         <img src="{% static 'img/DILIHAT.png'%}" class="w-100 rounded"/>
         <div class='position-absolute'>
@@ -15,7 +15,7 @@
     </div>
 </div>
 
-<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;;margin-bottom:170px" >
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:50px;margin-bottom:170px" >
     <div class="p-2 box-bawah" style="width:1120px">
         <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:rgba(0,0,0,0.6)">
             <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px;font-size:20px">BEST DEAL BUDGET PRODUCT!</span>
@@ -50,25 +50,20 @@
                 </select>
             </div>
             <div class="col-2">
-                <button class="btn btn-outline-secondary form-control rounded-pill" onclick="tampilkan_barang_budget()" style="font-size:12px">Terapkan Filter</button>
+                <button class="btn btn-outline-secondary form-control rounded-pill" onclick="tampilkan_barang_budget()" style="font-size:12px">Temukan!</button>
             </div>
         </div>
     </div>
     <div class="d-flex justify-content-between">
         <div class=" panah-kiri">&lt;</div>
-        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>  
+        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_budget">
+    
         </div>
         <div class=" panah-kanan ">&gt;</div>
     </div>
 </div>
 
-<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;;margin-bottom:170px" >
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:50px;;margin-bottom:170px" >
     <div class="p-2 box-bawah" style="width:1120px">
         <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:rgba(255,255,0,1)">
             <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px;font-size:20px">GREAT PREMIUM PRODUCT!</span>
@@ -103,25 +98,20 @@
                 </select>
             </div>
             <div class="col-2">
-                <button class="btn btn-outline-secondary form-control rounded-pill" style="font-size:12px">Terapkan Filter</button>
+                <button class="btn btn-outline-secondary form-control rounded-pill" onclick="tampilkan_barang_premium()" style="font-size:12px">Temukan!</button>
             </div>
         </div>
     </div>
     <div class="d-flex justify-content-between">
         <div class=" panah-kiri">&lt;</div>
-        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>  
+        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_premium">
+              
         </div>
         <div class=" panah-kanan ">&gt;</div>
     </div>
 </div>
 
-<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:20px;margin-bottom:170px" >
+<div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:50px;margin-bottom:170px" >
     <div class="p-2 box-bawah" style="width:1120px;">
         <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:rgba(0,255,0,0.8)">
             <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px;font-size:20px">GAJIAN SALE!</span>
@@ -148,19 +138,14 @@
             </div>
             
             <div class="col-2">
-                <button class="btn btn-outline-secondary form-control rounded-pill" style="font-size:12px">Terapkan Filter</button>
+                <button class="btn btn-outline-secondary form-control rounded-pill" onclick="tampilkan_barang_disc()" style="font-size:12px">Temukan!</button>
             </div>
         </div>
     </div>
     <div class="d-flex justify-content-between">
         <div class=" panah-kiri">&lt;</div>
-        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_sering_dicari_5">
-            <div class="box-sering-dicari">Test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
-            <div class="box-sering-dicari">test</div>
+        <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_disc">
+
         </div>
         <div class=" panah-kanan ">&gt;</div>
     </div>
@@ -279,7 +264,152 @@
                 'halaman':halaman_budget,
             },
             success: function(data) {
-                console.log(data);
+                max_halaman_budget = data.max_page;
+                $("#box_budget").empty();
+                if(data.result.length>0) {
+                    data.result.forEach(function(mydata) {
+                        let template="";
+                        let badgenya="";
+                        if(mydata.barang_new==true) {
+                            badgenya = badgenya + "<span style='font-size:12px' class='badge bg-danger'>NEW!</span>";
+                        }
+                        if(mydata.barang_ongkir_aktif==true) {
+                            badgenya = badgenya + "<span style='font-size:12px;' class='badge bg-success'>Gratis Ongkir</span>";
+                        }
+                        discountnya = parseInt((mydata.barang_disc/mydata.barang_harga)*100);
+                        if(mydata.barang_disc_aktif===false) {
+                            discountnya=0;
+                        }
+                        if(discountnya==0) {
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:green'>Harga: "+ ubahKeUang(mydata.barang_harga)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>" +
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        } else {
+                            let nettprice = mydata.barang_harga - mydata.barang_disc;
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div><span class='badge bg-info fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
+                            "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        }
+                        $("#box_budget").append(template);
+                    });
+                } else {
+                    template="<div class='box-sering-dicari-tidak-ketemu text-center'>Ups.. maaf barang yang kamu cari belum ada...</div>";
+                    $("#box_budget").append(template);
+                }
+            }
+        });
+    }
+
+    function tampilkan_barang_premium() {
+        $.ajax({
+            type: "POST",
+            url: '/api/get/barang/premium/',
+            data : {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'merek': merek_premium,
+                'kategori':kategori_premium,
+                'harga':harga_premium,
+                'halaman':halaman_premium,
+            },
+            success: function(data) {
+                max_halaman_premium = data.max_page;
+                $("#box_premium").empty();
+                if(data.result.length>0) {
+                    data.result.forEach(function(mydata) {
+                        let template="";
+                        let badgenya="";
+                        if(mydata.barang_new==true) {
+                            badgenya = badgenya + "<span style='font-size:12px' class='badge bg-danger'>NEW!</span>";
+                        }
+                        if(mydata.barang_ongkir_aktif==true) {
+                            badgenya = badgenya + "<span style='font-size:12px;' class='badge bg-success'>Gratis Ongkir</span>";
+                        }
+                        discountnya = parseInt((mydata.barang_disc/mydata.barang_harga)*100);
+                        if(mydata.barang_disc_aktif===false) {
+                            discountnya=0;
+                        }
+                        if(discountnya==0) {
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:green'>Harga: "+ ubahKeUang(mydata.barang_harga)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>" +
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        } else {
+                            let nettprice = mydata.barang_harga - mydata.barang_disc;
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div><span class='badge bg-info fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
+                            "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        }
+                        $("#box_premium").append(template);
+                    });
+                } else {
+                    template="<div class='box-sering-dicari-tidak-ketemu text-center'>Ups.. maaf barang yang kamu cari belum ada...</div>";
+                    $("#box_premium").append(template);
+                }
+            }
+        });
+    }
+
+    function tampilkan_barang_disc() {
+        $.ajax({
+            type: "POST",
+            url: '/api/get/barang/discount/',
+            data : {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'merek': merek_diskon,
+                'kategori':kategori_diskon,
+                'halaman':halaman_diskon,
+            },
+            success: function(data) {
+                max_halaman_diskon = data.max_page;
+                $("#box_disc").empty();
+                if(data.result.length>0) {
+                    data.result.forEach(function(mydata) {
+                        let template="";
+                        let badgenya = "";
+                        if(mydata.barang_new==true) {
+                            badgenya = badgenya + "<span style='font-size:12px' class='badge bg-danger'>NEW!</span>";
+                        }
+                        if(mydata.barang_ongkir_aktif==true) {
+                            badgenya = badgenya + "<span style='font-size:12px;' class='badge bg-success'>Gratis Ongkir</span>";
+                        }
+
+                        discountnya = parseInt((mydata.barang_disc/mydata.barang_harga)*100);
+                        if(mydata.barang_disc_aktif===false) {
+                            discountnya=0;
+                        }
+                        if(discountnya==0) {
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:green'>Harga: "+ ubahKeUang(mydata.barang_harga)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>" +
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        } else {
+                            let nettprice = mydata.barang_harga - mydata.barang_disc;
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div><span class='badge bg-info fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
+                            "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        }
+                        $("#box_disc").append(template);
+                    });
+                } else {
+                    template="<div class='box-sering-dicari-tidak-ketemu text-center'>Ups.. maaf barang yang kamu cari belum ada...</div>";
+                    $("#box_disc").append(template);
+                }
             }
         });
     }

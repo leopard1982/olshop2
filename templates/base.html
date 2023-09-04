@@ -67,8 +67,8 @@
     </div>
 
     
-    <div class="container-fluid fixed-top bg-white" id="the_header"  style="height:150px;width:1120px">
-        <div class="p-2 border-bottom border-danger m-2">
+    <div class="container-fluid fixed-top bg-white shadow" id="the_header"  style="border-bottom-left-radius:10px;border-bottom-right-radius:10px;height:150px;width:1120px">
+        <div class="p-2 border border-danger rounded m-2">
             <div class="row">
                 <div class="col-6 col-sm-6 col-md-6 col-lg-4 col-xl-3 col-xxl-3 jagoan  d-flex align-items-center" title="jagoanhelm.com">
                     <div class="rounded-pill shadow"><img src="{% static 'img/jagoanhelm.png'%}" style="height:50px;weight:60px" alt=""></div>
@@ -192,7 +192,7 @@
         <div class="my-2"></div>
     </div>
 
-    <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-left:70px;margin-top:160px;">
+    <div class="container" onscroll="myFunction()" style="margin-bottom:50px;margin-left:70px;margin-top:190px;">
         {% block contents%}{% endblock%}
     </div>
     <div class="container" style="margin-bottom:50px">
@@ -251,6 +251,9 @@
         let halaman_budget=1;
         let halaman_premium =1;
         let halaman_diskon=1;
+        let max_halaman_budget=1;
+        let max_halaman_premium=1;
+        let max_halaman_diskon=1;
 
         function set_kategori_page(kategori) {
             window.location.href = "/?cat=" + kategori;
@@ -271,6 +274,9 @@
             },5000);
             /*searchkeyword();*/
            freq_search();
+           tampilkan_barang_budget();
+           tampilkan_barang_premium();
+           tampilkan_barang_disc();
         });
 
         function cek_scroll() {
@@ -304,14 +310,35 @@
                 success: function(data) {
                     $("#box_sering_dicari_5").empty();
                     data.result.forEach(function(mydata){
-                        console.log(mydata);
-                        
-                        tampilkan = "<div class='box-sering-dicari'>"+
-                            "<img src='"    + mydata.barang_foto1 + "' alt='' class='w-100 rounded myimg'><div style='font-size:10px;font-weight:bold;'><div class='position-absolute' style='margin-top:-20px'><span class='badge bg-danger mx-1' style='font-size:10px;'>NEW</span><span class='badge bg-success mx-1' style='font-size:10px'>FREE ONGKIR!</span></div>"+
-                            mydata.barang_nama.toUpperCase()+"</div><div style='font-size:12px;color:green'>Harga: <strong>" + ubahKeUang(mydata.barang_harga) + "</strong></div>" +
-                            "<div style='font-size:12px;color:blue;'>Merek: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+
-                            "<div><span class='badge bg-info' style='font-size:10px'>DISC 15%</span></div></div>";
-                        $("#box_sering_dicari_5").append(tampilkan);
+                        let template="";
+                        let badgenya = "";
+                        if(mydata.barang_new==true) {
+                            badgenya = badgenya + "<span style='font-size:12px' class='badge bg-danger'>NEW!</span>";
+                        }
+                        if(mydata.barang_ongkir_aktif==true) {
+                            badgenya = badgenya + "<span style='font-size:12px;' class='badge bg-success'>Gratis Ongkir</span>";
+                        }
+                        discountnya = parseInt((mydata.barang_disc/mydata.barang_harga)*100);
+                        if(mydata.barang_disc_aktif===false) {
+                            discountnya=0;
+                        }
+                        if(discountnya==0 ) {
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:green'>Harga: "+ ubahKeUang(mydata.barang_harga)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>" +
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        } else {
+                            let nettprice = mydata.barang_harga - mydata.barang_disc;
+                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.substring(0,40).toUpperCase() +"</div>"+
+                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div><span class='badge bg-info fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
+                            "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
+                            "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
+                            "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
+                        }
+                        $("#box_sering_dicari_5").append(template);
                     })
                 }
             });

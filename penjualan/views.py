@@ -110,7 +110,9 @@ def hasil_cari(request):
 @api_view(['POST'])
 def tampil_barang_budget(request):
     if request.method == 'POST':
-        q = Q(barang_harga__gt=500000)
+        q = Q(barang_harga__lt=500000)
+
+        q &= Q(barang_arsip=False)
         mereknya = request.data['merek']
         if mereknya !="":
             q &= Q(barang_merek=merek.objects.get(merek_nama=mereknya))
@@ -128,7 +130,7 @@ def tampil_barang_budget(request):
             data = data.order_by('barang_disc')
         elif(harganya=="premium"):
             data = data.order_by('-barang_harga')
-        pages = Paginator(data,2)
+        pages = Paginator(data,6)
         page = pages.page(1)
         myresult = []
 
@@ -139,7 +141,83 @@ def tampil_barang_budget(request):
         serial = serialMasterBarang(myresult,many=True)
         context = {
             'result': serial.data,
-            'halaman': halamannya
+            'max_page': int(pages.num_pages),
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def tampil_barang_premium(request):
+    if request.method == 'POST':
+        q = Q(barang_harga__gt=500000)
+
+        q &= Q(barang_arsip=False)
+
+        mereknya = request.data['merek']
+        if mereknya !="":
+            q &= Q(barang_merek=merek.objects.get(merek_nama=mereknya))
+        kategorinya = request.data['kategori']
+        if kategorinya !="":
+            q &= Q(barang_kategori=kategoriBarang.objects.get(barang_kategori=kategorinya))   
+        harganya = request.data['harga']
+        halamannya = request.data['halaman']
+
+        data = masterBarang.objects.all().filter(q)
+
+        if(harganya == "murah"):
+            data = data.order_by('barang_harga')
+        elif(harganya == "diskon"):
+            data = data.order_by('barang_disc')
+        elif(harganya=="premium"):
+            data = data.order_by('-barang_harga')
+        pages = Paginator(data,6)
+        page = pages.page(1)
+        myresult = []
+
+        
+        for p in page:
+            myresult.append(p)
+
+        serial = serialMasterBarang(myresult,many=True)
+        context = {
+            'result': serial.data,
+            'max_page': int(pages.num_pages),
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def tampil_barang_disc(request):
+    if request.method == 'POST':
+        q = Q(barang_disc__gt=0)
+        mereknya = request.data['merek']
+
+        q &= Q(barang_disc_aktif=True)
+
+        q &= Q(barang_arsip=False)
+
+        if mereknya !="":
+            q &= Q(barang_merek=merek.objects.get(merek_nama=mereknya))
+        kategorinya = request.data['kategori']
+        if kategorinya !="":
+            q &= Q(barang_kategori=kategoriBarang.objects.get(barang_kategori=kategorinya))   
+       
+        halamannya = request.data['halaman']
+
+        data = masterBarang.objects.all().filter(q).order_by('-barang_disc')
+
+        pages = Paginator(data,6)
+        page = pages.page(1)
+        myresult = []
+
+        
+        for p in page:
+            myresult.append(p)
+
+        serial = serialMasterBarang(myresult,many=True)
+        context = {
+            'result': serial.data,
+            'max_page': int(pages.num_pages),
         }
         return Response(context)
     return Response({})
