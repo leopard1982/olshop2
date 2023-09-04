@@ -11,6 +11,14 @@
     border-bottom: 2px solid red;
     transition-duration: 0.2s;
     cursor: pointer;
+    font-size: 15px;
+    width: 110px;
+    min-width: 110px;
+    max-width: 110px;
+    margin-left: 10px;
+    margin-right: 10px;
+    text-align: center;
+    margin-top: 15px;
 }
 
 .jagoan {
@@ -81,6 +89,76 @@ a {
     cursor: pointer;
 }
 
+@keyframes panah-kiri-jalan {
+    from {
+        transform: translateX(-5px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateX(0px);
+        transition-duration: 1s;
+    }
+}
+
+@keyframes panah-kanan-jalan {
+    from {
+        transform: translateX(5px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateX(0px);
+        transition-duration: 1s;
+    }
+}
+
+.panah-kanan-jalan-uhui {
+    animation-name: panah-kanan-jalan;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-duration: 2s;
+}
+
+
+.panah-kiri {
+    font-size: 60px;
+    font-weight: bold;
+    margin-left: -50px;
+    margin-top: 85px;
+    color: white;
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 30px;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.panah-kanan {
+    font-size: 60px;
+    font-weight: bold;
+    margin-right: -50px;
+    margin-top: 85px;
+    color: white;
+    border: 1px solid grey;
+    background-color: grey;
+    border-radius: 30px;
+    cursor: pointer;
+    padding-bottom: 10px;
+}
+
+.panah-kiri:hover {
+    transform: translateX(-10px);
+    transition-duration: 1s;
+    cursor: pointer;
+}
+
+.panah-kanan:hover {
+    transform: translateX(10px);
+    transition-duration: 1s;
+    cursor: pointer;
+}
+
 .search-box-hasil {
     width: 360px;
     margin-left: 10px;
@@ -147,6 +225,21 @@ a {
     cursor: pointer;
 }
 
+.promo-box {
+    width: 350px;
+    max-width: 350px;
+    min-width: 350px;
+    height: 410px;
+    min-height: 410px;
+    max-height: 410px;
+    border: 1px solid red;
+    box-shadow: 2px 2px solid lightgrey;
+    position: absolute;
+    background-color: white;
+    display: none;
+    padding: 10px;
+    cursor: pointer;
+}
 
 .notification-box {
     width: 30%;
@@ -362,24 +455,7 @@ a {
 
 
 
-@keyframes kanan {
-    from {
-        transform: translateX(0px);
-        transition-duration: 1s;
-    }
 
-    to {
-        transform: translateX(5px);
-        transition-duration: 2s;
-    }
-}
-
-.panah-kanan {
-    animation-duration: 1s;
-    animation-name: kanan;
-    animation-iteration-count: infinite;
-    animation-direction: alternate;
-}
 
 @keyframes bawah {
     from {
@@ -391,6 +467,109 @@ a {
         transform: translateY(5px);
         transition-duration: 1s;
     }
+}
+
+@keyframes bawah_voucher {
+    from {
+        transform: translateY(0px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateY(10px);
+        transition-duration: 1s;
+    }
+}
+
+
+@keyframes atas_voucher {
+    from {
+        transform: translateY(10px);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: translateY(0px);
+        transition-duration: 1s;
+    }
+}
+
+@keyframes goyang {
+    from {
+        transform: rotate(5deg);
+        transition-duration: 1s;
+    }
+
+    to {
+        transform: rotate(-5deg);
+        transition-duration: 1s;
+    }
+}
+
+.gambar-voucher-goyang1 {
+    animation-name: goyang;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 2s;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+    margin-left: 10px;
+    margin-top: 50px;
+}
+
+.gambar-voucher-goyang2 {
+    animation-name: goyang;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 1s;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+    margin-left: 10px;
+    margin-top: 50px;
+}
+
+.gambar-voucher-goyang1:hover,
+.gambar-voucher-goyang2:hover,
+.gambar-voucher-bawah:hover {
+    cursor: pointer;
+}
+
+.gambar-voucher-bawah {
+    animation-name: bawah_voucher;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 2.8s;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+    margin-left: 10px;
+    margin-top: 50px;
+}
+
+.gambar-voucher-atas {
+    animation-name: atas_voucher;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-duration: 1.5s;
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+    margin-left: 10px;
+    margin-top: 50px;
 }
 
 .box-bawah {
