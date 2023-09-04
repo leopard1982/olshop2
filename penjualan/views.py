@@ -2,7 +2,11 @@ from django.shortcuts import render
 
 from administrasi.serializersnya import serialSearchKeyword, serialKategori, serialMasterBarang
 
+<<<<<<< HEAD
 from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek
+=======
+from administrasi.models import searchKeyword, kategoriBarang, masterBarang, etalase
+>>>>>>> 8d811c45f2d9907e75ecb263123da716e4409930
 
 from rest_framework.decorators import api_view
 
@@ -14,6 +18,7 @@ from django.core.paginator import Paginator
 
 # Create your views here.
 def dashboard(request):
+<<<<<<< HEAD
     mereknya = merek.objects.all()
     kategorinya = kategoriBarang.objects.all()
     context = {
@@ -21,6 +26,10 @@ def dashboard(request):
         'kategorinya':kategorinya,
     }
     return render(request,'penjualan/dashboard.html',context)
+=======
+    etalasenya = etalase.objects.all()
+    return render(request,'penjualan/dashboard.html',{'etalasenya':etalasenya})
+>>>>>>> 8d811c45f2d9907e75ecb263123da716e4409930
 
 
 @api_view(['POST'])
