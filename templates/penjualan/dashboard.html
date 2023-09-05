@@ -16,7 +16,7 @@
 </div>
 
 <div style=" container-fluid background-color:whitesmoke;border-radius:5px;margin-top:50px;margin-bottom:170px" >
-    <div class="p-2 box-bawah" style="width:1120px">
+    <div class="p-2 box-bawah" style="width:1117px">
         <div class=" rounded text-start  fw-bold d-flex justify-content-between" style="background-color:rgba(0,0,0,0.6)">
             <span class="text-start fw-bold" style="margin-bottom:10px;margin-left:10px;font-size:20px">BEST DEAL BUDGET PRODUCT!</span>
             
@@ -54,12 +54,12 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-between">
-        <div class=" panah-kiri">&lt;</div>
+    <div class="d-flex justify-content-between" style="width:1117px">
+        <div class=" panah-kiri" onclick="panah_kiri_budget()">&lt;</div>
         <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_budget">
     
         </div>
-        <div class=" panah-kanan ">&gt;</div>
+        <div class=" panah-kanan " onclick="panah_kanan_budget()">&gt;</div>
     </div>
 </div>
 
@@ -102,12 +102,12 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-between">
-        <div class=" panah-kiri">&lt;</div>
+    <div class="d-flex justify-content-between"  style="width:1117px">
+        <div class=" panah-kiri"  onclick="panah_kiri_premium()">&lt;</div>
         <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_premium">
               
         </div>
-        <div class=" panah-kanan ">&gt;</div>
+        <div class=" panah-kanan "  onclick="panah_kanan_premium()">&gt;</div>
     </div>
 </div>
 
@@ -142,12 +142,12 @@
             </div>
         </div>
     </div>
-    <div class="d-flex justify-content-between">
-        <div class=" panah-kiri">&lt;</div>
+    <div class="d-flex justify-content-between"  style="width:1115px">
+        <div class=" panah-kiri" onclick="panah_kiri_diskon()">&lt;</div>
         <div class="position-absolute d-flex justify-content-evenly" style="margin-top:300px" id="box_disc">
 
         </div>
-        <div class=" panah-kanan ">&gt;</div>
+        <div class=" panah-kanan " onclick="panah_kanan_diskon()">&gt;</div>
     </div>
     
 </div>
@@ -412,6 +412,60 @@
                 }
             }
         });
+    }
+
+    function panah_kanan_premium() {
+        if(halaman_premium<max_halaman_premium) {
+            halaman_premium +=1;
+        } else {
+            halaman_premium = 1;
+        }
+        tampilkan_barang_premium();
+    }
+
+    function panah_kiri_premium() {
+        if(halaman_premium>1) {
+            halaman_premium -=1;
+        } else {
+            halaman_premium = max_halaman_premium;
+        }
+        tampilkan_barang_premium();
+    }
+
+    function panah_kanan_budget() {
+        if(halaman_budget<max_halaman_budget) {
+            halaman_budget +=1;
+        } else {
+            halaman_budget = 1;
+        }
+        tampilkan_barang_budget();
+    }
+
+    function panah_kiri_budget() {
+        if(halaman_budget>1) {
+            halaman_budget -=1;
+        } else {
+            halaman_budget = max_halaman_budget;
+        }
+        tampilkan_barang_budget();
+    }
+
+    function panah_kanan_diskon() {
+        if(halaman_diskon<max_halaman_diskon) {
+            halaman_diskon +=1;
+        } else {
+            halaman_diskon = 1;
+        }
+        tampilkan_barang_disc();
+    }
+
+    function panah_kiri_diskon() {
+        if(halaman_diskon>1) {
+            halaman_diskon -=1;
+        } else {
+            halaman_diskon = max_halaman_diskon;
+        }
+        tampilkan_barang_disc();
     }
             
 </script>

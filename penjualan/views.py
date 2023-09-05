@@ -120,7 +120,7 @@ def tampil_barang_budget(request):
         if kategorinya !="":
             q &= Q(barang_kategori=kategoriBarang.objects.get(barang_kategori=kategorinya))   
         harganya = request.data['harga']
-        halamannya = request.data['halaman']
+        halamannya = int(request.data['halaman'])
 
         data = masterBarang.objects.all().filter(q)
 
@@ -131,7 +131,7 @@ def tampil_barang_budget(request):
         elif(harganya=="premium"):
             data = data.order_by('-barang_harga')
         pages = Paginator(data,6)
-        page = pages.page(1)
+        page = pages.page(halamannya)
         myresult = []
 
         
@@ -160,7 +160,7 @@ def tampil_barang_premium(request):
         if kategorinya !="":
             q &= Q(barang_kategori=kategoriBarang.objects.get(barang_kategori=kategorinya))   
         harganya = request.data['harga']
-        halamannya = request.data['halaman']
+        halamannya = int(request.data['halaman'])
 
         data = masterBarang.objects.all().filter(q)
 
@@ -171,7 +171,7 @@ def tampil_barang_premium(request):
         elif(harganya=="premium"):
             data = data.order_by('-barang_harga')
         pages = Paginator(data,6)
-        page = pages.page(1)
+        page = pages.page(halamannya)
         myresult = []
 
         
@@ -202,12 +202,12 @@ def tampil_barang_disc(request):
         if kategorinya !="":
             q &= Q(barang_kategori=kategoriBarang.objects.get(barang_kategori=kategorinya))   
        
-        halamannya = request.data['halaman']
+        halamannya = int(request.data['halaman'])
 
         data = masterBarang.objects.all().filter(q).order_by('-barang_disc')
 
         pages = Paginator(data,6)
-        page = pages.page(1)
+        page = pages.page(halamannya)
         myresult = []
 
         
