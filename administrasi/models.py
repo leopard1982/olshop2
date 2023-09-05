@@ -53,7 +53,7 @@ class masterBarang(models.Model):
     barang_kategori = models.ForeignKey(kategoriBarang,on_delete=models.RESTRICT,verbose_name="Kategori Barang")
     barang_terjual = models.PositiveIntegerField(default=0,verbose_name="Barang Jumlah Terjual")
     barang_dicari = models.PositiveIntegerField(default=0,verbose_name="Jumlah HIT")
-    barang_merek = models.ForeignKey(merek,on_delete=models.RESTRICT)
+    barang_merek = models.ForeignKey(merek,on_delete=models.RESTRICT,null=True,blank=True)
 
     class Meta:
         ordering = ['barang_nama','barang_sku']

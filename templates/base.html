@@ -17,6 +17,18 @@
        
     {% csrf_token %}
 
+    <div class="modal" tabindex="-1" id="modalDetailItem">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center" style="font-size:20px;margin-bottom:10px" id="Item_Detail_Header"></div>
+                <div class="d-flex w-100 justify-content-center " style="border-bottom:1px solid grey;border-top:1px solid grey;" id="Item_Detail_Gambar"></div>
+                <div style="margin-top:10px">test</div>
+            </div>
+          </div>
+        </div>
+    </div>
+
     <div class="modal" tabindex="-1" id="modalkategori">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -323,14 +335,14 @@
                             discountnya=0;
                         }
                         if(discountnya==0 ) {
-                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            template = "<div id='item_c1_" + mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.substring(0,40).toUpperCase() +"</div>"+
                             "<div style='font-size:12px;font-weight:bold;color:green'>Harga: "+ ubahKeUang(mydata.barang_harga)+"</div>"+ 
                             "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>" +
                             "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
                         } else {
                             let nettprice = mydata.barang_harga - mydata.barang_disc;
-                            template = "<div><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
+                            template = "<div id='item_c2_" + mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.substring(0,40).toUpperCase() +"</div>"+
                             "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
                             "<div><span class='badge bg-info fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
@@ -339,6 +351,15 @@
                             "<div class='d-flex justify-content-between'>"+badgenya+"</div></div>";
                         }
                         $("#box_sering_dicari_5").append(template);
+                        if(discountnya==0) {
+                            $("#item_c1_" + mydata.barang_sku).click(function() {
+                                item_detail(mydata.barang_sku);
+                            });
+                        } else {
+                            $("#item_c2_" + mydata.barang_sku).click(function() {
+                                item_detail(mydata.barang_sku);
+                            });
+                        }
                     })
                 }
             });
@@ -399,6 +420,7 @@
                                 "<div style='font-size:12px;font-weight:bold;'>" + mydata.barang_nama.toUpperCase() +"</div></div>";
                             $("#hasil_pencarian").append(tampilan);
                             $("#cari_" + mydata.barang_sku).click(function() {
+                                item_detail(mydata.barang_sku);
                                 $.ajax({
                                     type: "POST",
                                     url: '/api/get/search/hasil/',
@@ -407,8 +429,8 @@
                                         'kode_sku':  mydata.barang_sku
                                     },
                                     success: function(data) {
-                                        console.log("pencarian di klik " + data);
                                         isi_seringdicari();
+                                        
                                     }
                                 });
                             });

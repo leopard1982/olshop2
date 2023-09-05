@@ -221,3 +221,16 @@ def tampil_barang_disc(request):
         }
         return Response(context)
     return Response({})
+
+@api_view(['POST'])
+def tampil_barang_satu(request):
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+        data = masterBarang.objects.get(barang_sku=kode_barang)
+
+        serial = serialMasterBarang(data)
+        context = {
+            'result': serial.data,
+        }
+        return Response(context)
+    return Response({})
