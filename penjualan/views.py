@@ -1,8 +1,10 @@
 from django.shortcuts import render
 
 from administrasi.serializersnya import serialSearchKeyword, serialKategori, serialMasterBarang
+from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 
-from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek
+from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek, variasiWarna
+from administrasi.models import variasiVisor
 
 from rest_framework.decorators import api_view
 
@@ -229,6 +231,32 @@ def tampil_barang_satu(request):
         data = masterBarang.objects.get(barang_sku=kode_barang)
 
         serial = serialMasterBarang(data)
+        context = {
+            'result': serial.data,
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def variasi_warna(request):
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+        data = variasiWarna.objects.all().filter(barang_sku=masterBarang.objects.get(barang_sku=kode_barang))
+
+        serial = serialVariasiWarna(data,many=True)
+        context = {
+            'result': serial.data,
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def variasi_visor(request):
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+        data = variasiVisor.objects.all().filter(barang_sku=masterBarang.objects.get(barang_sku=kode_barang))
+
+        serial = serialVariasiVisor(data,many=True)
         context = {
             'result': serial.data,
         }

@@ -22,7 +22,7 @@ class serialVariasUkuran(serializers.ModelSerializer):
         model = variasiUkuran
         fields = "__all__"
 
-class serialVariasVisor(serializers.ModelSerializer):
+class serialVariasiVisor(serializers.ModelSerializer):
     class Meta:
         model = variasiVisor
         fields = "__all__"

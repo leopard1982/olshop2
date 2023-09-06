@@ -21,9 +21,36 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-body">
-                <div class="text-center" style="font-size:20px;margin-bottom:10px" id="Item_Detail_Header"></div>
+                <div class="text-center" style="font-size:20px;margin-bottom:10px;font-weight:bold" id="Item_Detail_Header"></div>
                 <div class="d-flex w-100 justify-content-center " style="border-bottom:1px solid grey;border-top:1px solid grey;" id="Item_Detail_Gambar"></div>
-                <div style="margin-top:10px">test</div>
+                <div style="margin-top:15px;margin-bottom:15px;"><strong><u>Deskripsi Produk:</u></strong></div>
+                <div style="height:150px" class="overflow-auto">
+                    <div id="Item_Detail_Deskripsi"></div>
+                </div>
+                <div style="margin-top:20px;font-weight:bold;">
+                    Variasi:
+                </div>
+                <div class="d-flex justify-content-center p-1 rounded border border-danger" style="margin-bottom:15px">
+                    <div class="col-6 px-1">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-4 p-1 text-end fw-bold">Warna:</div>
+                            <div class="col-8" id="Item_Detail_Warna"></div>
+                        </div>
+                    </div>
+                    <div class="col-6 px-1">
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-4 p-1 text-end fw-bold">Visor:</div>
+                            <div class="col-8"  id="Item_Detail_Visor"></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    Stok Tersedia: <span id="Item_Detail_Stok"></span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" style="font-size:15px !important" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" style="font-size:15px !important">Save changes</button>
             </div>
           </div>
         </div>

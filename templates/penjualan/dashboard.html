@@ -252,6 +252,62 @@
         }
     }
 
+    function setEnter(data) {
+        let deskripsi = data.split("\n");
+        let i=0;
+        let hasil="";
+
+        for(i=0;i<deskripsi.length;i++) {
+            hasil=hasil+"<div style='font-size:13px'>"+deskripsi[i]+"</div>";
+        }
+        return hasil;
+    }
+
+    function setWarna(data) {
+        kode_barang = data;
+        $("#Item_Detail_Warna").empty();
+        $.ajax({
+            type: "POST",
+            url: "/api/get/barang/warna/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode_barang':kode_barang,
+            },
+            success: function(data) {
+                let template="<select id='Item_Warna' style='font-size:12px' class='form-select border-secondary'>";
+                template += "<option value=''>--------</option>";
+                data.result.forEach(function(mydata) {
+                    template += "<option value='" + mydata.barang_warna + "'>" + mydata.barang_warna + "</option>";
+                });
+                template += "</select>";
+                $("#Item_Detail_Warna").append(template);
+            }
+        });
+    }
+
+    function setVisor(data) {
+        kode_barang = data;
+        $("#Item_Detail_Visor").empty();
+
+        $.ajax({
+            type: "POST",
+            url: "/api/get/barang/visor/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode_barang':kode_barang,
+            },
+            success: function(data) {
+                let template="<select id='Item_Visor' style='font-size:12px' class='form-select border-secondary'>";
+                template += "<option value=''>--------</option>";
+                data.result.forEach(function(mydata) {
+                    template += "<option value='" + mydata.barang_visor + "'>" + mydata.barang_visor + "</option>";
+                });
+                template += "</select>";
+                $("#Item_Detail_Visor").append(template);
+            }
+        });
+    }
+
     function item_detail(data) {
         //detail barang
         $.ajax({
@@ -262,11 +318,11 @@
                 'kode_barang':data
             },
             success: function(mydata) {
-                console.log(mydata);
-                console.log(typeof(mydata.result.barang_foto2));
                 $("#Item_Detail_Gambar").empty();
                 $("#Item_Detail_Header").text(mydata.result.barang_nama);
                 let gambar = "";
+                $("#Item_Detail_Deskripsi").html(setEnter(mydata.result.barang_deskripsi));
+
                 if (mydata.result.barang_foto1 !=null)
                 {
                     gambar = "<img src='" + mydata.result.barang_foto1 +"' class='gambar-item-detail'>"
@@ -297,6 +353,8 @@
                     gambar = "<img src='" + mydata.result.barang_foto6 +"' class='gambar-item-detail'>"
                     $("#Item_Detail_Gambar").append(gambar);
                 }
+                setWarna(mydata.result.barang_sku);
+                setVisor(mydata.result.barang_sku);
                 $("#modalDetailItem").modal('show');
             }
         });
