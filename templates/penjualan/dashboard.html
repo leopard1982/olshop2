@@ -277,12 +277,49 @@
                 let template="<select id='Item_Warna' style='font-size:12px' class='form-select border-secondary'>";
                 template += "<option value=''>--------</option>";
                 data.result.forEach(function(mydata) {
-                    template += "<option value='" + mydata.barang_warna + "'>" + mydata.barang_warna + "</option>";
+                    template += "<option value='" + mydata.barang_warna + "^" + mydata.barang_jumlah +"'>" + mydata.barang_warna + "</option>";
                 });
                 template += "</select>";
                 $("#Item_Detail_Warna").append(template);
+                /*
+                $("#Item_Warna").change(function() {
+                    if($("#Item_Warna").val() !="") {
+                        stok_warna = $("#Item_Warna").val().split("^")[1];
+                    } else {
+                        stok_warna = 0;
+                    }
+  
+                });
+                */
             }
         });
+    }
+
+    function setJumlahItem() {
+        /*
+        if(stok_visor==0 && stok_warna==0) {
+            $("#Item_Detail_Stok_nya").text("Silakan Pilih Varian!");
+            $("#jumlah_beli").css({"max":"0","value":"0"});
+
+        } else if(stok_visor==0 || stok_warna==0) {
+            if(stok_visor ==0) {
+                $("#Item_Detail_Stok_nya").text(stok_warna);
+                $("#jumlah_beli").css({"max":stok_warna,"value":"1"});
+            }
+            if (stok_warna==0) {
+                $("#jumlah_beli").css({"max":stok_visor,"value":"1"});
+                $("#Item_Detail_Stok_nya").text(stok_visor);
+            }
+        } else {
+            if(stok_visor>stok_warna) {
+                $("#Item_Detail_Stok_nya").text(stok_visor);
+                $("#jumlah_beli").css({"max":stok_warna,"value":"1"});
+            }else if(stok_visor<stok_warna) {
+                $("#Item_Detail_Stok_nya").text(stok_visor);
+                $("#jumlah_beli").css({"max":stok_visor,"value":"1"});
+            }
+        }
+        */
     }
 
     function setVisor(data) {
@@ -300,10 +337,20 @@
                 let template="<select id='Item_Visor' style='font-size:12px' class='form-select border-secondary'>";
                 template += "<option value=''>--------</option>";
                 data.result.forEach(function(mydata) {
-                    template += "<option value='" + mydata.barang_visor + "'>" + mydata.barang_visor + "</option>";
+                    template += "<option value='" + mydata.barang_visor + "^" + mydata.barang_jumlah+"'>" + mydata.barang_visor + "</option>";
                 });
                 template += "</select>";
                 $("#Item_Detail_Visor").append(template);
+                /*
+                $("#Item_Visor").change(function() {
+                    if($("#Item_Visor").val() !="") {
+                        stok_visor = $("#Item_Visor").val().split("^")[1];
+                    } else {
+                        stok_visor = 0;
+                    }
+                   
+                });
+                */
             }
         });
     }
@@ -355,6 +402,9 @@
                 }
                 setWarna(mydata.result.barang_sku);
                 setVisor(mydata.result.barang_sku);
+                $("#Item_Detail_Stok_nya").text(mydata.result.barang_stok);
+                $("#kode_barang_detail").val(mydata.result.barang_sku);
+                $("#jumlah_beli").val("1");
                 $("#modalDetailItem").modal('show');
             }
         });
@@ -603,6 +653,103 @@
         tampilkan_barang_disc();
     }
             
+    function addCart() {
+        let jumlah = $("#jumlah_beli").val();
+        let stok = $("#Item_Detail_Stok_nya").text();
+        
+        if(isNaN(parseInt(jumlah))==false) {
+            if(jumlah>0 && jumlah<=parseInt(stok)) {
+                $.ajax({
+                    type: "POST",
+                    url: "/api/add/cart/",
+                    data: {
+                        'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                        'kode_barang': $("#kode_barang_detail").val(),
+                        'jumlah_barang': jumlah,
+                        'warna_barang': $("#Item_Warna").val().split('^')[0],
+                        'visor_barang': $("#Item_Visor").val().split('^')[0],
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        updateCart();
+                    }
+                });
+            }
+        }
+    }
+
+    function updateCart() {
+        $.ajax({
+            type: "POST",
+            url: "api/get/cart/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                $("#jumlah_cart").text(data.jumlah_item);
+                $("#detail_cart").empty();
+                let variasi_warna="";
+                let variasi_visor=""
+
+                data.result.forEach(function(mydata) {
+                    variasi_warna = mydata.shopping_warna;
+                    variasi_visor = mydata.shopping_visor;
+
+                    if(variasi_warna=="") {
+                        variasi_warna="-";
+                    }
+
+                    if(variasi_visor=="") {
+                        variasi_visor="-";
+                    }
+
+                    let tambahan =""
+                    if(mydata.shopping_barang.barang_disc_aktif==true) {
+                        tambahan ="<div style='font-size:12px'>Harga: <s style='color:grey'>"+ubahKeUang(mydata.shopping_barang.barang_harga)+"</s> <span style='color:red;font-weight:bold'>"+ubahKeUang(mydata.shopping_barang.barang_harga-mydata.shopping_barang.barang_disc)+"</span></div>";
+                    } else {
+                        tambahan ="<div style='font-size:12px;'>Harga: <span style='color:red;font-weight:bold'>"+ubahKeUang(mydata.shopping_barang.barang_harga)+"</span></div>";
+                    }
+                    template = "<div class='shoppingcart-box-isi d-flex align-items-center justify-content-start'>" +
+                        "<div class='d-flex align-items-center'><img src='" + mydata.shopping_barang.barang_foto1 + "' class='gambar-box-kecil'></div>" +
+                        "<div >" + 
+                            "<div class='fw-bold' style='font-size:12px'>"+mydata.shopping_barang.barang_nama.toUpperCase()+"</div>" +
+                            "<div style='font-size:12px'>Jumlah di Keranjang: <button style='margin-left:5px;margin-right:5px;font-size:12px;border-radius:5px'  id='kurang_" + mydata.id+"'>-</button>" + "<strong>"+ mydata.shopping_jumlah+"</strong> <button style='font-size:12px;border-radius:5px' id='tambah_" + mydata.id+"'>+</button></div>" +
+                            "<div style='font-size:12px'>Variasi Warna: <strong>"+variasi_warna.toUpperCase()+"</strong></div>" +
+                            "<div style='font-size:12px'>Variasi Visor: <strong>"+variasi_visor.toUpperCase()+"</strong></div>" +
+                            tambahan +
+                            "</div> </div>";
+                    $("#detail_cart").append(template);
+                    $("#kurang_"+mydata.id).click(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/set/cart/kurangi/",
+                            data: {
+                                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                                'id':mydata.id,
+                            }, 
+                            success: function(data) {
+                                updateCart();
+                            }
+                        });
+                    });
+                    $("#tambah_"+mydata.id).click(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/set/cart/tambahi/",
+                            data: {
+                                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                                'id':mydata.id,
+                            },
+                            success: function(data) {
+                                updateCart();
+                            }
+                        });
+                    });
+                });
+                
+            }
+        });
+    }
 </script>
 
 {% endblock%}

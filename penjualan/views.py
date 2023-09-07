@@ -6,6 +6,10 @@ from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek, variasiWarna
 from administrasi.models import variasiVisor
 
+from penjualan.serializersnya import serialShoppingCart
+
+from penjualan.models import ShoppingCart
+
 from rest_framework.decorators import api_view
 
 from rest_framework.response import Response
@@ -84,7 +88,7 @@ def cari_keyword(request):
         q = Q()
         for filter in keyword_cari_stream:
             q = q | Q(barang_nama__icontains=filter)
-            print(q)
+
         data = masterBarang.objects.filter(q)
     
         serial = serialMasterBarang(data,many=True)
@@ -98,7 +102,7 @@ def cari_keyword(request):
 def hasil_cari(request):
     if request.method == 'POST':
         filternya = request.data['kode_sku']
-        print(filternya)
+
         data = masterBarang.objects.get(barang_sku=filternya)
         data.barang_dicari = data.barang_dicari+1
         data.save()
@@ -262,3 +266,83 @@ def variasi_visor(request):
         }
         return Response(context)
     return Response({})
+
+@api_view(['POST'])
+def addCart(request):
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+        jumlah_barang = request.data['jumlah_barang']
+        warna_barang = request.data['warna_barang']
+        visor_barang = request.data['visor_barang']
+
+        data = ShoppingCart.objects.all().filter(shopping_barang=masterBarang.objects.get(barang_sku=kode_barang),shopping_warna=warna_barang,shopping_visor=visor_barang)
+        if(data.count()>0):
+            data.update(shopping_jumlah = F('shopping_jumlah')+jumlah_barang)
+        else:
+            data = ShoppingCart()
+            data.shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)
+            data.shopping_jumlah = jumlah_barang
+            data.shopping_visor = visor_barang
+            data.shopping_warna = warna_barang
+            data.save()
+
+            return Response ({'result':True})
+    return Response ({'result':False})
+
+@api_view(['POST'])
+def get_cart (request):
+    if request.method == 'POST':
+        mydata = ShoppingCart.objects.all()
+        serial = serialShoppingCart(mydata,many=True)
+
+        context= {
+            'result': serial.data,
+            'jumlah_item': mydata.count()
+        }
+
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def addJumlahCart (request):
+    if request.method == 'POST':
+        idnya = request.data['id']
+       
+        # kode_barang = request.data['kode_barang']
+        # variasi_visor = request.data['variasi_visor']
+        # variasi_warna = request.data['variasi_warna']
+        mydata = ShoppingCart.objects.get(id=idnya)
+        if mydata is not None:
+            mydata.shopping_jumlah=mydata.shopping_jumlah+1
+            mydata.save()
+        context= {
+            'result':True
+        }
+
+        return Response(context)
+    return Response({'result':False})
+
+@api_view(['POST'])
+def subJumlahCart (request):
+    if request.method == 'POST':
+        idnya = request.data['id']
+        
+        # kode_barang = request.data['kode_barang']
+        # variasi_visor = request.data['variasi_visor']
+        # variasi_warna = request.data['variasi_warna']
+        
+        mydata = ShoppingCart.objects.get(id=idnya)
+        if mydata is not None:
+    
+            if(mydata.shopping_jumlah==1):
+                mydata.delete()
+            else:
+                mydata.shopping_jumlah = mydata.shopping_jumlah -1
+                mydata.save()
+
+        context= {
+            'result':True
+        }
+
+        return Response(context)
+    return Response({'result':False})

@@ -54,6 +54,7 @@ class masterBarang(models.Model):
     barang_terjual = models.PositiveIntegerField(default=0,verbose_name="Barang Jumlah Terjual")
     barang_dicari = models.PositiveIntegerField(default=0,verbose_name="Jumlah HIT")
     barang_merek = models.ForeignKey(merek,on_delete=models.RESTRICT,null=True,blank=True)
+    barang_stok = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['barang_nama','barang_sku']
@@ -65,7 +66,6 @@ class masterBarang(models.Model):
 class variasiWarna(models.Model):
     barang_sku = models.ForeignKey(masterBarang,on_delete=models.RESTRICT,verbose_name="Nama Barang")
     barang_warna = models.CharField(max_length=50,verbose_name="Nama Variasi Warna")
-    barang_jumlah = models.PositiveSmallIntegerField(default=0,verbose_name="Jumlah Barang")
 
     class Meta:
         ordering = ['barang_sku','barang_warna']
@@ -78,7 +78,6 @@ class variasiVisor(models.Model):
     barang_sku = models.ForeignKey(masterBarang,on_delete=models.RESTRICT,verbose_name="Jenis Visor Barang")
     barang_visor = models.CharField(max_length=50,verbose_name="Nama Variasi Visor")
     barang_visor_gambar = models.ImageField(upload_to="visor", verbose_name="Gambar Visor",null=True,blank=True)
-    barang_jumlah = models.PositiveSmallIntegerField(default=0,verbose_name="Jumlah Barang")
 
     class Meta:
         ordering = ['barang_sku','barang_visor']
@@ -90,7 +89,6 @@ class variasiVisor(models.Model):
 class variasiUkuran(models.Model):
     barang_sku = models.ForeignKey(masterBarang,on_delete=models.RESTRICT,verbose_name="Ukuran Barang")
     barang_ukuran = models.CharField(max_length=50,verbose_name="Nama Variasi Ukuran")
-    barang_jumlah = models.PositiveSmallIntegerField(default=0,verbose_name="Jumlah Barang")
 
     class Meta:
         ordering = ['barang_sku','barang_ukuran']
@@ -108,3 +106,4 @@ class chatBody(models.Model):
     chat_message = models.TextField(max_length=500,blank=False,null=False)
     chat_time = models.DateTimeField(auto_now_add=True)
     chat_user = models.ForeignKey(User,on_delete=models.RESTRICT)
+    

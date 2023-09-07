@@ -179,8 +179,8 @@ a {
 }
 
 .shoppingcart-box {
-    width: 30%;
-    max-width: 30%;
+    width: 50%;
+    max-width: 50%;
     overflow-x: hidden;
     overflow-y: scroll;
     height: 300px;
@@ -193,6 +193,19 @@ a {
     display: none;
     padding: 10px;
     cursor: pointer;
+}
+
+.shoppingcart-box-isi {
+    width: 100%;
+    max-width: 100%;
+    height: 140px;
+    min-height: 140px;
+    max-height: 140px;
+    border-top: 1px solid red;
+    padding-top: 3px;
+    padding-bottom: 10px;
+    cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .wishlist-box {
@@ -456,7 +469,20 @@ a {
 }
 
 
-
+.gambar-box-kecil {
+    width: 80px;
+    min-width: 80px;
+    max-width: 80px;
+    height: 80px;
+    min-height: 80px;
+    max-height: 80px;
+    margin-left: 5px;
+    margin-right: 10px;
+    margin-top: 20px;
+    text-align: center;
+    background-color: white;
+    border-radius: 10px;
+}
 
 
 @keyframes bawah {
