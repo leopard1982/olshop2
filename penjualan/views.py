@@ -6,9 +6,9 @@ from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek, variasiWarna
 from administrasi.models import variasiVisor
 
-from penjualan.serializersnya import serialShoppingCart
+from penjualan.serializersnya import serialShoppingCart, serialWishList
 
-from penjualan.models import ShoppingCart
+from penjualan.models import ShoppingCart, WishList_Item
 
 from rest_framework.decorators import api_view
 
@@ -346,3 +346,70 @@ def subJumlahCart (request):
 
         return Response(context)
     return Response({'result':False})
+
+@api_view(['POST'])
+def setWishlist (request):
+    jumlah=0
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+        print(kode_barang)
+        try:
+            mydata = WishList_Item.objects.get(kode_barang=masterBarang.objects.get(barang_sku=kode_barang))       
+            mydata.delete()
+            resultnya=False
+        except:       
+            mydata1=WishList_Item()
+            mydata1.kode_barang = masterBarang.objects.get(barang_sku=kode_barang)
+            mydata1.save()
+            
+            resultnya=True
+        print(kode_barang)
+
+        data = WishList_Item.objects.all()
+        jumlah = data.count()
+        serial = serialWishList(data,many=True)
+
+        context = {
+            'result': resultnya,
+            'jumlah':jumlah,
+            'data': serial.data
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def getWishlist (request):
+    resultnya = False
+    jumlah=0
+    if request.method == 'POST':
+        kode_barang = request.data['kode_barang']
+
+        mydata = WishList_Item.objects.all().filter(kode_barang=masterBarang.objects.get(barang_sku=kode_barang))       
+        if mydata.count()>0:
+           resultnya = True
+
+        context = {
+            'result': resultnya,
+
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def initialWishlist (request):
+    if request.method == 'POST':
+        mydata = WishList_Item.objects.all()       
+        
+        resultnya=True
+
+        data = WishList_Item.objects.all()
+        jumlah = data.count()
+        serial = serialWishList(data,many=True)
+
+        context = {
+            'result': resultnya,
+            'jumlah': jumlah,
+            'data': serial.data
+        }
+        return Response(context)
+    return Response({})

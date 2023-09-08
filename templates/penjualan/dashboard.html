@@ -2,6 +2,8 @@
 {% load static %}
 {% block contents%}
 
+
+
 <div style="background-color:whitesmoke;border-radius:5px;margin-top:70px;margin-left:-20px;" >
     <div class="box-sering-dicari-header d-flex align-items-center">
         <img src="{% static 'img/DILIHAT.png'%}" class="w-100 rounded"/>
@@ -405,6 +407,7 @@
                 $("#Item_Detail_Stok_nya").text(mydata.result.barang_stok);
                 $("#kode_barang_detail").val(mydata.result.barang_sku);
                 $("#jumlah_beli").val("1");
+                getWishList(mydata.result.barang_sku);
                 $("#modalDetailItem").modal('show');
             }
         });
@@ -687,7 +690,11 @@
             },
             success: function(data) {
                 $("#jumlah_cart").text(data.jumlah_item);
-                $("#detail_cart").empty();
+                if(data.jumlah_item>0) {
+                    $("#detail_cart").empty();
+                } else {
+                    $("#detail_cart").html("<div class='p-2 text-center'>Belum ada barang di keranjang belanjamu! yuk mulai belanja, ada banyak barang kualitas bagus di <span class='fw-bold text-danger' style='font-size:15px'>jagoanhelm.com</span></div>")
+                }
                 let variasi_warna="";
                 let variasi_visor=""
 
@@ -728,6 +735,7 @@
                                 'id':mydata.id,
                             }, 
                             success: function(data) {
+                                console.log(data);
                                 updateCart();
                             }
                         });
@@ -747,6 +755,98 @@
                     });
                 });
                 
+            }
+        });
+    }
+
+    function setWishList() {
+        $.ajax({
+            type: "POST",
+            url: "/api/set/wishlist/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode_barang':$("#kode_barang_detail").val(),
+            },
+            success: function(mydata) {
+                $("#wishlist_heart").empty();
+                console.log(mydata.result);
+                if(mydata.result==false) {
+                    $("#wishlist_heart").html("<i class='fa fa-heart-o'></i>");
+                } else {
+                    $("#wishlist_heart").html("<i class='fa fa-heart text-danger'></i>");
+                }
+                $("#jumlah_wishlist").text(mydata.jumlah);
+                $("#wishlist_menu").empty();
+                
+                if(mydata.jumlah == 0) {
+                    $("#wishlist_menu").html("<div class='text-center p-2'><i>belum ada barang di wishlistmu. boleh cek produk <span style='font-weight:bold;color:red;font-size:15px'>jagoanhelm.com</span> kaka, siapa tau ada yang disukai yah ^^</i></div>");
+                };
+                mydata.data.forEach(function(datanya) {
+                    let nama_barang = datanya.kode_barang.barang_nama;
+                    let gambar_barang = datanya.kode_barang.barang_foto1;
+                    let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' id='mywish_"+datanya.kode_barang.barang_sku+"'>"+
+                        "<img src='"+ gambar_barang+"'/ style='weight:80px;height:80px;border-radius:10px'><span style='font-weight:bold;margin-left:10px'>"+ nama_barang+"</span>" +
+                        "</div>";
+                    $("#wishlist_menu").append(template);
+                    $("#mywish_" + datanya.kode_barang.barang_sku).click(function() {
+                        $("#kode_barang_detail").val(datanya.kode_barang.barang_sku);
+                        item_detail($("#kode_barang_detail").val());
+                    });
+                })
+                
+            }
+        });
+    }
+
+    function getWishList(data) {
+        $.ajax({
+            type: "POST",
+            url: "/api/get/wishlist/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode_barang':data,
+            },
+            success: function(mydata) {
+                if(mydata.result==false) {
+                    $("#wishlist_heart").html("<i class='fa fa-heart-o'></i>");
+                } else {
+                    $("#wishlist_heart").html("<i class='fa fa-heart text-danger'></i>");
+                }
+                
+            }
+        });
+    }
+
+    function initWishList() {
+        $.ajax({
+            type: "POST",
+            url: "/api/init/wishlist/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+            },
+            success: function(mydata) {
+                if(mydata.result==false) {
+                    $("#wishlist_heart").html("<i class='fa fa-heart-o'></i>");
+                } else {
+                    $("#wishlist_heart").html("<i class='fa fa-heart text-danger'></i>");
+                }
+                $("#jumlah_wishlist").text(mydata.jumlah);
+                $("#wishlist_menu").empty();
+                if(mydata.jumlah == 0) {
+                    $("#wishlist_menu").html("<div class='text-center p-2'><i>belum ada barang di wishlistmu. boleh cek produk <span style='font-weight:bold;color:red;font-size:15px'>jagoanhelm.com</span> kaka, siapa tau ada yang disukai yah ^^</i></div>");
+                };
+                mydata.data.forEach(function(datanya) {
+                    let nama_barang = datanya.kode_barang.barang_nama;
+                    let gambar_barang = datanya.kode_barang.barang_foto1;
+                    let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' id='mywish2_"+datanya.kode_barang.barang_sku+"'>"+
+                        "<img src='"+ gambar_barang+"'/ style='weight:80px;height:80px;border-radius:10px'><span style='font-weight:bold;margin-left:10px;text-align:left'>"+ nama_barang+"</span>" +
+                        "</div>";
+                    $("#wishlist_menu").append(template);
+                    $("#mywish2_" + datanya.kode_barang.barang_sku).click(function() {
+                        $("#kode_barang_detail").val(datanya.kode_barang.barang_sku);
+                        item_detail($("#kode_barang_detail").val());
+                    });
+                })
             }
         });
     }

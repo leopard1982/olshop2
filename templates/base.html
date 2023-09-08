@@ -27,7 +27,10 @@
             <div class="modal-body">
                 <div class="text-center" style="font-size:20px;margin-bottom:10px;font-weight:bold;padding-top:20px;" id="Item_Detail_Header"></div>
                 <div class="d-flex w-100 justify-content-center " style="border-bottom:1px solid grey;border-top:1px solid grey;" id="Item_Detail_Gambar"></div>
-                <div style="margin-top:15px;margin-bottom:15px;"><strong><u>Deskripsi Produk:</u></strong></div>
+                <div class="d-flex justify-content-between" style="margin-top:15px;margin-bottom:15px;">
+                    <div><strong><u>Deskripsi Produk:</u></strong></div>
+                    <div onclick="setWishList()" style="cursor:pointer">wishlist <span id="wishlist_heart" style="cursor:pointer;font-size:20px"><i class="fa fa-heart-o"></i></span></div>
+                </div>
                 <div style="height:150px" class="overflow-auto">
                     <div id="Item_Detail_Deskripsi"></div>
                 </div>
@@ -142,12 +145,9 @@
                             </div>
                         </div>
                         <div>
-                            <div class="garis" onclick="show_wishlist()"><i class="fa fa-heartbeat"></i> Wishlist</div>
-                            <div class="wishlist-box" onmouseleave="hide_wishlist()">
-                                <div><strong>ITEM Wishlist1</strong></div>
-                                <div>{% lorem 1 %}</div>
-                                <div><strong>ITEM Wishlist2</strong></div>
-                                <div>{% lorem 1 %}</div>
+                            <div class="garis" onclick="show_wishlist()"><i class="fa fa-heartbeat"></i> Wishlist <span class="badge bg-danger" id="jumlah_wishlist"></span></div>
+                            <div class="wishlist-box" onmouseleave="hide_wishlist()" id="wishlist_menu">
+ 
                             </div>
                         </div>
 
@@ -336,6 +336,7 @@
             tampilkan_barang_premium();
             tampilkan_barang_disc();
             updateCart();
+            initWishList();
         });
 
         function cek_scroll() {

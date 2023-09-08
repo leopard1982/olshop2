@@ -2,7 +2,9 @@ from django.urls import path
 from penjualan.views import dashboard, set_search_keyword, get_kategori, get_barang_cari5
 from penjualan.views import cari_keyword, hasil_cari, tampil_barang_budget, tampil_barang_premium
 from penjualan.views import tampil_barang_disc, tampil_barang_satu, variasi_warna, variasi_visor
-from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart
+from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart, setWishlist, initialWishlist
+from penjualan.views import getWishlist
+
 urlpatterns = [
     path('',dashboard,name="dashboard"),
     path('api/set/search/',set_search_keyword, name="set_search_keyword"),
@@ -20,4 +22,7 @@ urlpatterns = [
     path('api/get/cart/',get_cart,name="get_cart"),
     path('api/set/cart/kurangi/',subJumlahCart,name="subJumlahCart"),
     path('api/set/cart/tambahi/',addJumlahCart,name="addJumlahCart"),
+    path('api/set/wishlist/',setWishlist,name="setWishlist"),
+    path('api/init/wishlist/',initialWishlist,name="initialWishlist"),
+    path('api/get/wishlist/',getWishlist,name="getWishList"),
 ]
