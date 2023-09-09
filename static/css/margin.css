@@ -179,8 +179,9 @@ a {
 }
 
 .shoppingcart-box {
-    width: 50%;
-    max-width: 50%;
+    width: 550px;
+    max-width: 550px;
+    min-width: 550px;
     overflow-x: hidden;
     overflow-y: scroll;
     height: 300px;
@@ -209,8 +210,9 @@ a {
 }
 
 .wishlist-box {
-    width: 30%;
-    max-width: 30%;
+    width: 400px;
+    max-width: 400px;
+    min-width: 400px;
     overflow-x: hidden;
     overflow-y: scroll;
     height: 300px;
@@ -228,9 +230,9 @@ a {
 .wishlist-box-isi {
     width: 100%;
     max-width: 100%;
-    height: 100px;
-    min-height: 100px;
-    max-height: 100px;
+    height: 120px;
+    min-height: 120px;
+    max-height: 120px;
     border-top: 1px solid red;
     padding-top: 10px;
     cursor: pointer;

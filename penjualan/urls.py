@@ -3,7 +3,7 @@ from penjualan.views import dashboard, set_search_keyword, get_kategori, get_bar
 from penjualan.views import cari_keyword, hasil_cari, tampil_barang_budget, tampil_barang_premium
 from penjualan.views import tampil_barang_disc, tampil_barang_satu, variasi_warna, variasi_visor
 from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart, setWishlist, initialWishlist
-from penjualan.views import getWishlist
+from penjualan.views import getWishlist, hapusCart
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('api/set/wishlist/',setWishlist,name="setWishlist"),
     path('api/init/wishlist/',initialWishlist,name="initialWishlist"),
     path('api/get/wishlist/',getWishlist,name="getWishList"),
+    path('api/del/cart/',hapusCart,name="hapusCart"),
 ]

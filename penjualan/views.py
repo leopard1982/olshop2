@@ -413,3 +413,11 @@ def initialWishlist (request):
         }
         return Response(context)
     return Response({})
+
+@api_view(['POST'])
+def hapusCart(request):
+    if request.method == 'POST':
+        id_cart = request.data['id_cart']
+        ShoppingCart.objects.all().filter(id=id_cart).delete()
+        return Response({'result':True})
+    return Response({})

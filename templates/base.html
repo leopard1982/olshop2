@@ -18,6 +18,7 @@
     <input type="hidden" id="stok_warna" value="">
     <input type="hidden" id="stok_visor" value="">
     <input type="hidden" id="kode_barang_detail" value="">
+    <input type="hidden" id="id_cart" value="">
        
     {% csrf_token %}
 
@@ -139,20 +140,20 @@
                     <div class="d-flex justify-content-end">
                     <!--<div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">-->
                         <div>
-                            <div class="garis" onclick="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>My Cart <span class="badge bg-danger" id="jumlah_cart"></span></div>                        
+                            <div class="garis" onmouseover="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>My Cart <span class="badge bg-danger" id="jumlah_cart"></span></div>                        
                             <div class="shoppingcart-box" onmouseleave="hide_shoppingcart()" id="detail_cart">
                                 
                             </div>
                         </div>
                         <div>
-                            <div class="garis" onclick="show_wishlist()"><i class="fa fa-heartbeat"></i> Wishlist <span class="badge bg-danger" id="jumlah_wishlist"></span></div>
+                            <div class="garis" onmouseover="show_wishlist()"><i class="fa fa-heartbeat"></i> Wishlist <span class="badge bg-danger" id="jumlah_wishlist"></span></div>
                             <div class="wishlist-box" onmouseleave="hide_wishlist()" id="wishlist_menu">
  
                             </div>
                         </div>
 
                         <div>
-                            <div class="garis" onclick="show_notification()"><i class="fa fa-bell-o"></i> Notification</div>
+                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification</div>
                             <div class="notification-box" onmouseleave="hide_notification()">
                                 <div><strong>My Notification1</strong></div>
                                 <div>{% lorem 1 %}</div>
@@ -161,13 +162,13 @@
                             </div>
                         </div>
                         <div >
-                            <div class=" garis" onclick="show_category()" ><i class="fa fa-users"></i> My Discuss</div>
+                            <div class=" garis" onmouseover="show_category()" ><i class="fa fa-users"></i> My Discuss</div>
                             <div class="category-box " onmouseleave="hide_category()">
                                 hallo
                             </div>
                         </div>
                         <div >
-                            <div class="garis" onclick="show_promo_menu()"><i class="fa fa-handshake-o"></i> PROMO </div>
+                            <div class="garis" onmouseover="show_promo_menu()"><i class="fa fa-handshake-o"></i> PROMO </div>
                             <div class="promo-box" onmouseleave="hide_promo_menu()">
                                 <div class="d-block w-100  my-3 border border-success p-2">
                                     <div class="d-flex row justify-content-center">
@@ -199,7 +200,7 @@
                             </div>
                         </div>
                         <div >
-                            <div class="garis" onclick="show_account()"><i class="fa fa-user-circle"></i> Account</div>
+                            <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
                             <div class="account-box" onmouseleave="hide_account()">
                                 <div><strong>My Account Info1</strong></div>
                                 <div>{% lorem 1 %}</div>
@@ -525,6 +526,7 @@
 
         function show_shoppingcart() {
             $(".shoppingcart-box").slideToggle("fast");
+            
             $(".wishlist-box").slideUp();
             $(".notification-box").slideUp();
             $(".account-box").slideUp();
@@ -533,11 +535,12 @@
         }
 
         function show_promo_menu() {
+            /*
             $(".account-box").slideUp();
             $(".category-box").slideUp();
             $(".shoppingcart-box").slideUp();
             $(".wishlist-box").slideUp();
-            $(".notification-box").slideUp();
+            $(".notification-box").slideUp();*/
             $(".promo-box").slideToggle("fast");
         }
 
