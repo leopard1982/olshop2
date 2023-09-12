@@ -370,6 +370,16 @@
                 $("#Item_Detail_Gambar").empty();
                 $("#Item_Detail_Header").text(mydata.result.barang_nama);
                 let gambar = "";
+                let harga="";
+                
+                console.log("diskon aktif : " + mydata.result.barang_disc_aktif);
+                if(mydata.result.barang_disc_aktif==true) {
+                    harga="<div><s>" + ubahKeUang(mydata.result.barang_harga) +"</s></div><span style='color:red'> "+ubahKeUang(mydata.result.barang_harga-mydata.result.barang_disc)+"</span>";
+                    $("#harga_nett_detail").val(mydata.result.barang_harga-mydata.result.barang_disc);
+                } else {
+                    harga="<div style='color:red'>"+ ubahKeUang(mydata.result.barang_harga) + "</div>";
+                    $("#harga_nett_detail").val(mydata.result.barang_harga);
+                }
                 $("#Item_Detail_Deskripsi").html(setEnter(mydata.result.barang_deskripsi));
 
                 if (mydata.result.barang_foto1 !=null)
@@ -407,6 +417,7 @@
                 $("#Item_Detail_Stok_nya").text(mydata.result.barang_stok);
                 $("#kode_barang_detail").val(mydata.result.barang_sku);
                 $("#jumlah_beli").val("1");
+                $("#Item_Detail_Harga").html(harga);
                 getWishList(mydata.result.barang_sku);
                 $("#modalDetailItem").modal('show');
             }
@@ -798,7 +809,7 @@
                     let nama_barang = datanya.kode_barang.barang_nama;
                     let gambar_barang = datanya.kode_barang.barang_foto1;
                     let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' >"+
-                        "<img src='"+ gambar_barang+"'/ style='weight:80px;height:80px;border-radius:10px'><div class='d-block'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
+                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
                         "</div>";
                     $("#wishlist_menu").append(template);
                     $("#mywish_" + datanya.kode_barang.barang_sku).click(function() {
@@ -852,7 +863,7 @@
                     let nama_barang = datanya.kode_barang.barang_nama;
                     let gambar_barang = datanya.kode_barang.barang_foto1;
                     let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' >"+
-                        "<img src='"+ gambar_barang+"'/ style='weight:80px;height:80px;border-radius:10px'><div class='d-block'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish2_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
+                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish2_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
                         "</div>";
                     $("#wishlist_menu").append(template);
                     $("#mywish2_" + datanya.kode_barang.barang_sku).click(function() {
@@ -879,8 +890,70 @@
     }
 
     function beli_sekarang() {
-        alert("Beli");
-        $("#modalDetailItem").modal("hide");
+        pembelianCart();
+        $("#modalCheckout").modal("show");
+    }
+
+    function pembelianCart() {
+        let template="";
+        let visor="";
+        let warna="";
+        let template_harga="";
+        let total_belanja=0;
+        $.ajax({
+            type: "POST",
+            url: "/api/get/cart/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                console.log(data);
+                $("#checkout_jumlah").text(data.jumlah_item);
+                $("#checkout_list").empty();
+                data.result.forEach(function(mydata) {
+                    visor= mydata.shopping_visor;
+                    warna=mydata.shopping_warna;
+                    template_harga ="";
+                    
+                    if(mydata.shopping_barang.barang_disc_aktif==true) {
+                        template_harga="<div>Harga: <strong><s>" + ubahKeUang(mydata.shopping_barang.barang_harga)+ "</s></strong> <strong> <span class='badge bg-success'>-" + parseInt(mydata.shopping_barang.barang_disc*100/mydata.shopping_barang.barang_harga) +"%</span> <span style='color:red'>" + ubahKeUang(mydata.shopping_barang.barang_harga-mydata.shopping_barang.barang_disc) +"</span></strong></div>";
+                        total_belanja = mydata.shopping_jumlah*(mydata.shopping_barang.barang_harga-mydata.shopping_barang.barang_disc);
+                        template_harga = template_harga + "<div>Kamu Hemat: <strong style='color:green'>"+ubahKeUang(mydata.shopping_barang.barang_disc*mydata.shopping_jumlah)+"</strong></div>"
+                        template_harga = template_harga + "<div style='font-size:15px'>Total Belanja: <strong style='color:red'>" + ubahKeUang(total_belanja)+"</strong></div>";
+                       
+
+                    } else {
+                        template_harga="<div>Harga: <strong><span style='color:red'>"+ ubahKeUang(mydata.shopping_barang.barang_harga)+"</span></strong></div>";
+                        total_belanja = mydata.shopping_jumlah*mydata.shopping_barang.barang_harga;
+                        template_harga = template_harga + "<div  style='font-size:15px'>Total Belanja: <strong style='color:red'>" + ubahKeUang(total_belanja)+"</strong></div>";
+                    }
+
+                    if(visor=="") {
+                        visor="random available";
+                    
+                    }
+                    if(warna=="") {
+                        warna="random available";
+                    }
+
+                    template = "<div class='w-100 p-2 ' style='font-size:12px'>"+
+                        "<div class='d-flex p-1 bg-danger rounded-top my-1 fw-bold text-white justify-content-center align-items-center'>" + 
+                            "<div class='col-1 d-flex justify-content-center'><input type='checkbox'></input></div>" +
+                            "<div class='col-11 '>" + mydata.shopping_barang.barang_nama.toUpperCase()+"</div>"+
+                        "</div>" +
+                        "<div class='d-flex justify-content-center rounded-bottom align-items-top border border-danger p-1' style='margin-top:-5px'>"+
+                            "<img src='" + mydata.shopping_barang.barang_foto1 +"' style='width:80px;height:80px;border-radius:10px'/>"+
+                            "<div style='width:100%;margin-left:10px' >"+
+                                "<div>Jumlah Barang: <strong>" + mydata.shopping_jumlah + "</strong> item </div>"+
+                                "<div>Variasi Warna: <strong>" +warna+"</strong></div>"+
+                                "<div>Variasi Visor: <strong>" +visor+"</strong></div>"+
+                                template_harga +
+                            "</div>" +
+                        "</div>";
+                    $("#checkout_list").append(template);                    
+                })
+            }
+        });
     }
 </script>
 

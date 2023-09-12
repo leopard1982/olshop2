@@ -19,8 +19,33 @@
     <input type="hidden" id="stok_visor" value="">
     <input type="hidden" id="kode_barang_detail" value="">
     <input type="hidden" id="id_cart" value="">
+    <input type="hidden" id="harga_nett_detail">
        
     {% csrf_token %}
+
+    <div class="modal" tabindex="-1" id="modalCheckout">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title"><i class='fa fa-cart-arrow-down'></i> Keranjang Belanjamu - <span style="font-size:15px;font-weight:bold" id="checkout_jumlah"></span> item</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="border border-secondary rounded p-3"> 
+                    <div style="height: 250px" class="overflow-auto " >
+                        <div id="checkout_list"></div>
+                    </div>
+              </div>
+
+              <div></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="button" class="btn btn-success"><i class="fa fa-money"></i> Proses Pembayaran</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
     <div class="modal" tabindex="-1" id="modalDetailItem">
         <div class="modal-dialog">
@@ -32,7 +57,7 @@
                     <div><strong><u>Deskripsi Produk:</u></strong></div>
                     <div onclick="setWishList()" style="cursor:pointer">wishlist <span id="wishlist_heart" style="cursor:pointer;font-size:20px"><i class="fa fa-heart-o"></i></span></div>
                 </div>
-                <div style="height:150px" class="overflow-auto">
+                <div style="height:100px" class="overflow-auto">
                     <div id="Item_Detail_Deskripsi"></div>
                 </div>
                 <div style="margin-top:20px;font-weight:bold;">
@@ -52,14 +77,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="row d-flex justify-content-between" style="font-size:15px;margin-bottom:20px">
-                    <div class="col-7 p-2">
-                        Stok Tersedia: <span style="font-size:15px;font-weight:bold;" id="Item_Detail_Stok_nya">Silakan Pilih Varian!</span>
+                <div class="row d-flex container justify-content-between" style="font-size:15px;margin-bottom:20px">
+                    <div class="col-4 p-2" style="font-size:15px">
+                        Harga: <strong><span id='Item_Detail_Harga'></span></strong>
                     </div>
-                    <div class="col-5">
+                    <div class="col-4 p-2" style="font-size:15px">
+                        Stok: <span style="font-size:13px;font-weight:bold;" id="Item_Detail_Stok_nya">Silakan Pilih Varian!</span>
+                    </div>
+                    <div class="col-4">
                         <div class="row d-flex justify-content-between">
-                            <div class="col-4 p-2">Jumlah:</div>
-                            <div class="col-8"><input id="jumlah_beli" type="number" value=1 min=1 class="form-control border-outline-info"></input></div>
+                            <div class="col-4 p-2" style="font-size:15px">Beli:</div>
+                            <div class="col-8"><input style="font-size:15px" id="jumlah_beli" type="number" value=1 min=1 class="form-control border-outline-info"></input></div>
                         </div>
                     </div>
                 </div>
@@ -342,11 +370,11 @@
 
         function cek_scroll() {
             if($(window).scrollTop()>last_position) {
-                $("#the_header").slideUp("fast");
+                $("#the_header").hide();
                 $("#the_footer").slideDown("slow");
             } else {
                 $("#the_header").slideDown("slow");
-                $("#the_footer").slideUp("fast");
+                $("#the_footer").hide();
             }
             last_position=$(window).scrollTop();
         }
@@ -516,85 +544,84 @@
                     });
                 }
             });
-            $(".category-box").slideToggle("fast");
-            $(".shoppingcart-box").slideUp();
-            $(".wishlist-box").slideUp();
-            $(".notification-box").slideUp();
-            $(".account-box").slideUp();
-            $(".promo-box").slideUp();
+            $(".category-box").slideDown("fast");
+            $(".shoppingcart-box").hide();
+            $(".wishlist-box").hide();
+            $(".notification-box").hide();
+            $(".account-box").hide();
+            $(".promo-box").hide();
         }
 
         function show_shoppingcart() {
-            $(".shoppingcart-box").slideToggle("fast");
+            $(".shoppingcart-box").slideDown("fast");
             
-            $(".wishlist-box").slideUp();
-            $(".notification-box").slideUp();
-            $(".account-box").slideUp();
-            $(".category-box").slideUp();
-            $(".promo-box").slideUp();
+            $(".wishlist-box").hide();
+            $(".notification-box").hide();
+            $(".account-box").hide();
+            $(".category-box").hide();
+            $(".promo-box").hide();
         }
 
         function show_promo_menu() {
-            /*
-            $(".account-box").slideUp();
-            $(".category-box").slideUp();
-            $(".shoppingcart-box").slideUp();
-            $(".wishlist-box").slideUp();
-            $(".notification-box").slideUp();*/
-            $(".promo-box").slideToggle("fast");
+            $(".account-box").hide();
+            $(".category-box").hide();
+            $(".shoppingcart-box").hide();
+            $(".wishlist-box").hide();
+            $(".notification-box").hide();
+            $(".promo-box").slideDown("fast");
         }
 
         function hide_shoppingcart() {
-            $(".shoppingcart-box").slideUp("fast");
+            $(".shoppingcart-box").hide();
         }
 
         function hide_promo_menu() {
-            $(".promo-box").slideUp("fast");
+            $(".promo-box").hide();
         }
 
         function hide_category() {
-            $(".category-box").slideUp("fast");
+            $(".category-box").hide();
         }
 
         function show_wishlist() {
-            $(".wishlist-box").slideToggle("fast");
-            $(".category-box").slideUp();
-            $(".shoppingcart-box").slideUp();
-            $(".notification-box").slideUp();
-            $(".account-box").slideUp();
-            $(".promo-box").slideUp();
+            $(".wishlist-box").slideDown("fast");
+            $(".category-box").hide();
+            $(".shoppingcart-box").hide();
+            $(".notification-box").hide();
+            $(".account-box").hide();
+            $(".promo-box").hide();
         }
 
         function hide_wishlist() {
-            $(".wishlist-box").slideUp("fast");
+            $(".wishlist-box").hide();
         }
 
         function show_notification() {
-            $(".notification-box").slideToggle("fast");
-            $(".category-box").slideUp();
-            $(".shoppingcart-box").slideUp();
-            $(".wishlist-box").slideUp();
-            $(".account-box").slideUp();
-            $(".promo-box").slideUp();
+            $(".notification-box").slideDown("fast");
+            $(".category-box").hide();
+            $(".shoppingcart-box").hide();
+            $(".wishlist-box").hide();
+            $(".account-box").hide();
+            $(".promo-box").hide();
         }
 
         function hide_notification() {
-            $(".notification-box").slideUp("fast");
+            $(".notification-box").hide();
         }
 
     
 
         function show_account() {
-            $(".account-box").slideToggle("fast");
-            $(".category-box").slideUp();
-            $(".shoppingcart-box").slideUp();
-            $(".wishlist-box").slideUp();
-            $(".notification-box").slideUp();
-            $(".promo-box").slideUp();
+            $(".account-box").slideDown("fast");
+            $(".category-box").hide();
+            $(".shoppingcart-box").hide();
+            $(".wishlist-box").hide();
+            $(".notification-box").hide();
+            $(".promo-box").hide();
         }
 
         function hide_account() {
-            $(".account-box").slideUp("fast");
+            $(".account-box").hide();
         }
 
         
