@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from penjualan.models import ShoppingCart, WishList_Item
+from penjualan.models import ShoppingCart, WishList_Item, Buying_Detail, Buying_Header
 from administrasi.models import masterBarang
 
 class serialMasterBarang(serializers.ModelSerializer):
@@ -17,4 +17,15 @@ class serialWishList(serializers.ModelSerializer):
     kode_barang = serialMasterBarang()
     class Meta:
         model = WishList_Item
+        fields = "__all__"
+
+class serialBuyingHeader(serializers.ModelSerializer):
+    class Meta:
+        model = Buying_Header
+        fields = "__all__"
+
+class serialBuyingDetail(serializers.ModelSerializer):
+    buying_kode = serialBuyingHeader()
+    class Meta:
+        model = Buying_Detail
         fields = "__all__"

@@ -41,7 +41,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-              <button type="button" class="btn btn-success"><i class="fa fa-money"></i> Proses Pembayaran</button>
+              <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="proses_bayar()"><i class="fa fa-money"></i> Proses Pembayaran</button>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
                     <div class="col-7 d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" ><span class="fa fa-user-circle "></span> Chat</button>
                         <button type="button" class="btn btn-success mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart()"><span class="fa fa-shopping-cart "></span> Keranjang</button>
-                        <button type="button" class="btn btn-primary mx-1" style="font-size:12px !important;padding-top:0px !important"><span class="fa fa-money "></span> Beli</button>
+                        <button type="button" class="btn btn-primary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money " ></span> Beli</button>
                     </div>
                 </div>
             </div>
@@ -181,12 +181,8 @@
                         </div>
 
                         <div>
-                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification</div>
-                            <div class="notification-box" onmouseleave="hide_notification()">
-                                <div><strong>My Notification1</strong></div>
-                                <div>{% lorem 1 %}</div>
-                                <div><strong>My Notification2</strong></div>
-                                <div>{% lorem 1 %}</div>
+                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification <span class='badge bg-danger' id="jumlah_notif"></span></div>
+                            <div class="notification-box" onmouseleave="hide_notification()" id="my_notif">
                             </div>
                         </div>
                         <div >
@@ -342,6 +338,8 @@
         let stok_warna =0;
         let stok_visor =0;
 
+        let daftar_id_cart=[];
+
         function set_kategori_page(kategori) {
             window.location.href = "/?cat=" + kategori;
         }
@@ -366,6 +364,7 @@
             tampilkan_barang_disc();
             updateCart();
             initWishList();
+            update_notif_bayar();
         });
 
         function cek_scroll() {
@@ -554,7 +553,6 @@
 
         function show_shoppingcart() {
             $(".shoppingcart-box").slideDown("fast");
-            
             $(".wishlist-box").hide();
             $(".notification-box").hide();
             $(".account-box").hide();

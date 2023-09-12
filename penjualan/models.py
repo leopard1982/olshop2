@@ -16,3 +16,32 @@ class ShoppingCart(models.Model):
 
 class WishList_Item(models.Model):
     kode_barang = models.ForeignKey(masterBarang,on_delete=models.RESTRICT,verbose_name="Barang Wishlist")
+
+class Voucher_Ongkir(models.Model):
+    voucher_kode = models.CharField(max_length=200,primary_key=True,null=False,blank=False)
+    voucher_nama = models.CharField(max_length=200)
+    voucher_valid = models.DateField(auto_now_add=False)
+    voucher_min_belanja = models.PositiveBigIntegerField(default=0)
+    voucher_nilai = models.PositiveIntegerField(default=0)
+    voucher_aktif = models.BooleanField(default=True)
+    voucher_time = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-voucher_time']
+
+class Buying_Header(models.Model):
+    buying_kode = models.CharField(max_length=10, blank=False, null=False,primary_key=True)
+    buying_total = models.PositiveBigIntegerField(null=True,blank=True,default=0)
+    buying_kirim_resi = models.CharField(max_length=200, blank=True,null=True)
+    buying_kirim_ekspedisi = models.CharField(max_length=200, blank=True, null=True)
+    buying_time = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-buying_time"]
+
+class Buying_Detail(models.Model):
+    buying_kode = models.ForeignKey(Buying_Header,on_delete=models.RESTRICT)
+    buying_barang = models.ForeignKey(masterBarang, null=False,blank=False,verbose_name="Kode Barang",on_delete=models.RESTRICT)
+    buying_jumlah = models.PositiveIntegerField(default=0)
+    buying_warna = models.CharField(max_length=200, blank=False, null=False)
+    buying_visor = models.CharField(max_length=200,blank=False,null=False)
+    buying_pesan = models.CharField(max_length=200,blank=False,null=False)

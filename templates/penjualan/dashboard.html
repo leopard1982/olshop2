@@ -737,10 +737,13 @@
                             tambahan +"</div></div>"+
                             "<div class='d-flex justify-content-between'  style='margin-top:-20px; margin-bottom:20px'><div class='px-2'><button id='delcart_"+mydata.id+"' class='btn btn-secondary'  style='font-size:15px'><i class='fa fa-window-close'></i> Hapus Keranjang</button></div>"+
                             "<div class='px-2'><button class='btn btn-primary' id='detailcart_"+mydata.id+"' style='font-size:15px'><i class='fa fa-tags'></i> Detail Barang</button></div>"+
-                            "<div class='px-2'><button onclick='beli_sekarang()' class='btn btn-success' style='font-size:15px'><i class='fa fa-money'></i> Beli Sekarang</button></div></div>"+
+                            "<div class='px-2'><button id='btn_beli_"+mydata.id+"' class='btn btn-success' style='font-size:15px'><i class='fa fa-money'></i> Beli Sekarang</button></div></div>"+
                             " </div>";
                     $("#detail_cart").append(template);
-                    
+                    $("#btn_beli_" + mydata.id).click(function() {
+                        $("#id_cart").val(mydata.id);
+                        beli_sekarang();
+                    });
                     $("#delcart_" + mydata.id).click(function() {
                         $("#id_cart").val(mydata.id);
                         del_cart();
@@ -891,7 +894,11 @@
 
     function beli_sekarang() {
         pembelianCart();
-        $("#modalCheckout").modal("show");
+    }
+
+    function beli_sekarang_from_detail() {
+        addCart();
+        pembelianCart();
     }
 
     function pembelianCart() {
@@ -938,7 +945,7 @@
 
                     template = "<div class='w-100 p-2 ' style='font-size:12px'>"+
                         "<div class='d-flex p-1 bg-danger rounded-top my-1 fw-bold text-white justify-content-center align-items-center'>" + 
-                            "<div class='col-1 d-flex justify-content-center'><input type='checkbox'></input></div>" +
+                            "<div class='col-1 d-flex justify-content-center'><input type='checkbox'  id='checkbox_"+ mydata.id +"' onchange='checkboxnya()'></input></div>" +
                             "<div class='col-11 '>" + mydata.shopping_barang.barang_nama.toUpperCase()+"</div>"+
                         "</div>" +
                         "<div class='d-flex justify-content-center rounded-bottom align-items-top border border-danger p-1' style='margin-top:-5px'>"+
@@ -948,13 +955,86 @@
                                 "<div>Variasi Warna: <strong>" +warna+"</strong></div>"+
                                 "<div>Variasi Visor: <strong>" +visor+"</strong></div>"+
                                 template_harga +
+                                "<div><input type='text' id='pesan_"+mydata.id+"' placeholder='request ku' style='font-size:13px;border-radius:10px;font-style:italic;font-weight:bold' class='form-control border border-secondary'></div>" +
                             "</div>" +
                         "</div>";
-                    $("#checkout_list").append(template);                    
+                    $("#checkout_list").append(template);     
+                    
+                    if(mydata.id==$("#id_cart").val()) {
+                        console.log("ketemu");
+                        $("#checkbox_" +mydata.id).attr("checked","checked");
+                        checkboxnya();
+                    }           
                 })
+                $("#modalCheckout").modal("show");
             }
         });
     }
+
+    function checkboxnya() {
+        daftar_id_cart=[];
+        let jsonCheckout={};
+        $("input[type=checkbox]").each(function() {
+            if($(this).is(":checked")) {
+                //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
+                daftar_id_cart.push($(this).attr("id").split("_")[1]);
+                //$("#pesan_" + $(this).attr("id").split("_")[1]).attr("readonly","readonly");
+            } else {
+                //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
+            }
+        });
+
+    }
+
+    function proses_bayar() {
+        let list_lengkap = [];
+        let data ="";
+        for(let i=0;i<daftar_id_cart.length;i++) {
+            data = {
+                'id': daftar_id_cart[i],
+                'request': $("#pesan_"+daftar_id_cart[i]).val()
+            }
+            list_lengkap.push(data);
+        }
+
+        console.log(list_lengkap);
+
+        $.ajax({
+            type: "POST",
+            url: '/api/set/bayar/',
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'dibayar': JSON.stringify(list_lengkap)
+            },
+            success: function(data) {
+                updateCart();
+                update_notif_bayar();
+            }
+        });
+    }
+
+    function update_notif_bayar() {
+        $.ajax({
+            type: "POST",
+            url: '/api/get/bayar/',
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                console.log(data);
+                $("#jumlah_notif").text(data.jumlah_blm_bayar);
+                $("#my_notif").empty();
+                data.pembayaran_header.forEach(function(mydata){
+                    template = "<div class='notification-box-isi'>Pesanan nomor: <span style='color:red;font-weight:bold'>"+
+                        mydata.buying_kode+"</span> berhasil dibuat. Silakan melakukan pembayaran sebesar: <span style='font-weight:bold;color:green'>" + 
+                            ubahKeUang(mydata.buying_total)+"</span>. <button style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
+                    $("#my_notif").append(template);
+                });
+
+            }
+        });
+    }
+    
 </script>
 
 {% endblock%}

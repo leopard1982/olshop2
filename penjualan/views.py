@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from random import random
+
 from administrasi.serializersnya import serialSearchKeyword, serialKategori, serialMasterBarang
 from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 
@@ -7,8 +9,9 @@ from administrasi.models import searchKeyword, kategoriBarang, masterBarang, mer
 from administrasi.models import variasiVisor
 
 from penjualan.serializersnya import serialShoppingCart, serialWishList
+from penjualan.serializersnya import serialBuyingDetail, serialBuyingHeader
 
-from penjualan.models import ShoppingCart, WishList_Item
+from penjualan.models import ShoppingCart, WishList_Item, Buying_Header, Buying_Detail
 
 from rest_framework.decorators import api_view
 
@@ -17,6 +20,8 @@ from rest_framework.response import Response
 from django.db.models import F, Q
 
 from django.core.paginator import Paginator
+
+import json
 
 # Create your views here.
 def dashboard(request):
@@ -421,3 +426,69 @@ def hapusCart(request):
         ShoppingCart.objects.all().filter(id=id_cart).delete()
         return Response({'result':True})
     return Response({})
+
+@api_view(['POST'])
+def proses_bayar(request):
+    filternya = Q()
+
+    data=None
+
+    random_id = ""
+    for i in range(0,20):
+        random_id = random_id + str(int(random()*10))
+    
+    if request.method == 'POST':
+        list_json = json.loads(request.data['dibayar'])
+        total_harga = 0
+        total_item=0
+        #buat headernya dulu
+        buy_header = Buying_Header()
+        buy_header.buying_kode=random_id
+        buy_header.save()
+        
+        for list in list_json:
+            cart_id = list['id']
+            pesan = list['request']
+            data = ShoppingCart.objects.get(id=int(cart_id))
+            harga = data.shopping_barang.barang_harga
+            if data.shopping_barang.barang_disc_aktif==True:
+                harga = harga - data.shopping_barang.barang_disc
+            total_harga = total_harga + harga * data.shopping_jumlah
+
+            total_item = total_item+1
+            
+            #tambahkan detail buyingnya
+            buy_detail = Buying_Detail()
+            buy_detail.buying_kode = Buying_Header.objects.get(buying_kode=random_id)
+            buy_detail.buying_barang = data.shopping_barang
+            buy_detail.buying_jumlah = data.shopping_jumlah
+            buy_detail.buying_visor = data.shopping_visor
+            buy_detail.buying_warna = data.shopping_warna
+            buy_detail.buying_pesan = pesan
+            buy_detail.save()
+
+            data.delete()
+
+        Buying_Header.objects.all().filter(buying_kode=random_id).update(buying_total=total_harga)
+
+        return Response({'result':True})
+    return Response({'result':False})
+
+
+@api_view(['POST'])
+def update_notif_bayar(request):
+    if request.method=="POST":
+        data = Buying_Detail.objects.all()
+        serial = serialBuyingDetail(data,many=True)
+        jumlah_blm_bayar = Buying_Header.objects.all().count()
+        data2 = Buying_Header.objects.all().order_by("-buying_time")
+        serial2 = serialBuyingHeader(data2,many=True)
+        context = {
+            'result': True,
+            'pembayaran_detail':serial.data,
+            'pembayaran_header':serial2.data,
+            'jumlah_blm_bayar':jumlah_blm_bayar,
+        }
+        return Response(context)
+    
+    return Response({'result':False})
