@@ -680,6 +680,7 @@
             success: function(data) {
                 console.log(data.id_cart);
                 $("#id_cart").val(data.id_cart);
+                pembelianCart();
             }
         });
         
@@ -709,10 +710,7 @@
                             //cek apakah ini langsung beli_sekarang
                             //kalau langsung beli maka cek id_cart nya dan masukkan id_cartnya
                             getCart_id();
-                            pembelianCart();
-                        }
-                        
-                            
+                        }       
                     }
                 });
             }
