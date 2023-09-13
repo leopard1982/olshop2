@@ -1013,8 +1013,10 @@
         let total_beli=0;
         let total_diskon=0;
         let id_cart = 0;
+        let jml_item = 0;
         $("input[type=checkbox]").each(function() {
             if($(this).is(":checked")) {
+                jml_item += 1;
                 //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
                 id_cart = $(this).attr("id").split("_")[1];
                 daftar_id_cart.push(id_cart);
@@ -1029,6 +1031,16 @@
 
             } else {
                 //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
+            }
+            if(jml_item>0) {
+                $("#bayar_detail").removeClass("d-none");
+                $("#bayar_detail_kosong").addClass("d-none");
+                $("#bayar_detail_button").removeClass("disabled");
+                $("#bayar_jumlah_barang").text(jml_item);
+            } else {
+                $("#bayar_detail").addClass("d-none");
+                $("#bayar_detail_kosong").removeClass("d-none");
+                $("#bayar_detail_button").addClass("disabled");
             }
         });
 

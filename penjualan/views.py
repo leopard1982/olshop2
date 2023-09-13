@@ -320,17 +320,21 @@ def get_cart (request):
 @api_view(['POST'])
 def get_cart_id (request):
     if request.method == 'POST':
-        visor = request.data['visor']
-        warna = request.data['warna']
-        kode_barang = request.data['kode_barang']
-        mydata = ShoppingCart.objects.all().get(shopping_visor=visor, shopping_warna=warna, shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)).id
+        
+            visor = request.data['visor']
+            warna = request.data['warna']
+            kode_barang = request.data['kode_barang']
+            try:
+                mydata = ShoppingCart.objects.all().get(shopping_visor=visor, shopping_warna=warna, shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)).id
+            except:
+                mydata = ShoppingCart.objects.all()[0].id
+            context= {
+                'id_cart': mydata,
+                'result':True
+            }
 
-        context= {
-            'id_cart': mydata,
-            'result':True
-        }
-
-        return Response(context)
+            return Response(context)
+    
     return Response({})
 
 @api_view(['POST'])
