@@ -934,6 +934,10 @@
         let warna="";
         let template_harga="";
         let total_belanja=0;
+        let total_beli=0;
+        let total_diskon=0;
+        let template_hidden_total="";
+
         $.ajax({
             type: "POST",
             url: "/api/get/cart/",
@@ -954,12 +958,14 @@
                         total_belanja = mydata.shopping_jumlah*(mydata.shopping_barang.barang_harga-mydata.shopping_barang.barang_disc);
                         template_harga = template_harga + "<div>Kamu Hemat: <strong style='color:green'>"+ubahKeUang(mydata.shopping_barang.barang_disc*mydata.shopping_jumlah)+"</strong></div>"
                         template_harga = template_harga + "<div style='font-size:15px'>Total Belanja: <strong style='color:red'>" + ubahKeUang(total_belanja)+"</strong></div>";
-                       
-
+                        total_beli = mydata.shopping_jumlah*mydata.shopping_barang.barang_harga;
+                        total_diskon = mydata.shopping_jumlah*mydata.shopping_barang.barang_disc;
                     } else {
                         template_harga="<div>Harga: <strong><span style='color:red'>"+ ubahKeUang(mydata.shopping_barang.barang_harga)+"</span></strong></div>";
                         total_belanja = mydata.shopping_jumlah*mydata.shopping_barang.barang_harga;
                         template_harga = template_harga + "<div  style='font-size:15px'>Total Belanja: <strong style='color:red'>" + ubahKeUang(total_belanja)+"</strong></div>";
+                        total_beli = mydata.shopping_jumlah*mydata.shopping_barang.barang_harga;
+                        total_diskon = 0;
                     }
 
                     if(visor=="") {
@@ -986,9 +992,9 @@
                             "</div>" +
                         "</div>";
                     $("#checkout_list").append(template);     
-                    
-                    console.log("id mydata.id: " + mydata.id);
-                    console.log("id id_cart: " + $("#id_cart").val());
+                    template_hidden_total="<input type='hidden' id='pembayaran_item_"+mydata.id+"'' total_belanja='"+total_belanja+"' total_beli='"+total_beli+"' total_diskon='"+total_diskon+"'>";
+                    $("#checkout_list").append(template_hidden_total);
+
                     if(mydata.id==$("#id_cart").val()) {
                         console.log("ketemu");
                         $("#checkbox_" +mydata.id).attr("checked","checked");
@@ -1003,11 +1009,24 @@
     function checkboxnya() {
         daftar_id_cart=[];
         let jsonCheckout={};
+        let total_belanja=0;
+        let total_beli=0;
+        let total_diskon=0;
+        let id_cart = 0;
         $("input[type=checkbox]").each(function() {
             if($(this).is(":checked")) {
                 //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
-                daftar_id_cart.push($(this).attr("id").split("_")[1]);
+                id_cart = $(this).attr("id").split("_")[1];
+                daftar_id_cart.push(id_cart);
                 //$("#pesan_" + $(this).attr("id").split("_")[1]).attr("readonly","readonly");
+                total_belanja = parseInt($("#pembayaran_item_" + id_cart).attr("total_belanja"))+total_belanja;
+                total_beli = parseInt($("#pembayaran_item_" + id_cart).attr("total_beli"))+total_beli;
+                total_diskon = parseInt($("#pembayaran_item_" + id_cart).attr("total_diskon"))+total_diskon;
+
+                $("#bayar_total_belanja").text(ubahKeUang(total_beli));
+                $("#bayar_total_pembayaran").text(ubahKeUang(total_belanja));
+                $("#bayar_total_hemat").text(ubahKeUang(total_diskon));
+
             } else {
                 //$("#pesan_" + $(this).attr("id").split("_")[1]).removeAttr("readonly");
             }
@@ -1056,8 +1075,11 @@
                 data.pembayaran_header.forEach(function(mydata){
                     template = "<div class='notification-box-isi'>Pesanan nomor: <span style='color:red;font-weight:bold'>"+
                         mydata.buying_kode+"</span> berhasil dibuat. Silakan melakukan pembayaran sebesar: <span style='font-weight:bold;color:green'>" + 
-                            ubahKeUang(mydata.buying_total)+"</span>. <button style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
+                            ubahKeUang(mydata.buying_total)+"</span>. <button id='tbl_detail_bayar_" +mydata.buying_kode+ "' style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
                     $("#my_notif").append(template);
+                    $("#tbl_detail_bayar_" + mydata.buying_kode).click(function() {
+                        alert(mydata.buying_kode);
+                    });
                 });
 
             }

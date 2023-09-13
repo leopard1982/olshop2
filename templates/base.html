@@ -37,7 +37,9 @@
                     </div>
               </div>
 
-              <div></div>
+              <div style="font-size:14px">Total Belanjamu: <span class=' fw-bold' id="bayar_total_belanja"></span></div>
+              <div style="font-size:14px">Kamu Hanya Bayar: <span class='text-danger fw-bold' id="bayar_total_pembayaran"></span></div>
+              <div style="font-size:14px">Kamu Hemat: <span  class='text-success fw-bold' id="bayar_total_hemat"></span></div>
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -372,9 +374,9 @@
         function cek_scroll() {
             if($(window).scrollTop()>last_position) {
                 $("#the_header").hide();
-                $("#the_footer").slideDown("slow");
+                $("#the_footer").slideDown("fast");
             } else {
-                $("#the_header").slideDown("slow");
+                $("#the_header").slideDown("fast");
                 $("#the_footer").hide();
             }
             last_position=$(window).scrollTop();
@@ -382,11 +384,11 @@
         
 
         function tampilsearch() {
-            $(".search-box").slideDown("slow");
+            $(".search-box").slideDown("fast");
         }
 
         function hide_search() {
-            $(".search-box").slideUp("slow");
+            $(".search-box").hide();
             
         }
 
