@@ -709,9 +709,8 @@
                             if(status_beli==1) {
                                 getCart_id();
                             }
-
-                            pembelianCart();
                         }
+                        pembelianCart();
                             
                     }
                 });
@@ -769,8 +768,9 @@
                     $("#detail_cart").append(template);
                     $("#btn_beli_" + mydata.id).click(function() {
                         $("#id_cart").val(mydata.id);
-                        status_beli=0; //berarti titak dibeli langsung, tapi melalui cart dulu
-                        beli_sekarang();
+                        status_beli=0; //berarti tiDak dibeli langsung, tapi melalui cart dulu
+                        //alert("diklik beli dari list cart");
+                        pembelianCart();
                     });
                     $("#delcart_" + mydata.id).click(function() {
                         $("#id_cart").val(mydata.id);
