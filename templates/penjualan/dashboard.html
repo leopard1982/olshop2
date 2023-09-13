@@ -703,12 +703,13 @@
                     },
                     success: function(data) {
                         updateCart();
+                        console.log(statusnya);
+                        console.log(status_beli);
                         if(statusnya!="keranjang") {
                             //cek apakah ini langsung beli_sekarang
                             //kalau langsung beli maka cek id_cart nya dan masukkan id_cartnya
-                            if(status_beli==1) {
-                                getCart_id();
-                            }
+                            getCart_id();
+                            
                         }
                         pembelianCart();
                             
