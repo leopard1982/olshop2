@@ -666,8 +666,26 @@
         }
         tampilkan_barang_disc();
     }
+
+    function getCart_id () {
+        $.ajax({
+            type: 'POST',
+            url: 'api/get/cart/id/',
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'warna': $("#stok_warna").val(),
+                'visor': $("#stok_visor").val(),
+                'kode_barang': $("#kode_barang_detail").val()
+            },
+            success: function(data) {
+                console.log(data.id_cart);
+                $("#id_cart").val(data.id_cart);
+            }
+        });
+        
+    }
             
-    function addCart() {
+    function addCart(statusnya) {
         let jumlah = $("#jumlah_beli").val();
         let stok = $("#Item_Detail_Stok_nya").text();
         
@@ -684,8 +702,17 @@
                         'visor_barang': $("#Item_Visor").val().split('^')[0],
                     },
                     success: function(data) {
-                        console.log(data);
                         updateCart();
+                        if(statusnya!="keranjang") {
+                            //cek apakah ini langsung beli_sekarang
+                            //kalau langsung beli maka cek id_cart nya dan masukkan id_cartnya
+                            if(status_beli==1) {
+                                getCart_id();
+                            }
+
+                            pembelianCart();
+                        }
+                            
                     }
                 });
             }
@@ -742,6 +769,7 @@
                     $("#detail_cart").append(template);
                     $("#btn_beli_" + mydata.id).click(function() {
                         $("#id_cart").val(mydata.id);
+                        status_beli=0; //berarti titak dibeli langsung, tapi melalui cart dulu
                         beli_sekarang();
                     });
                     $("#delcart_" + mydata.id).click(function() {
@@ -893,12 +921,12 @@
     }
 
     function beli_sekarang() {
-        pembelianCart();
+        addCart();
     }
 
     function beli_sekarang_from_detail() {
+        status_beli=1; //beli langsung tanpa keranjang belanja, supaya dapat id_cart
         addCart();
-        pembelianCart();
     }
 
     function pembelianCart() {
@@ -960,6 +988,8 @@
                         "</div>";
                     $("#checkout_list").append(template);     
                     
+                    console.log("id mydata.id: " + mydata.id);
+                    console.log("id id_cart: " + $("#id_cart").val());
                     if(mydata.id==$("#id_cart").val()) {
                         console.log("ketemu");
                         $("#checkbox_" +mydata.id).attr("checked","checked");

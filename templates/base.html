@@ -97,7 +97,7 @@
                     </div>
                     <div class="col-7 d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" ><span class="fa fa-user-circle "></span> Chat</button>
-                        <button type="button" class="btn btn-success mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart()"><span class="fa fa-shopping-cart "></span> Keranjang</button>
+                        <button type="button" class="btn btn-success mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart('keranjang')"><span class="fa fa-shopping-cart "></span> Keranjang</button>
                         <button type="button" class="btn btn-primary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money " ></span> Beli</button>
                     </div>
                 </div>
@@ -339,6 +339,8 @@
         let stok_visor =0;
 
         let daftar_id_cart=[];
+
+        let status_beli=1;
 
         function set_kategori_page(kategori) {
             window.location.href = "/?cat=" + kategori;

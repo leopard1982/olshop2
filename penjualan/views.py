@@ -280,9 +280,12 @@ def addCart(request):
         warna_barang = request.data['warna_barang']
         visor_barang = request.data['visor_barang']
 
+        id_cart = None
+
         data = ShoppingCart.objects.all().filter(shopping_barang=masterBarang.objects.get(barang_sku=kode_barang),shopping_warna=warna_barang,shopping_visor=visor_barang)
         if(data.count()>0):
             data.update(shopping_jumlah = F('shopping_jumlah')+jumlah_barang)
+            id_cart = data[0].id
         else:
             data = ShoppingCart()
             data.shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)
@@ -290,8 +293,14 @@ def addCart(request):
             data.shopping_visor = visor_barang
             data.shopping_warna = warna_barang
             data.save()
+            id_cart = ShoppingCart.objects.all().order_by("-id")[0].id
 
-            return Response ({'result':True})
+            context = {
+                'id_cart':id_cart,
+                'result': True
+            }
+            print(context)
+            return Response (context)
     return Response ({'result':False})
 
 @api_view(['POST'])
@@ -303,6 +312,22 @@ def get_cart (request):
         context= {
             'result': serial.data,
             'jumlah_item': mydata.count()
+        }
+
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def get_cart_id (request):
+    if request.method == 'POST':
+        visor = request.data['visor']
+        warna = request.data['warna']
+        kode_barang = request.data['kode_barang']
+        mydata = ShoppingCart.objects.all().get(shopping_visor=visor, shopping_warna=warna, shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)).id
+
+        context= {
+            'id_cart': mydata,
+            'result':True
         }
 
         return Response(context)
