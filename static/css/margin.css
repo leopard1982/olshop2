@@ -262,8 +262,6 @@ a {
     width: 400px;
     max-width: 400px;
     min-width: 400px;
-    overflow-x: hidden;
-    overflow-y: scroll;
     height: 300px;
     min-height: 300px;
     max-height: 300px;
@@ -280,7 +278,7 @@ a {
     width: 100%;
     padding: 10px;
     cursor: pointer;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid blue;
     font-size: 14px;
 }
 

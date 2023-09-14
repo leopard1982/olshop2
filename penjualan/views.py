@@ -573,10 +573,11 @@ def get_klaim_voucher_ongkir(request):
     if request.method=="POST":     
         data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today())
         serial = serialKlaimGratisOngkir(data,many=True)
-        print(serial.data)
+        jumlah = data.count()
         context = {
             'result':True,
-            'data':serial.data
+            'data':serial.data,
+            'jumlah':jumlah
         }
         return Response(context)
     return Response({'result':False})

@@ -1183,6 +1183,7 @@
                 $("#voucher_gratis_ongkirmu").append(template);    
                 
                 get_alamat_rumah();
+                jumlah_notif_voucher_ongkir();
             }
         });
     }
@@ -1204,6 +1205,50 @@
                 template = template + "</select>";    
                 $("#alamat_kirim").empty();
                 $("#alamat_kirim").append(template);              
+            }
+        });
+    }
+
+    function notif_voucher_ongkir() {
+        //isi voucher gratis ongkirnya
+        $.ajax({
+            type: "POST",
+            url: "/api/get/klaimgratisongkir/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                let template="";
+                $("#my_notif").empty();
+                //voucher_gratis_ongkirmu
+                data.data.forEach(function(mydata) {
+                    template = "<div class='d-flex justify-content-start align-items-center' style='margin-bottom:5px;margin-top:5px;padding-bottom:5px;border-bottom:1px solid green;'>"+
+                        "<img src='/static/img/send.jpg' style='margin-right:10px;border-radius:10px;width:80px;height:80px'>"+
+                        "<div>"+
+                            "<div style='font-size:15px;font-weight:bold'>"+mydata.voucher_nama+"</div>"+
+                            "<div style='font-size:14px;font-style:italic'>senilai: "+ubahKeUang(mydata.voucher_nilai)+"</div>"+
+                            "<div style='font-size:14px;font-style:italic'>minimal belanja: "+ubahKeUang(mydata.voucher_min_belanja)+"</div>"+
+                            "<div style='font-size:14px;font-style:italic'>valid sampai: "+mydata.voucher_valid+"</div>"+
+                            "</div>"+
+                        "</div>";
+                    $("#my_notif").append(template);
+                })
+                jumlah_notif_voucher_ongkir();
+
+            }
+        });
+    }
+
+    function jumlah_notif_voucher_ongkir() {
+        //isi voucher gratis ongkirnya
+        $.ajax({
+            type: "POST",
+            url: "/api/get/klaimgratisongkir/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                $("#jumlah_notif_voucher").text(data.jumlah);
             }
         });
     }

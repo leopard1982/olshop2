@@ -208,8 +208,14 @@
                         </div>
 
                         <div>
-                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification <span class='badge bg-danger' id="jumlah_notif"></span></div>
-                            <div class="notification-box" onmouseleave="hide_notification()" id="my_notif">
+                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification </div>
+                            <div class="notification-box" onmouseleave="hide_notification()">
+                                <div class="d-flex justify-content-between my-2  w-100" style="border-bottom:1px solid grey;">
+                                    <div class="bg-primary p-2 text-white rounded-top" onclick="update_notif_bayar()">Belanjaku <span class='badge bg-danger' id="jumlah_notif"></span></div>
+                                    <div class="bg-success p-2 text-white rounded-top" onclick="notif_voucher_ongkir()">Voucherku <span class='badge bg-danger' id="jumlah_notif_voucher"></span></div>
+                                    <div class="bg-secondary p-2 text-white rounded-top">Tracking</div>
+                                </div>
+                                <div  id="my_notif" class="h-75 overflow-auto"></div>
                             </div>
                         </div>
                         <div >
@@ -396,6 +402,7 @@
             updateCart();
             initWishList();
             update_notif_bayar();
+            jumlah_notif_voucher_ongkir();
         });
 
         function cek_scroll() {
