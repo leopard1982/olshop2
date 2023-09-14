@@ -6,16 +6,20 @@ from administrasi.serializersnya import serialSearchKeyword, serialKategori, ser
 from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 
 from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek, variasiWarna
-from administrasi.models import variasiVisor
+from administrasi.models import variasiVisor, alamatRumah
 
-from penjualan.serializersnya import serialShoppingCart, serialWishList
-from penjualan.serializersnya import serialBuyingDetail, serialBuyingHeader
+from penjualan.serializersnya import serialShoppingCart, serialWishList, serialKlaimGratisOngkir
+from penjualan.serializersnya import serialBuyingDetail, serialBuyingHeader, serialGratisOngkir
+from penjualan.serializersnya import serialAlamatRumah
 
 from penjualan.models import ShoppingCart, WishList_Item, Buying_Header, Buying_Detail
+from penjualan.models import Voucher_Ongkir, Klaim_Voucher_Ongkir
 
 from rest_framework.decorators import api_view
 
 from rest_framework.response import Response
+
+from datetime import datetime
 
 from django.db.models import F, Q
 
@@ -521,3 +525,71 @@ def update_notif_bayar(request):
         return Response(context)
     
     return Response({'result':False})
+
+@api_view(['POST'])
+def get_voucher_ongkir(request):
+    if request.method=="POST":
+        data = Voucher_Ongkir.objects.all().filter(Q(voucher_valid__gte=datetime.today()) & Q(voucher_aktif=True))
+        serial = serialGratisOngkir(data,many=True)
+        context = {
+            'result': True,
+            'data': serial.data
+        }
+        return Response(context)
+    
+    return Response({'result':False})
+
+
+@api_view(['POST'])
+def klaim_voucher_ongkir(request):
+    if request.method=="POST":
+        kode_voucher = request.data['kode_voucher']
+        nilai = request.data['nilai']
+        min_belanja = request.data['min_belanja']
+        valid = request.data['valid']
+        tahun = int(valid.split('-')[0])
+        bulan = int(valid.split('-')[1])
+        hari = int(valid.split('-')[2])
+        valid=datetime(tahun,bulan,hari)
+        nama_voucher = request.data['nama_voucher']
+         
+        claim = Klaim_Voucher_Ongkir.objects.all().filter(voucher_kode=kode_voucher)
+        if (claim.count() > 0) :
+            return Response({'result':False})
+        else:
+            claim = Klaim_Voucher_Ongkir()
+            claim.voucher_kode = kode_voucher
+            claim.voucher_nilai = nilai
+            claim.voucher_min_belanja = min_belanja
+            claim.voucher_valid = valid
+            claim.voucher_terpakai=False
+            claim.voucher_nama=nama_voucher
+            claim.save()
+            return Response({'result':True})
+    return Response({'result':False})
+
+@api_view(['POST'])
+def get_klaim_voucher_ongkir(request):
+    if request.method=="POST":     
+        data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today())
+        serial = serialKlaimGratisOngkir(data,many=True)
+        print(serial.data)
+        context = {
+            'result':True,
+            'data':serial.data
+        }
+        return Response(context)
+    return Response({'result':False})
+
+@api_view(['POST'])
+def get_alamat_rumah(request):
+    if request.method == 'POST':
+        data = alamatRumah.objects.all()
+        serial = serialAlamatRumah(data,many=True)
+
+        context={
+            'data':serial.data
+        }
+
+        return Response(context)
+    return Response({})

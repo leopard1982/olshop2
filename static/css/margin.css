@@ -245,9 +245,9 @@ a {
     width: 350px;
     max-width: 350px;
     min-width: 350px;
-    height: 410px;
-    min-height: 410px;
-    max-height: 410px;
+    height: 300px;
+    min-height: 300px;
+    max-height: 300px;
     border: 1px solid red;
     box-shadow: 2px 2px solid lightgrey;
     position: absolute;

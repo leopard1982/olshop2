@@ -691,6 +691,7 @@
         let stok = $("#Item_Detail_Stok_nya").text();
         
         if(isNaN(parseInt(jumlah))==false) {
+            //isi  data visor dll nya
             if(jumlah>0 && jumlah<=parseInt(stok)) {
                 $.ajax({
                     type: "POST",
@@ -701,6 +702,7 @@
                         'jumlah_barang': jumlah,
                         'warna_barang': $("#Item_Warna").val().split('^')[0],
                         'visor_barang': $("#Item_Visor").val().split('^')[0],
+                        
                     },
                     success: function(data) {
                         updateCart();
@@ -714,6 +716,9 @@
                     }
                 });
             }
+
+            //isi voucher gratis ongkirnya
+            isi_voucher_ongkir();
         }
     }
 
@@ -948,6 +953,7 @@
                 console.log(data);
                 $("#checkout_jumlah").text(data.jumlah_item);
                 $("#checkout_list").empty();
+
                 data.result.forEach(function(mydata) {
                     visor= mydata.shopping_visor;
                     warna=mydata.shopping_warna;
@@ -978,7 +984,7 @@
 
                     template = "<div class='w-100 p-2 ' style='font-size:12px'>"+
                         "<div class='d-flex p-1 bg-danger rounded-top my-1 fw-bold text-white justify-content-center align-items-center'>" + 
-                            "<div class='col-1 d-flex justify-content-center'><input type='checkbox'  id='checkbox_"+ mydata.id +"' onchange='checkboxnya()'></input></div>" +
+                            "<div class='col-1 d-flex justify-content-center'><input  class='form-check-input fw-bold' type='checkbox'  id='checkbox_"+ mydata.id +"' onchange='checkboxnya()'></input></div>" +
                             "<div class='col-11 '>" + mydata.shopping_barang.barang_nama.toUpperCase()+"</div>"+
                         "</div>" +
                         "<div class='d-flex justify-content-center rounded-bottom align-items-top border border-danger p-1' style='margin-top:-5px'>"+
@@ -1001,6 +1007,7 @@
                         checkboxnya();
                     }           
                 })
+                isi_voucher_ongkir();
                 $("#modalCheckout").modal("show");
             }
         });
@@ -1094,6 +1101,109 @@
                     });
                 });
 
+            }
+        });
+    }
+
+    function klik_gratis_ongkir() {
+        let template="";
+        $("#voucher_gratis_ongkir").empty();
+        //list gratis ongkir
+        $.ajax({
+            type: "POST",
+            url: "/api/get/gratisongkir/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                data.data.forEach(function(mydata) {
+                    template = "<div class='d-flex justify-content-between align-items-center p-2' style='border-bottom:1px solid green'>" +
+                        "<img src='/static/img/send.jpg' style='width:80px;height:80px;border-radius:10px'>" +
+                        "<div><div style='font-size:20px'><strong>" + mydata.voucher_nama + "</strong></div>" +
+                        "<div>senilai: <strong>" + ubahKeUang(mydata.voucher_nilai) + "</strong></div>" +
+                        "<div>minimal belanja: <strong>" + ubahKeUang(mydata.voucher_min_belanja) + "</strong></div>" +
+                        "<div>valid sampai: <i>" + mydata.voucher_valid + "</i></div>" +
+                        "</div><div><button class='btn btn-success' id='gratis_klaim_"+ mydata.voucher_kode +"'>klaim</button></div>" +
+                        "<input type='hidden' id='gratis_kode_" + mydata.voucher_kode + "'></div>";
+                    $("#voucher_gratis_ongkir").append(template);
+                    $("#gratis_kode_" + mydata.voucher_kode).attr("min_belanja",mydata.voucher_min_belanja);
+                    $("#gratis_kode_" + mydata.voucher_kode).attr("kode_voucher",mydata.voucher_kode);
+                    $("#gratis_kode_" + mydata.voucher_kode).attr("nilai",mydata.voucher_nilai);
+                    $("#gratis_klaim_" + mydata.voucher_kode).click(function() {
+                        $.ajax({
+                            type: "POST",
+                            url: '/api/set/klaimgratisongkir/',
+                            data: {
+                                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                                'kode_voucher': mydata.voucher_kode,
+                                'nilai':mydata.voucher_nilai,
+                                'min_belanja':mydata.voucher_min_belanja,
+                                'valid': mydata.voucher_valid,
+                                'nama_voucher':mydata.voucher_nama
+                            },
+                            success: function(data_klaim) {
+                                if(data_klaim.result == true) {
+                                    alert('Berhasil!')
+                                } else {
+                                    alert('Sudah Pernah Diklaim!');
+                                }
+                            }
+                        });
+                    });
+                });
+            }
+        });
+        template = "<div class='d-flex justify-content-between align-items-center p-2' style='border-bottom:1px solid green'>" +
+            "<img src='" + "source" + "' style='width:80px;height:80px;border-radius:10px'>" +
+            "<div><div style='font-size:20px'><strong>" + "headernya" + "</strong></div>" +
+            "<div>senilai: <strong>" + "nilainya" + "</strong></div>" +
+            "<div>minimal belanja: <strong>" + "minimal" + "</strong></div>" +
+            "<div>valid sampai: <i>" + "tanggal_valid" + "</i></div>" +
+            "</div><div><button class='btn btn-success' id='gratis_klaim_"+ "kode" +"'>klaim</button></div>" +
+            "<input type='hidden' name='gratis_kode_" + "kode" + "'></div>";
+        $("#modalGratisOngkir").modal("show");
+    }
+
+    function isi_voucher_ongkir() {
+        //isi voucher gratis ongkirnya
+        $.ajax({
+            type: "POST",
+            url: "/api/get/klaimgratisongkir/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                //voucher_gratis_ongkirmu
+                template = "<select class='form-select' style='font-size:13px' id='select_gratis_ongkir'><option value=''>-------------</option>";
+                data.data.forEach(function(mydata) {
+                    template = template + "<option  value='" + mydata.voucher_kode + "^" + mydata.voucher_min_belanja + "^" + mydata.voucher_nilai +"'>" + mydata.voucher_nama+" - " + ubahKeUang(mydata.voucher_nilai) +"</option>";
+                });
+                template = template + "</select>";    
+                $("#voucher_gratis_ongkirmu").empty();
+                $("#voucher_gratis_ongkirmu").append(template);    
+                
+                get_alamat_rumah();
+            }
+        });
+    }
+
+    function get_alamat_rumah() {
+        //isi voucher gratis ongkirnya
+        $.ajax({
+            type: "POST",
+            url: "/api/get/alamat/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                //voucher_gratis_ongkirmu
+                template = "<select class='form-select' style='font-size:13px' id='select_alamat_kirim'><option value=''>-------------</option>";
+                data.data.forEach(function(mydata) {
+                    template = template + "<option  value='" + mydata.alamat_detail +"'>" + mydata.alamat_detail.toUpperCase() +"</option>";
+                });
+                template = template + "</select>";    
+                $("#alamat_kirim").empty();
+                $("#alamat_kirim").append(template);              
             }
         });
     }

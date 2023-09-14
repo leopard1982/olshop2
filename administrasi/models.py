@@ -106,4 +106,13 @@ class chatBody(models.Model):
     chat_message = models.TextField(max_length=500,blank=False,null=False)
     chat_time = models.DateTimeField(auto_now_add=True)
     chat_user = models.ForeignKey(User,on_delete=models.RESTRICT)
+
+class alamatRumah(models.Model):
+    alamat_nama = models.CharField(max_length=100,default="",primary_key=True,null=False,blank=False)
+    alamat_detail = models.CharField(max_length=200,default="")
+    alamat_propinsi = models.CharField(max_length=200)
+    alamat_kota = models.CharField(max_length=200)
+    alamat_kecamatan = models.CharField(max_length=200)
+    alamat_telpon = models.CharField(max_length=20)
+
     

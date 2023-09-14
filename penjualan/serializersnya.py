@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from penjualan.models import ShoppingCart, WishList_Item, Buying_Detail, Buying_Header
-from administrasi.models import masterBarang
+from penjualan.models import ShoppingCart, WishList_Item, Buying_Detail, Buying_Header, Voucher_Ongkir
+from penjualan.models import Klaim_Voucher_Ongkir
+from administrasi.models import masterBarang, alamatRumah
 
 class serialMasterBarang(serializers.ModelSerializer):
     class Meta:
@@ -28,4 +29,19 @@ class serialBuyingDetail(serializers.ModelSerializer):
     buying_kode = serialBuyingHeader()
     class Meta:
         model = Buying_Detail
+        fields = "__all__"
+
+class serialGratisOngkir(serializers.ModelSerializer):
+    class Meta:
+        model = Voucher_Ongkir
+        fields = "__all__"
+
+class serialKlaimGratisOngkir(serializers.ModelSerializer):
+    class Meta:
+        model = Klaim_Voucher_Ongkir
+        fields = "__all__"
+
+class serialAlamatRumah(serializers.ModelSerializer):
+    class Meta:
+        model = alamatRumah
         fields = "__all__"

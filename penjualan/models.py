@@ -28,6 +28,24 @@ class Voucher_Ongkir(models.Model):
     class Meta:
         ordering = ['-voucher_time']
 
+    def __str__(self):
+        return self.voucher_nama
+    
+class Klaim_Voucher_Ongkir(models.Model):
+    voucher_kode = models.CharField(max_length=200,primary_key=True,null=False,blank=False)
+    voucher_min_belanja = models.PositiveBigIntegerField(default=0)
+    voucher_terpakai = models.PositiveIntegerField(default=0)
+    voucher_valid = models.DateField(auto_now_add=False)
+    voucher_klaim = models.DateTimeField(auto_now_add=True)
+    voucher_nilai = models.PositiveIntegerField(default=0)
+    voucher_nama = models.CharField(max_length=200)
+
+    class Meta:
+        ordering = ['-voucher_klaim']
+
+    def __str__(self):
+        return self.voucher_kode
+
 class Buying_Header(models.Model):
     buying_kode = models.CharField(max_length=10, blank=False, null=False,primary_key=True)
     buying_total = models.PositiveBigIntegerField(null=True,blank=True,default=0)
