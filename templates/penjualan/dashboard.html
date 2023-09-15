@@ -712,7 +712,10 @@
                             //cek apakah ini langsung beli_sekarang
                             //kalau langsung beli maka cek id_cart nya dan masukkan id_cartnya
                             getCart_id();
-                        }       
+                        }    
+                        else {
+                            notifikasinya("Barang Berhasil Ditambahkan ke Keranjangmu!");
+                        }
                     }
                 });
             }
@@ -920,6 +923,7 @@
             },
             success: function(data) {
                 updateCart();
+                notifikasinya("Keranjang Berhasil Dihapus!");
             }
         });
     }
@@ -1064,8 +1068,6 @@
             list_lengkap.push(data);
         }
 
-        console.log(list_lengkap);
-
         $.ajax({
             type: "POST",
             url: '/api/set/bayar/',
@@ -1076,6 +1078,7 @@
             success: function(data) {
                 updateCart();
                 update_notif_bayar();
+                notifikasinya("Transaksi Pembayaran Berhasil! Silakan Cek Notifikasi yah...");
             }
         });
     }
@@ -1097,7 +1100,7 @@
                             ubahKeUang(mydata.buying_total)+"</span>. <button id='tbl_detail_bayar_" +mydata.buying_kode+ "' style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
                     $("#my_notif").append(template);
                     $("#tbl_detail_bayar_" + mydata.buying_kode).click(function() {
-                        alert(mydata.buying_kode);
+                        notifikasinya("KODE BARANG YANG DIPILIH: " +mydata.buying_kode);
                     });
                 });
 
@@ -1143,9 +1146,9 @@
                             },
                             success: function(data_klaim) {
                                 if(data_klaim.result == true) {
-                                    alert('Berhasil!')
+                                    notifikasinya("Voucher Gratis Ongkir ini <strong>berhasil</strong> kamu klaim! Segera ke Proses Pembayaran yah sebelum Voucher Expired!");
                                 } else {
-                                    alert('Sudah Pernah Diklaim!');
+                                    notifikasinya("Voucher Gratis Ongkir ini sudah pernah kamu klaim. Silakan Cek Daftar Voucher Gratis Ongkirmu yah...");
                                 }
                             }
                         });
@@ -1251,6 +1254,11 @@
                 $("#jumlah_notif_voucher").text(data.jumlah);
             }
         });
+    }
+
+    function notifikasinya(pesan) {
+        $("#Informasinya_Notif").html(pesan);
+        $("#modalInformasi_Notif").modal('show');
     }
     
 </script>
