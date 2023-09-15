@@ -374,10 +374,10 @@
                 
                 console.log("diskon aktif : " + mydata.result.barang_disc_aktif);
                 if(mydata.result.barang_disc_aktif==true) {
-                    harga="<div><s>" + ubahKeUang(mydata.result.barang_harga) +"</s></div><span style='color:red'> "+ubahKeUang(mydata.result.barang_harga-mydata.result.barang_disc)+"</span>";
+                    harga="<div style='font-size:15px;font-weight:bold;text-align:center'><s>" + ubahKeUang(mydata.result.barang_harga) +"</s></div><center><span  style='color:red;font-size:15px;font-weight:bold'> "+ubahKeUang(mydata.result.barang_harga-mydata.result.barang_disc)+"</span></center>";
                     $("#harga_nett_detail").val(mydata.result.barang_harga-mydata.result.barang_disc);
                 } else {
-                    harga="<div style='color:red'>"+ ubahKeUang(mydata.result.barang_harga) + "</div>";
+                    harga="<div  style='font-size:15px;font-weight:bold;;text-align:center;color:red'>"+ ubahKeUang(mydata.result.barang_harga) + "</div>";
                     $("#harga_nett_detail").val(mydata.result.barang_harga);
                 }
                 $("#Item_Detail_Deskripsi").html(setEnter(mydata.result.barang_deskripsi));
@@ -414,7 +414,7 @@
                 }
                 setWarna(mydata.result.barang_sku);
                 setVisor(mydata.result.barang_sku);
-                $("#Item_Detail_Stok_nya").text(mydata.result.barang_stok);
+                $("#Item_Detail_Stok_nya").html("<div class='text-center h5'>" + mydata.result.barang_stok + "</div>");
                 $("#kode_barang_detail").val(mydata.result.barang_sku);
                 $("#jumlah_beli").val("1");
                 $("#Item_Detail_Harga").html(harga);
@@ -462,7 +462,7 @@
                             let nettprice = mydata.barang_harga - mydata.barang_disc;
                             template = "<div id='item_b2_"+mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
-                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div style='font-size:12px;font-weight:bold;color:red'>Harga: <s>"+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
                             "<div><span class='badge bg-warning fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
                             "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
                             "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
@@ -525,7 +525,7 @@
                             let nettprice = mydata.barang_harga - mydata.barang_disc;
                             template = "<div id='item_p2_" + mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
-                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div style='font-size:12px;font-weight:bold;color:red'>Harga: <s>"+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
                             "<div><span class='badge bg-warning fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
                             "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
                             "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
@@ -588,7 +588,7 @@
                             let nettprice = mydata.barang_harga - mydata.barang_disc;
                             template = "<div id='item_d2_" + mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.toUpperCase().substring(0,40).toUpperCase() +"</div>"+
-                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div style='font-size:12px;font-weight:bold;color:red'>Harga: <s>"+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
                             "<div><span class='badge bg-warning fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
                             "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
                             "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 

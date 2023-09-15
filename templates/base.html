@@ -71,7 +71,7 @@
                     <div><strong><u>Deskripsi Produk:</u></strong></div>
                     <div onclick="setWishList()" style="cursor:pointer">wishlist <span id="wishlist_heart" style="cursor:pointer;font-size:20px"><i class="fa fa-heart-o"></i></span></div>
                 </div>
-                <div style="height:100px" class="overflow-auto">
+                <div style="height:100px" class="overflow-auto p-2 border rounded border-secondary">
                     <div id="Item_Detail_Deskripsi"></div>
                 </div>
                 <div style="margin-top:20px;font-weight:bold;">
@@ -91,28 +91,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="row d-flex container justify-content-between" style="font-size:15px;margin-bottom:20px">
+                <div class="row d-flex container justify-content-between p-2 border border-secondary rounded" style="font-size:15px;margin-left:1px;margin-bottom:20px">
                     <div class="col-4 p-2" style="font-size:15px">
-                        Harga: <strong><span id='Item_Detail_Harga'></span></strong>
+                        <div class="text-center fw-bold "><u>Harga:</u></div>
+                        <div><strong><span id='Item_Detail_Harga' style="font-size:13px;font-weight:bold;"></span></strong></div>
                     </div>
                     <div class="col-4 p-2" style="font-size:15px">
-                        Stok: <span style="font-size:13px;font-weight:bold;" id="Item_Detail_Stok_nya">Silakan Pilih Varian!</span>
+                        <div class="text-center fw-bold "><u>Stok:</u></div>
+                        <div><span style="font-size:13px;font-weight:bold;" id="Item_Detail_Stok_nya">Silakan Pilih Varian!</span></div>
                     </div>
                     <div class="col-4">
                         <div class="row d-flex justify-content-between">
-                            <div class="col-4 p-2" style="font-size:15px">Beli:</div>
-                            <div class="col-8"><input style="font-size:15px" id="jumlah_beli" type="number" value=1 min=1 class="form-control border-outline-info"></input></div>
+                            <div class="col-12 text-center fw-bold " style="font-size:15px"><u>Beli:</u></div>
+                            <div class="col-12"><input style="font-size:20px;font-weight:bold;border:1px solid red;text-align:center" id="jumlah_beli" type="number" value=1 min=1 class="form-control border-outline-info"></input></div>
                         </div>
                     </div>
                 </div>
-                <div class="d-flex justify-content-between container-fluid">
-                    <div class="col-5">
+                <div class="d-flex justify-content-between align-items-center container-fluid">
+                    <div class="col-3">
                         <button class="btn btn-danger text-white fw-bold" style="font-size:12px"><i class="fa fa-youtube-play"></i> YouTube </button>  
                     </div>
-                    <div class="col-7 d-flex justify-content-end">
-                        <button type="button" class="btn btn-secondary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" ><span class="fa fa-user-circle "></span> Chat</button>
-                        <button type="button" class="btn btn-success mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart('keranjang')"><span class="fa fa-shopping-cart "></span> Keranjang</button>
-                        <button type="button" class="btn btn-primary mx-1" style="font-size:12px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money " ></span> Beli</button>
+                    <div class="col-9 d-flex justify-content-end">
+                        <button type="button" class="btn btn-secondary mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" ><span class="fa fa-user-circle "></span> Chat</button>
+                        <button type="button" class="btn btn-success mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart('keranjang')"><span class="fa fa-shopping-cart " ></span> Keranjang</button>
+                        <button type="button" class="btn btn-primary mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money "  ></span> Beli</button>
                     </div>
                 </div>
             </div>
@@ -474,7 +476,7 @@
                             let nettprice = mydata.barang_harga - mydata.barang_disc;
                             template = "<div id='item_c2_" + mydata.barang_sku+"'><div class='box-sering-dicari'><img class='w-100 rounded' src='"+ mydata.barang_foto1+"'</div>"+
                             "<div style='font-size:10px;font-weight:bold'>"+ mydata.barang_nama.substring(0,40).toUpperCase() +"</div>"+
-                            "<div style='font-size:12px;font-weight:bold;color:red'><s>Harga: "+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
+                            "<div style='font-size:12px;font-weight:bold;color:red'>Harga: <s>"+ ubahKeUang(mydata.barang_harga)+"</s></div>"+ 
                             "<div><span class='badge bg-warning fw-bold' style='font-size:12px'>Discount " + discountnya +"%</span></div>" +
                             "<div style='font-size:14px;font-weight:bold;color:green'>"+ ubahKeUang(nettprice)+"</div>"+ 
                             "<div style='font-size:12px;color:blue'>Merk: <strong>"+ mydata.barang_merek.merek_nama.toUpperCase()+"</strong></div>"+ 
