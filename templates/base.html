@@ -301,7 +301,7 @@
             <div class="col-12 col-sm-12 col-md-12 col-lg-8 col-xl-8 col-xxl-8">
                 <div class="row ">
                     <div class="col-6">
-                        <i class="fa fa-search search-icon"></i><input type="text" id="search" placeholder="search..." autocomplete="on" onkeyup="searchkeyword()" onmouseover="tampilsearch()" onchange="searchkeyword()" onfocusin="tampilsearch()">
+                        <i class="fa fa-search search-icon"></i><input type="text" id="search" placeholder="search..."  onkeyup="searchkeyword()" onclick="tampilsearch()" onchange="searchkeyword()" onfocusin="tampilsearch()">
                         <div class="search-box" onmouseleave="hide_search()">
                             <div>Pencarian: "<span id="keyword" class="fw-bold"></span>"
                                 <div class="spinner-border text-secondary" style="width:10px;height:10px" role="status">
@@ -532,9 +532,8 @@
 
             freq_search();
             /* tampilkan hasil*/
-            
+            $("#hasil_pencarian").empty();
             if($("#keyword").text().trim().length>0) {
-                $("#hasil_pencarian").empty();
                 $.ajax({
                     type: "POST",
                     url: '/api/get/search/',
