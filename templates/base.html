@@ -27,35 +27,57 @@
     <div class="modal" tabindex="-1" id="modalUserRegister">
         <div class="modal-dialog">
           <div class="modal-content border border-success">
-            <div class="modal-header">
+            <div class="modal-header bg-success">
               <h5 class="modal-title w-100 py-1 px-2 bg-success text-white fw-bold"><i class="fa fa-user"></i> Registrasi JagoanHelm.com</strong></h5>
-              <button type="button" class="btn-close border border-success " style="padding:10px;border-radius:0px" data-bs-dismiss="modal" aria-label="Close"></button>
+              <button type="button" class="btn-close border border-success bg-white" style="padding:10px;border-radius:0px" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="d-flex justify-content-start align-items-center my-2">
+                <div class="d-flex justify-content-between align-items-center my-2 p-2" style="border-bottom:1px solid lightgrey">
                     <div class="col-2">Email:</div>
                     <div class="col-6 mx-2"><input class="form-control" type="email" placeholder="Email Kamu" id="email_register"></div>
-                    <div class="col-3"><button onclick="createEmail()" style="border-radius:10px"  id="button_register">kirim konfirmasi</button></div>
+                    <div class="col-3"><button onclick="createEmail()" class="btn btn-outline-success fw-bold"  id="button_register">kirim OTP</button></div>
                 </div>
-                <div class="d-none justify-content-center align-items-center" id="konfirmasi2_register">
-                    <div class="col-5">Kode Konfirmasi Email:</div>
-                    <div class="col-4 mx-1"><input type="text" class="form-control" id="kode_konfirmasi" placeholder="kode konfirmasi"></div>
-                    <div class="col-2"><button class="btn btn-primary" id="button_register_cek" onclick="cekKode()">Cek</button></div>
-                </div>
-                <div class="d-none justify-content-center align-items-center" id="konfirmasi2_password">
-                    <div class="col-6">
-                        <input type="password" id="register_pass1" onkeyup="cek_password()" placeholder="password #1" class="form-control">
-                    </div>
-                    <div class="col-6">
-                        <input type="password" id="register_pass2" onkeyup="cek_password()" placeholder="password #2" class="form-control">
+                <div id="konfirmasi2_register" class="invisible">
+                    <div class="d-flex justify-content-center align-items-center" >
+                        <div class="col-5">Kode Konfirmasi Email:</div>
+                        <div class="col-4 mx-1"><input type="text" class="form-control" id="kode_konfirmasi" placeholder="kode konfirmasi"></div>
+                        <div class="col-2"><button class="btn btn-primary" id="button_register_cek" onclick="cekKode()">Cek</button></div>
                     </div>
                 </div>
-                <div style="font-size:12px" class="d-none" id="hasil_cek_password" id="info_password">
+                <div id="konfirmasi2_password" class="invisible p-2 border border-secondary rounded">
+                    <div class="d-flex justify-content-center align-items-center" >
+                        <div class="col-6">
+                            Username:
+                        </div>
+                        <div class="col-6">
+                            <input type="text" id="register_username" onkeyup="cek_password()" placeholder="username, min.6 karakter" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" >
+                        <div class="col-6">
+                            Password:
+                        </div>
+                        <div class="col-6">
+                            <input type="password" id="register_pass1" onkeyup="cek_password()" placeholder="password, min.6 karakter" class="form-control">
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center" >
+                        <div class="col-6">
+                            Konfirmasi Password:
+                        </div>
+                        <div class="col-6">
+                            <input type="password" id="register_pass2" onkeyup="cek_password()" placeholder="password, min.6 karakter" class="form-control">
+                        </div>
+                    </div>    
+                    <div style="font-size:12px" id="hasil_cek_password" id="info_password">
 
+                    </div>
                 </div>
+
+                
             </div>
             <div class="modal-footer d-flex justify-content-center">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="" disabled id="button_register_kan"><i class="fa fa-user"></i> Register</button>
+              <button type="button" class="btn btn-secondary"  onclick="submit_new_user()" disabled id="button_register_kan"><i class="fa fa-user"></i> Register</button>
             </div>
           </div>
         </div>
@@ -64,9 +86,9 @@
     <div class="modal" tabindex="-1" id="modalCheckout">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title"><i class='fa fa-cart-arrow-down'></i> Keranjang Belanjamu - <span style="font-size:15px;font-weight:bold" id="checkout_jumlah"></span> item</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-success">
+              <h5 class="modal-title text-white fw-bold"><i class='fa fa-cart-arrow-down'></i> Keranjang Belanjamu - <span style="font-size:15px;font-weight:bold" id="checkout_jumlah"></span> item</h5>
+              <button type="button" class="btn-close bg-white border border-success text-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="border border-secondary rounded p-3"> 
@@ -102,8 +124,11 @@
     <div class="modal" tabindex="-1" id="modalDetailItem">
         <div class="modal-dialog">
           <div class="modal-content overflow-auto">
+            <div class="modal-header bg-danger ">
+                <span class="modal-title" id="Item_Detail_Header" style="font-size:15px;font-weight:bold;color:white"></span>
+                <button type="button" class="btn-close border border-danger bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <div class="text-center" style="font-size:20px;margin-bottom:10px;font-weight:bold;padding-top:20px;" id="Item_Detail_Header"></div>
                 <div class="d-flex w-100 justify-content-center " style="border-bottom:1px solid grey;border-top:1px solid grey;" id="Item_Detail_Gambar"></div>
                 <div class="d-flex justify-content-between" style="margin-top:15px;margin-bottom:15px;">
                     <div><strong><u>Deskripsi Produk:</u></strong></div>
@@ -164,6 +189,10 @@
     <div class="modal" tabindex="-1" id="modalkategori">
         <div class="modal-dialog">
           <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <div class="text-center h3">KATEGORI</div>
                 <div class=" box-bingkai-kategori" id="the_kategori">
@@ -174,11 +203,41 @@
         </div>
     </div>
 
+    <div class="modal" tabindex="-1" id="modalLogin">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title fw-bold text-white">LOGIN</h5>
+                <button type="button" class="btn-close border border-primary bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">User Name:</div>
+                    <div class="col-7"><input type="text" id="login_username" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Password:</div>
+                    <div class="col-7"><input type="password" id="login_password" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-2">
+                    <button class="btn btn-primary" id="login_button">login</button>
+                </div>
+                <div style="font-size:12px" class="d-flex justify-content-center align-items-center">
+                    Lupa Password/ Username? silakan <a href="#" class="mx-2">klik</a> di sini!
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
     <div class="modal" tabindex="-1" id="modalGratisOngkir">
         <div class="modal-dialog">
           <div class="modal-content">
+            <div class="modal-header bg-info text-white fw-bold">
+                <h5 class="modal-title">Klaim Gratis Ongkirmu!</h5>
+                <button type="button" class="btn-close bg-white border border-info" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <div class="text-center h3 w-100 p-2 bg-success rounded fw-bold text-white my-2">Klaim Gratis Ongkirmu!</div>
                 <div id="voucher_gratis_ongkir" class="overflow-auto" style="height:400px">
                 
                 </div>
@@ -191,6 +250,10 @@
     <div class="modal" tabindex="-1" id="modalpromo">
         <div class="modal-dialog">
           <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h5 class="modal-title fw-bold">Promo Bulan Ini!</h5>
+                <button type="button" class="btn-close bg-white border border-warning" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
                 <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                     <div class="carousel-indicators">
@@ -226,9 +289,9 @@
     <div class="modal" tabindex="-1" id="modalInformasi_Notif">
         <div class="modal-dialog">
           <div class="modal-content border border-success">
-            <div class="modal-header">
-              <h5 class="modal-title w-100 py-1 px-2 bg-success text-white fw-bold"><i class="fa fa-info-circle"></i> Informasi</h5>
-              <button type="button" class="btn-close border border-success " style="padding:10px;border-radius:0px" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-header bg-info">
+              <h5 class="modal-title w-100 py-1 px-2  text-white fw-bold"><i class="fa fa-info-circle"></i> Informasi</h5>
+              <button type="button" class="btn-close border border-info bg-white " style="padding:10px;border-radius:0px" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <p id="Informasinya_Notif"></p>
@@ -251,7 +314,7 @@
                     <div class="d-flex justify-content-end">
                     <!--<div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">-->
                         <div>
-                            <div class="garis" onmouseover="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>My Cart <span class="badge bg-danger" id="jumlah_cart"></span></div>                        
+                            <div class="garis" onmouseover="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>Keranjangku <span class="badge bg-danger" id="jumlah_cart"></span></div>                        
                             <div class="shoppingcart-box" onmouseleave="hide_shoppingcart()" id="detail_cart">
                                 
                             </div>
@@ -264,18 +327,18 @@
                         </div>
 
                         <div>
-                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notification </div>
+                            <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notifikasi </div>
                             <div class="notification-box" onmouseleave="hide_notification()">
                                 <div class="d-flex justify-content-between my-2  w-100" style="border-bottom:1px solid grey;">
-                                    <div class="bg-primary p-2 text-white rounded-top" onclick="update_notif_bayar()">Belanjaku <span class='badge bg-danger' id="jumlah_notif"></span></div>
-                                    <div class="bg-success p-2 text-white rounded-top" onclick="notif_voucher_ongkir()">Voucherku <span class='badge bg-danger' id="jumlah_notif_voucher"></span></div>
+                                    <div class="bg-success p-2 text-white rounded-top" onclick="update_notif_bayar()">Belanjaku <span class='badge bg-danger' id="jumlah_notif"></span></div>
+                                    <div class="bg-info p-2 text-white rounded-top" onclick="notif_voucher_ongkir()">Voucherku <span class='badge bg-danger' id="jumlah_notif_voucher"></span></div>
                                     <div class="bg-secondary p-2 text-white rounded-top">Tracking</div>
                                 </div>
                                 <div  id="my_notif" class="h-75 overflow-auto"></div>
                             </div>
                         </div>
                         <div >
-                            <div class=" garis" onmouseover="show_category()" ><i class="fa fa-users"></i> My Discuss</div>
+                            <div class=" garis" onmouseover="show_category()" ><i class="fa fa-users"></i> Diskusiku</div>
                             <div class="category-box " onmouseleave="hide_category()">
                                 hallo
                             </div>
@@ -283,10 +346,10 @@
                         <div >
                             <div class="garis" onmouseover="show_promo_menu()"><i class="fa fa-handshake-o"></i> PROMO </div>
                             <div class="promo-box" onmouseleave="hide_promo_menu()">
-                                <div class="d-block w-100  my-3 border border-success p-2">
+                                <div class="d-block w-100  my-3 border border-info p-2">
                                     <div class="d-flex row justify-content-center">
-                                        <div class="col-2 text-center bg-success p-2"><i class="fa fa-paper-plane-o bg-success " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
-                                        <div class="col-10 bg-success">
+                                        <div class="col-2 text-center bg-info p-2"><i class="fa fa-paper-plane-o bg-info " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
+                                        <div class="col-10 bg-info">
                                             <div style="font-size:15px;color:white;text-align:center;padding-top:10px;font-weight:bold;">VOUCHER GRATIS ONGKIR</div>
                                         </div>
                                     </div>
@@ -317,7 +380,7 @@
                         <div >
                             <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
                             <div class="account-box" onmouseleave="hide_account()">
-                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey"><i class="fa fa-user-circle-o"></i> Login</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="login_form()"><i class="fa fa-user-circle-o"></i> Login</div>
                                 <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="showRegisterForm()"><i class="fa fa-user"></i> Daftar User Baru</div>
                                 
                             </div>

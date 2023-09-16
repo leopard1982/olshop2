@@ -1126,7 +1126,7 @@
                         "<div>senilai: <strong>" + ubahKeUang(mydata.voucher_nilai) + "</strong></div>" +
                         "<div>minimal belanja: <strong>" + ubahKeUang(mydata.voucher_min_belanja) + "</strong></div>" +
                         "<div>valid sampai: <i>" + mydata.voucher_valid + "</i></div>" +
-                        "</div><div><button class='btn btn-success' id='gratis_klaim_"+ mydata.voucher_kode +"'>klaim</button></div>" +
+                        "</div><div><button class='btn btn-info' id='gratis_klaim_"+ mydata.voucher_kode +"'>klaim</button></div>" +
                         "<input type='hidden' id='gratis_kode_" + mydata.voucher_kode + "'></div>";
                     $("#voucher_gratis_ongkir").append(template);
                     $("#gratis_kode_" + mydata.voucher_kode).attr("min_belanja",mydata.voucher_min_belanja);
@@ -1275,8 +1275,8 @@
                 },
                 success: function(data){
                     if(data.result==true) {
-                        $("#konfirmasi2_register").removeClass("d-none");
-                        $("#konfirmasi2_register").addClass("d-flex");
+                        $("#konfirmasi2_register").addClass("visible");
+                        $("#konfirmasi2_register").removeClass("invisible");
                     }
                     else {
                         $("#button_register").removeAttr('disabled');
@@ -1288,9 +1288,9 @@
     }
 
     function cekKode() {
-        kode= $("#kode_konfirmasi").val();
-        email = $("#email_register").val();
-        alert(kode);
+        kode= $("#kode_konfirmasi").val().trim();
+        email = $("#email_register").val().trim();
+
         $.ajax({
             type: 'POST',
             url: '/api/get/email/conf/',
@@ -1302,21 +1302,25 @@
             },
             success: function(data){
                 if(data.result==true) {
-                    $("#konfirmasi2_register").removeClass("d-flex");
-                    $("#konfirmasi2_register").addClass("d-none");
-                    $("#konfirmasi2_password").addClass("d-flex");
-                    $("#konfirmasi2_password").removeClass("d-none");
-                    $("#info_password").addClass("d-flex");
-                    $("#info_password").removeClass("d-none");
-                } 
+                    $("#konfirmasi2_register").removeClass("visible");
+                    $("#konfirmasi2_register").addClass("invisible");
+                    $("#konfirmasi2_password").removeClass("invisible");
+                    $("#konfirmasi2_password").addClass("visible");
+                } else {
+                    $("#konfirmasi2_register").removeClass("invisible");
+                    $("#konfirmasi2_register").addClass("visible");
+                    $("#konfirmasi2_password").removeClass("visible");
+                    $("#konfirmasi2_password").addClass("invisible");
+                }
             }
         });
     }
 
+
     function showRegisterForm() {
-        $("#info_password").removeClass("d-flex");
-        $("#info_password").addClass("d-none");
-        $("#konfirmasi2_password").addClass("d-none");
+        $("#konfirmasi2_password").addClass("invisible");
+        $("#konfirmasi2_register").addClass("invisible");
+        $("#register_username").val("");
         $("#button_register_kan").attr("disabled","disabled");
         $("#register_pass2").val('');
         $("#register_pass1").val('');
@@ -1324,7 +1328,6 @@
         $("#kode_konfirmasi").val('');
         $("#button_register").removeAttr('disabled');
         $("#email_register").removeAttr('disabled');
-        $("#konfirmasi2_register").addClass("d-none");
         $("#modalUserRegister").modal('show');
     }
 
@@ -1332,18 +1335,47 @@
     function cek_password() {
         pass1=$("#register_pass1").val().trim();
         pass2=$("#register_pass2").val().trim();
-        $("#info_password").addClass("d-flex");
+        username=$("#register_username").val().trim();
         
-        if(pass1==pass2 && pass1.length>6) {
+        if(pass1==pass2 && pass1.length>6 && username.length>6) {
             $("#button_register_kan").removeAttr("disabled");
-            $("#hasil_cek_password").html("<span class='text-success'>Password Pertama dan Kedua Sama, Silakan Klik Register!</span>");
+            $("#hasil_cek_password").html("<span class='text-success'>Username, Password Pertama dan Kedua Sama, Silakan Klik Register!</span>");
         } else {
             $("#button_register_kan").attr("disabled","disabled");
-            $("#hasil_cek_password").html("<span class='text-danger'>Password Pertama dan Kedua Berbeda, Ulangi lagi yah!</span>");
+            $("#hasil_cek_password").html("<span class='text-danger'>Username min.6 karakter/ Password #1 dan #2 Berbeda, Ulangi lagi yah!</span>");
         }
     }
+
+    function submit_new_user() {
+        username=$("#register_username").val().trim().toLowerCase(); 
+        password=$("#register_pass1").val().trim();
+        email = $("#email_register").val().trim().toLowerCase();
+
+        $.ajax({
+            type: "POST",
+            url: '/api/set/user/',
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'username':username,
+                'password':password,
+                'email':email
+            },
+            success: function(data) {
+                if(data.result==true) {
+                    $("#modalUserRegister").modal("hide");
+                    notifikasinya("Username: <strong >" + username + "</strong> telah berhasil dibuat! Silakan Login untuk melanjutkan pembelian!")
+                } else {
+                    notifikasinya("Username sudah dipakai! Silakan Coba Username lain yah....");
+                }
+            }
+        });
+    }
     
-    
+    function login_form() {
+        $("#login_username").val("");
+        $("#login_password").val("");
+        $("#modalLogin").modal("show");
+    }
 </script>
 
 {% endblock%}

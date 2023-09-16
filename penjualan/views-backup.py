@@ -627,8 +627,7 @@ def createKode(request):
         try:
             send_mail("Kode Konfirmasi","jagoanhelm.com - kode rahasia anda adalah: \n\n%s\n\nSilakan konfirmasi dalam 5 menit."%kode,"adhy.chandra@live.co.uk",[email])
             return Response({'result':True})
-        except Exception as ex:
-            print(ex)
+        except :
             return Response({'result':False})
     return Response({'result':False})
 
@@ -665,7 +664,6 @@ def createUser(request):
             user.set_password(password)
             user.save()
             return Response({'result':True})
-        except Exception as ex:
-            print(ex)
+        except:
             pass
     return Response({'result':False})
