@@ -115,4 +115,9 @@ class alamatRumah(models.Model):
     alamat_kecamatan = models.CharField(max_length=200)
     alamat_telpon = models.CharField(max_length=20)
 
+class emailKonfirm(models.Model):
+    email = models.EmailField(max_length=200, blank=False,null=False,primary_key=True)
+    kode = models.CharField(max_length=8)
+    exp = models.DateTimeField()
+
     

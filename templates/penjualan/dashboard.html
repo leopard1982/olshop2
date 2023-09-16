@@ -1260,6 +1260,89 @@
         $("#Informasinya_Notif").html(pesan);
         $("#modalInformasi_Notif").modal('show');
     }
+
+    function createEmail() {
+        email= $("#email_register").val();
+        if(email.trim().length>0) {
+            $("#button_register").attr('disabled', 'disabled');
+            $("#email_register").attr('disabled', 'disabled');
+            $.ajax({
+                type: 'POST',
+                url: '/api/set/email/conf/',
+                data: {
+                    'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                    'email':email
+                },
+                success: function(data){
+                    if(data.result==true) {
+                        $("#konfirmasi2_register").removeClass("d-none");
+                        $("#konfirmasi2_register").addClass("d-flex");
+                    }
+                    else {
+                        $("#button_register").removeAttr('disabled');
+                        $("#email_register").removeAttr('disabled');
+                    }
+                }
+            });
+        }
+    }
+
+    function cekKode() {
+        kode= $("#kode_konfirmasi").val();
+        email = $("#email_register").val();
+        alert(kode);
+        $.ajax({
+            type: 'POST',
+            url: '/api/get/email/conf/',
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode':kode,
+                'email':email
+                
+            },
+            success: function(data){
+                if(data.result==true) {
+                    $("#konfirmasi2_register").removeClass("d-flex");
+                    $("#konfirmasi2_register").addClass("d-none");
+                    $("#konfirmasi2_password").addClass("d-flex");
+                    $("#konfirmasi2_password").removeClass("d-none");
+                    $("#info_password").addClass("d-flex");
+                    $("#info_password").removeClass("d-none");
+                } 
+            }
+        });
+    }
+
+    function showRegisterForm() {
+        $("#info_password").removeClass("d-flex");
+        $("#info_password").addClass("d-none");
+        $("#konfirmasi2_password").addClass("d-none");
+        $("#button_register_kan").attr("disabled","disabled");
+        $("#register_pass2").val('');
+        $("#register_pass1").val('');
+        $("#email_register").val('');
+        $("#kode_konfirmasi").val('');
+        $("#button_register").removeAttr('disabled');
+        $("#email_register").removeAttr('disabled');
+        $("#konfirmasi2_register").addClass("d-none");
+        $("#modalUserRegister").modal('show');
+    }
+
+    
+    function cek_password() {
+        pass1=$("#register_pass1").val().trim();
+        pass2=$("#register_pass2").val().trim();
+        $("#info_password").addClass("d-flex");
+        
+        if(pass1==pass2 && pass1.length>6) {
+            $("#button_register_kan").removeAttr("disabled");
+            $("#hasil_cek_password").html("<span class='text-success'>Password Pertama dan Kedua Sama, Silakan Klik Register!</span>");
+        } else {
+            $("#button_register_kan").attr("disabled","disabled");
+            $("#hasil_cek_password").html("<span class='text-danger'>Password Pertama dan Kedua Berbeda, Ulangi lagi yah!</span>");
+        }
+    }
+    
     
 </script>
 

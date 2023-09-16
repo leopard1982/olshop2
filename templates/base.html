@@ -5,6 +5,7 @@
 <head>
     <script src="{% static 'js/jquery.3.6.4.js'%}"></script>
     <script src="{% static 'js/bootstrap5.bundle.min.js'%}"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Shop #2</title>
@@ -22,6 +23,43 @@
     <input type="hidden" id="harga_nett_detail">
        
     {% csrf_token %}
+
+    <div class="modal" tabindex="-1" id="modalUserRegister">
+        <div class="modal-dialog">
+          <div class="modal-content border border-success">
+            <div class="modal-header">
+              <h5 class="modal-title w-100 py-1 px-2 bg-success text-white fw-bold"><i class="fa fa-user"></i> Registrasi JagoanHelm.com</strong></h5>
+              <button type="button" class="btn-close border border-success " style="padding:10px;border-radius:0px" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-start align-items-center my-2">
+                    <div class="col-2">Email:</div>
+                    <div class="col-6 mx-2"><input class="form-control" type="email" placeholder="Email Kamu" id="email_register"></div>
+                    <div class="col-3"><button onclick="createEmail()" style="border-radius:10px"  id="button_register">kirim konfirmasi</button></div>
+                </div>
+                <div class="d-none justify-content-center align-items-center" id="konfirmasi2_register">
+                    <div class="col-5">Kode Konfirmasi Email:</div>
+                    <div class="col-4 mx-1"><input type="text" class="form-control" id="kode_konfirmasi" placeholder="kode konfirmasi"></div>
+                    <div class="col-2"><button class="btn btn-primary" id="button_register_cek" onclick="cekKode()">Cek</button></div>
+                </div>
+                <div class="d-none justify-content-center align-items-center" id="konfirmasi2_password">
+                    <div class="col-6">
+                        <input type="password" id="register_pass1" onkeyup="cek_password()" placeholder="password #1" class="form-control">
+                    </div>
+                    <div class="col-6">
+                        <input type="password" id="register_pass2" onkeyup="cek_password()" placeholder="password #2" class="form-control">
+                    </div>
+                </div>
+                <div style="font-size:12px" class="d-none" id="hasil_cek_password" id="info_password">
+
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-center">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="" disabled id="button_register_kan"><i class="fa fa-user"></i> Register</button>
+            </div>
+          </div>
+        </div>
+    </div>
 
     <div class="modal" tabindex="-1" id="modalCheckout">
         <div class="modal-dialog">
@@ -200,7 +238,7 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
     
     <div class="container-fluid fixed-top bg-white shadow" id="the_header"  style="border-bottom-left-radius:10px;border-bottom-right-radius:10px;height:150px;width:1120px">
         <div class="p-2 border border-danger rounded m-2">
@@ -279,10 +317,9 @@
                         <div >
                             <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
                             <div class="account-box" onmouseleave="hide_account()">
-                                <div><strong>My Account Info1</strong></div>
-                                <div>{% lorem 1 %}</div>
-                                <div><strong>My Account Info2</strong></div>
-                                <div>{% lorem 1 %}</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey"><i class="fa fa-user-circle-o"></i> Login</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="showRegisterForm()"><i class="fa fa-user"></i> Daftar User Baru</div>
+                                
                             </div>
                         </div>
                     </div>
@@ -295,8 +332,6 @@
                     -->
                 </div>
             </div>
-           
-            
         </div>
         
         <div class="row px-2">
@@ -421,6 +456,8 @@
             initWishList();
             update_notif_bayar();
             jumlah_notif_voucher_ongkir();
+            $.cookie('nama','suryo');
+            //alert($.cookie('nama'));
         });
 
         function cek_scroll() {

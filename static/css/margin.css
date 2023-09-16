@@ -283,13 +283,11 @@ a {
 }
 
 .account-box {
-    width: 30%;
-    max-width: 30%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    height: 300px;
-    min-height: 300px;
-    max-height: 300px;
+    width: 250px;
+    max-width: 250px;
+    height: 150px;
+    min-height: 120px;
+    max-height: 120px;
     border: 1px solid red;
     box-shadow: 2px 2px solid lightgrey;
     position: absolute;
@@ -297,7 +295,7 @@ a {
     display: none;
     padding: 10px;
     cursor: pointer;
-    margin-left: -200px;
+    margin-left: -100px;
 }
 
 .search-frequent {

@@ -6,7 +6,7 @@ from administrasi.serializersnya import serialSearchKeyword, serialKategori, ser
 from administrasi.serializersnya import serialVariasiWarna, serialVariasiVisor
 
 from administrasi.models import searchKeyword, kategoriBarang, masterBarang, merek, variasiWarna
-from administrasi.models import variasiVisor, alamatRumah
+from administrasi.models import variasiVisor, alamatRumah, emailKonfirm
 
 from penjualan.serializersnya import serialShoppingCart, serialWishList, serialKlaimGratisOngkir
 from penjualan.serializersnya import serialBuyingDetail, serialBuyingHeader, serialGratisOngkir
@@ -19,13 +19,20 @@ from rest_framework.decorators import api_view
 
 from rest_framework.response import Response
 
-from datetime import datetime
+from datetime import datetime,timedelta
 
 from django.db.models import F, Q
 
 from django.core.paginator import Paginator
 
+from django.core.mail import send_mail
+
+from django.conf import settings
+
 import json
+
+import os
+
 
 # Create your views here.
 def dashboard(request):
@@ -500,7 +507,8 @@ def proses_bayar(request):
             buy_detail.buying_pesan = pesan
             buy_detail.save()
 
-            data.delete()
+        #email konfirmasi
+        send_mail("Konfirmasi Belanja #" + str(random_id),"Terima kasih untuk pembelanjaanmu dengan nomor transaksi: " + str(random_id),"Email Konfirmasi <adhy.chandra@live.co.uk>",["yulian.cute@gmail.com"])            
 
         Buying_Header.objects.all().filter(buying_kode=random_id).update(buying_total=total_harga)
 
@@ -594,3 +602,43 @@ def get_alamat_rumah(request):
 
         return Response(context)
     return Response({})
+
+@api_view(['POST'])
+def createKode(request):
+    kode=""
+    if request.method=="POST":
+        email = request.data['email']
+        data = emailKonfirm.objects.all().filter(email=email)
+        
+        for x in range(0,10):
+            kode = kode + str(int(random()*10))
+        if(data.count()>0):
+            data.update(kode=kode,exp = datetime.today() + timedelta(minutes=5))
+        else:
+            data = emailKonfirm()
+            data.email = email
+            data.kode = kode
+            data.exp = datetime.now() + timedelta(minutes=5)
+            data.save()
+        try:
+            send_mail("Kode Konfirmasi","jagoanhelm.com - kode rahasia anda adalah: \n\n%s\n\nSilakan konfirmasi dalam 5 menit."%kode,"adhy.chandra@live.co.uk",[email])
+            return Response({'result':True})
+        except:
+            return Response({'result':False})
+    return Response({'result':False})
+
+@api_view(['POST'])
+def getKode(request):
+    kode=""
+    
+    if request.method=="POST":
+        print(request.data)
+        email = request.data['email']
+        kode = request.data['kode']
+        data = emailKonfirm.objects.all().filter(email=email,kode=kode,exp__gte=datetime.now())
+        print(data)
+        if(data.count()>0):
+            data.delete()
+            return Response({'result':True})
+    
+    return Response({'result':False})

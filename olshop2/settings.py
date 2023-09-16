@@ -119,7 +119,7 @@ TIME_ZONE = 'Asia/Jakarta'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -135,3 +135,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticroot')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = "sgbackend.SendGridBackend"
+SENDGRID_API_KEY = "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"

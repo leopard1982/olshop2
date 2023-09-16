@@ -5,7 +5,7 @@ from penjualan.views import tampil_barang_disc, tampil_barang_satu, variasi_warn
 from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart, setWishlist, initialWishlist
 from penjualan.views import getWishlist, hapusCart, proses_bayar, update_notif_bayar, get_cart_id
 from penjualan.views import get_voucher_ongkir, klaim_voucher_ongkir, get_klaim_voucher_ongkir
-from penjualan.views import get_alamat_rumah
+from penjualan.views import get_alamat_rumah,createKode,getKode
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
@@ -35,4 +35,6 @@ urlpatterns = [
     path('api/set/klaimgratisongkir/',klaim_voucher_ongkir,name="klaim_voucher_ongkir"),
     path('api/get/klaimgratisongkir/',get_klaim_voucher_ongkir,name="get_klaim_voucher_ongkir"),
     path('api/get/alamat/',get_alamat_rumah,name="get_alamat_rumah"),
+    path('api/set/email/conf/',createKode,name="createKode"),
+    path('api/get/email/conf/',getKode,name="getKode"),
 ]
