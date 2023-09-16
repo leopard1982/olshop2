@@ -507,8 +507,10 @@ def proses_bayar(request):
             buy_detail.buying_pesan = pesan
             buy_detail.save()
 
+            data.delete()
+
         #email konfirmasi
-        send_mail("Konfirmasi Belanja #" + str(random_id),"Terima kasih untuk pembelanjaanmu dengan nomor transaksi: " + str(random_id),"Email Konfirmasi <adhy.chandra@live.co.uk>",["yulian.cute@gmail.com"])            
+        #send_mail("Konfirmasi Belanja #" + str(random_id),"Terima kasih untuk pembelanjaanmu dengan nomor transaksi: " + str(random_id),"Email Konfirmasi <adhy.chandra@live.co.uk>",["yulian.cute@gmail.com"])            
 
         Buying_Header.objects.all().filter(buying_kode=random_id).update(buying_total=total_harga)
 
@@ -623,7 +625,7 @@ def createKode(request):
         try:
             send_mail("Kode Konfirmasi","jagoanhelm.com - kode rahasia anda adalah: \n\n%s\n\nSilakan konfirmasi dalam 5 menit."%kode,"adhy.chandra@live.co.uk",[email])
             return Response({'result':True})
-        except:
+        except :
             return Response({'result':False})
     return Response({'result':False})
 
