@@ -5,7 +5,8 @@ from penjualan.views import tampil_barang_disc, tampil_barang_satu, variasi_warn
 from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart, setWishlist, initialWishlist
 from penjualan.views import getWishlist, hapusCart, proses_bayar, update_notif_bayar, get_cart_id
 from penjualan.views import get_voucher_ongkir, klaim_voucher_ongkir, get_klaim_voucher_ongkir
-from penjualan.views import get_alamat_rumah,createKode,getKode,createUser
+from penjualan.views import get_alamat_rumah,createKode,getKode,createUser, loginUser, logoutUser
+from penjualan.views import gantiPassword
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
@@ -38,4 +39,7 @@ urlpatterns = [
     path('api/set/email/conf/',createKode,name="createKode"),
     path('api/get/email/conf/',getKode,name="getKode"),
     path('api/set/user/',createUser,name="createUser"),
+    path('api/user/login/',loginUser,name="loginUser"),
+    path('api/user/logout/',logoutUser,name="logoutUser"),
+    path('api/user/ganti/password/',gantiPassword,name="gantiPassword"),
 ]

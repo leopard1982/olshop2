@@ -25,6 +25,8 @@ from datetime import datetime,timedelta
 
 from django.db.models import F, Q
 
+from django.contrib.auth import authenticate, login, logout
+
 from django.core.paginator import Paginator
 
 from django.core.mail import send_mail
@@ -669,3 +671,43 @@ def createUser(request):
             print(ex)
             pass
     return Response({'result':False})
+
+@api_view(['POST'])
+def loginUser (request):
+    if request.method == 'POST':
+        username = request.data['username']
+        password = request.data['password']
+        
+        user = authenticate(username=username, password=password)
+
+        if(user is not None) :
+            login(request,user)
+            return Response({'result':True})
+
+    return Response({'result':False})
+
+@api_view(['POST'])
+def logoutUser (request):
+    if request.method == 'POST':
+        logout(request)
+        return Response({'result':True})
+
+    return Response({'result':False})
+
+@api_view(['POST'])
+def gantiPassword (request):
+    if request.method == 'POST':
+        password_baru = request.data['password_baru']
+        password_lama = request.data['password_lama']
+        username = request.user.username
+        
+        user = authenticate(username=username,password=password_lama)
+    
+        if(user is not None):
+            user = User.objects.get(username=username)
+            user.set_password(password_baru)
+            user.save()
+            return Response({'result':True})
+            
+    return Response({'result':False})
+

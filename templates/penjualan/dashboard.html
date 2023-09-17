@@ -1302,11 +1302,13 @@
             },
             success: function(data){
                 if(data.result==true) {
+                    notifikasinya("Kode OTP berhasil dikirimkan. Silakan kamu cek email inbox, apabila tidak ditemukan, coba cek di folder spam/ junk mail!");
                     $("#konfirmasi2_register").removeClass("visible");
                     $("#konfirmasi2_register").addClass("invisible");
                     $("#konfirmasi2_password").removeClass("invisible");
                     $("#konfirmasi2_password").addClass("visible");
                 } else {
+                    notifikasinya("Kode OTP gagal dikirimkan, silakan cek ulang email kamu yah...");
                     $("#konfirmasi2_register").removeClass("invisible");
                     $("#konfirmasi2_register").addClass("visible");
                     $("#konfirmasi2_password").removeClass("visible");
@@ -1375,6 +1377,100 @@
         $("#login_username").val("");
         $("#login_password").val("");
         $("#modalLogin").modal("show");
+    }
+
+    function logout_form() {
+        $.ajax({
+            type: "POST",
+            url: "/api/user/logout/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            },
+            success: function(data) {
+                if(data.result==true) {
+                    notifikasinya("Logout Berhasil");
+                    setTimeout(function() {
+                        window.location.reload();
+                    },2000);
+                }
+            }
+        });
+    }
+
+    function login_kan() {
+        username = $("#login_username").val().trim().toLowerCase();
+        password = $("#login_password").val();
+
+        if(username.length>6 && password.length>6) {
+            $.ajax({
+                type: "POST",
+                url: '/api/user/login/',
+                data: {
+                    'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                    'username':username,
+                    'password':password
+                },
+                success: function(data) {
+                    if(data.result==true) {
+                        $("#modalLogin").modal("hide");
+                        notifikasinya("Login Berhasil");
+                        setTimeout(function() {
+                            window.location.reload();
+                        },2000);
+                    } else {
+                        notifikasinya("Username atau Password tidak sesuai! silakan ulangi kembali yah....");
+                    }
+                }
+            });
+        } else {
+            notifikasinya("Username dan Password minimal 6 karakter yah.... Silakan Ulangi Kembali!")
+        }
+    }
+
+    function gantipassword_form() {
+        $("#ganti_password_lama").val("");
+        $("#ganti_password_baru1").val("");
+        $("#ganti_password_baru2").val("");
+        $("#modalGantiPassword").modal("show");
+    }
+
+    function gantipassword() {
+        let pass_lama = $("#ganti_password_lama").val().trim();
+        let pass_baru1 = $("#ganti_password_baru1").val().trim();
+        let pass_baru2 = $("#ganti_password_baru2").val().trim();
+
+        if(pass_baru1==pass_baru2 && pass_baru1.length>6 ) {
+            $.ajax({
+                type: "POST",
+                url: "/api/user/ganti/password/",
+                data: {
+                    'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                    'password_lama': pass_lama,
+                    'password_baru':pass_baru1
+                },
+                success: function(data) {
+                    if (data.result == true) {
+                        $("#modalGantiPassword").modal("hide");
+                        notifikasinya("Selamat Password sudah berhasil diganti. Silahkan login ulang dengan password baru!");
+                        setTimeout(function() {
+                            window.location.reload();
+                        },2000);
+                    } else {
+                        notifikasinya("Penggantian Password tidak berhasil, apakah ada salah isi password?");
+                    }
+                }
+            });
+        }
+    }
+
+    function show_lupa_password() {
+        $("#modalLogin").modal('hide');
+        $("#email_lupa").val("");
+        $("#modalLupaPassword").modal("show");
+    }
+
+    function request_username_password() {
+
     }
 </script>
 

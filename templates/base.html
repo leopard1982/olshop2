@@ -132,7 +132,11 @@
                 <div class="d-flex w-100 justify-content-center " style="border-bottom:1px solid grey;border-top:1px solid grey;" id="Item_Detail_Gambar"></div>
                 <div class="d-flex justify-content-between" style="margin-top:15px;margin-bottom:15px;">
                     <div><strong><u>Deskripsi Produk:</u></strong></div>
+                    {% if user.is_authenticated%}
                     <div onclick="setWishList()" style="cursor:pointer">wishlist <span id="wishlist_heart" style="cursor:pointer;font-size:20px"><i class="fa fa-heart-o"></i></span></div>
+                    {% else %}
+                    <div></div>
+                    {% endif%}
                 </div>
                 <div style="height:100px" class="overflow-auto p-2 border rounded border-secondary">
                     <div id="Item_Detail_Deskripsi"></div>
@@ -175,9 +179,13 @@
                         <button class="btn btn-danger text-white fw-bold" style="font-size:12px"><i class="fa fa-youtube-play"></i> YouTube </button>  
                     </div>
                     <div class="col-9 d-flex justify-content-end">
+                        {% if user.is_authenticated %}
                         <button type="button" class="btn btn-secondary mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" ><span class="fa fa-user-circle "></span> Chat</button>
                         <button type="button" class="btn btn-success mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart('keranjang')"><span class="fa fa-shopping-cart " ></span> Keranjang</button>
                         <button type="button" class="btn btn-primary mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money "  ></span> Beli</button>
+                        {% else%}
+                        <i><strong>Silakan Login pembelian yah...</strong></i>
+                        {% endif%}
                     </div>
                 </div>
             </div>
@@ -203,11 +211,33 @@
         </div>
     </div>
 
+    <div class="modal" tabindex="-1" id="modalLupaPassword">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title fw-bold text-white"><i class="fa fa-lock"></i> Lupa Password</h5>
+                <button type="button" class="btn-close border border-primary bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Email Didaftarkan:</div>
+                    <div class="col-7"><input type="text" id="email_lupa" placeholder="isi dengan email yang kamu!" class="form-control"></div>
+                </div>
+                
+                <div class="d-flex justify-content-center align-items-center my-2">
+                    <button class="btn btn-primary"  onclick="request_username_password()">Kirim Permintaan</button>
+                </div>
+
+            </div>
+          </div>
+        </div>
+    </div>
+
     <div class="modal" tabindex="-1" id="modalLogin">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header bg-primary">
-                <h5 class="modal-title fw-bold text-white">LOGIN</h5>
+                <h5 class="modal-title fw-bold text-white"><i class="fa fa-user-circle"></i> LOGIN</h5>
                 <button type="button" class="btn-close border border-primary bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -220,11 +250,44 @@
                     <div class="col-7"><input type="password" id="login_password" class="form-control"></div>
                 </div>
                 <div class="d-flex justify-content-center align-items-center my-2">
-                    <button class="btn btn-primary" id="login_button">login</button>
+                    <button class="btn btn-primary" id="login_button" onclick="login_kan()">login</button>
                 </div>
                 <div style="font-size:12px" class="d-flex justify-content-center align-items-center">
-                    Lupa Password/ Username? silakan <a href="#" class="mx-2">klik</a> di sini!
+                    Lupa Password/ Username? silakan <a href="#" class="mx-2" onclick="show_lupa_password()">klik</a> di sini!
                 </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div class="modal" tabindex="-1" id="modalGantiPassword">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title fw-bold text-white"><i class="fa fa-key"></i> GANTI PASSWORD</h5>
+                <button type="button" class="btn-close border border-primary bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">User Name:</div>
+                    <div class="col-7 h5 fw-bold">{{ user.username }}</div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Password Lama:</div>
+                    <div class="col-7"><input type="password" id="ganti_password_lama" placeholder="password lama" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Password Baru:</div>
+                    <div class="col-7"><input type="password" id="ganti_password_baru1" placeholder="password baru (6 karakter)" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Konfirmasi :</div>
+                    <div class="col-7"><input type="password" id="ganti_password_baru2" placeholder="konfirm password baru" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-3">
+                    <button class="btn btn-primary" id="gantipassword_button" onclick="gantipassword()">Ganti Password</button>
+                </div>
+
             </div>
           </div>
         </div>
@@ -313,19 +376,29 @@
                 <div class="col-6 col-sm-6 col-md-6 col-lg-8 col-xl-9 col-xxl-9">
                     <div class="d-flex justify-content-end">
                     <!--<div class="d-none d-sm-none d-md-none d-lg-flex d-xl-flex d-xxl-flex justify-content-evenly">-->
+                        {% if user.is_authenticated %}
                         <div>
                             <div class="garis" onmouseover="show_shoppingcart()"><i class="fa fa-cart-arrow-down mx-2"></i>Keranjangku <span class="badge bg-danger" id="jumlah_cart"></span></div>                        
                             <div class="shoppingcart-box" onmouseleave="hide_shoppingcart()" id="detail_cart">
                                 
                             </div>
                         </div>
+                        {% else %}
+                        <div class="mx-3 py-3"><i class="fa fa-cart-arrow-down mx-2"></i>Keranjangku </div>                        
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
                         <div>
                             <div class="garis" onmouseover="show_wishlist()"><i class="fa fa-heartbeat"></i> Wishlist <span class="badge bg-danger" id="jumlah_wishlist"></span></div>
                             <div class="wishlist-box" onmouseleave="hide_wishlist()" id="wishlist_menu">
  
                             </div>
                         </div>
-
+                        {% else %}
+                        <div class="mx-3  py-3"><i class="fa fa-heartbeat"></i> Wishlist</div>
+                        {% endif %}
+                        
+                        {% if user.is_authenticated %}
                         <div>
                             <div class="garis" onmouseover="show_notification()"><i class="fa fa-bell-o"></i> Notifikasi </div>
                             <div class="notification-box" onmouseleave="hide_notification()">
@@ -337,15 +410,30 @@
                                 <div  id="my_notif" class="h-75 overflow-auto"></div>
                             </div>
                         </div>
+                        {% else %}
+                        <div class="mx-3  py-3"><i class="fa fa-bell-o"></i> Notifikasi </div>
+                        {% endif %}
+
+                        {% if user.is_authenticated %}
                         <div >
                             <div class=" garis" onmouseover="show_category()" ><i class="fa fa-users"></i> Diskusiku</div>
                             <div class="category-box " onmouseleave="hide_category()">
                                 hallo
                             </div>
                         </div>
+                        {% else%}
+                        <div class="mx-3  py-3"><i class="fa fa-users"></i> Diskusiku</div>
+                        {% endif%}
+
+                        
                         <div >
                             <div class="garis" onmouseover="show_promo_menu()"><i class="fa fa-handshake-o"></i> PROMO </div>
+                            {% if user.is_authenticated%}
                             <div class="promo-box" onmouseleave="hide_promo_menu()">
+                            {% else %}
+                            <div class="promo-box" onmouseleave="hide_promo_menu()" style="height:160px;min-height:160px;max-height:160px">
+                            {% endif %}
+                                {% if user.is_authenticated%}
                                 <div class="d-block w-100  my-3 border border-info p-2">
                                     <div class="d-flex row justify-content-center">
                                         <div class="col-2 text-center bg-info p-2"><i class="fa fa-paper-plane-o bg-info " style="font-size:30px;color:white;font-weight:bold" aria-hidden="true"></i></div>
@@ -355,6 +443,7 @@
                                     </div>
                                     <div class="text-center my-1" ><button class="btn" onclick="klik_gratis_ongkir()">Klik untuk Klaim Sekarang!</button></div>
                                 </div>
+                                {% endif %}
                                 <!--
                                 <div class="d-block w-100  my-3 border border-danger p-2" >
                                     <div class="d-flex row justify-content-center">
@@ -377,14 +466,25 @@
                                 </div>
                             </div>
                         </div>
-                        <div >
+                        
+                        {% if user.is_authenticated%}
+                        <div  >
+                            <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
+                            <div class="account-box" onmouseleave="hide_account()" style="height:150px !important;min-height:150px !important;max-height:150px !important">
+                                <div class="my-1 p-1 rounded bg-danger text-white text-center w-100" style="font-size:12px;">hallo, <strong>{{user.username}}</strong>!</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="logout_form()"><i class="fa fa-user-circle-o"></i> Logout</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="gantipassword_form()"><i class="fa fa-key"></i> Ganti Password</div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div>
                             <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
                             <div class="account-box" onmouseleave="hide_account()">
                                 <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="login_form()"><i class="fa fa-user-circle-o"></i> Login</div>
                                 <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="showRegisterForm()"><i class="fa fa-user"></i> Daftar User Baru</div>
-                                
                             </div>
                         </div>
+                        {% endif%}
                     </div>
                     <!--
                     <div class="d-flex d-sm-flex d-md-flex d-lg-none d-xl-none d-xxl-none justify-content-end">
@@ -434,6 +534,7 @@
                 Jl. Pulo Sirih Utama, RT.004/RW.015<br>
                 Jaka Setia, Bekasi Selatan, Kota Bekasi<br>
                 Jawa Barat 17148<br><br>
+                
                 <iframe class="w-100" style="height:200px" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.0085656979195!2d106.97028017380322!3d-6.262600993725997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e698db00b8eacf9%3A0x7ee3fad755f1e152!2sJagoan%20Helm!5e0!3m2!1sid!2sid!4v1693393950234!5m2!1sid!2sid" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div class="col-8 ">
