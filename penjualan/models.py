@@ -1,8 +1,10 @@
 from django.db import models
 from administrasi.models import masterBarang
+from django.contrib.auth.models import User
 
 # Create your models here.
 class ShoppingCart(models.Model):
+    shopping_user = models.ForeignKey(User,on_delete=models.RESTRICT)
     shopping_barang = models.ForeignKey(masterBarang, null=False,blank=False,verbose_name="Kode Barang",on_delete=models.RESTRICT)
     shopping_jumlah = models.PositiveIntegerField(default=0)
     shopping_warna = models.CharField(max_length=200, blank=False, null=False)
@@ -15,6 +17,7 @@ class ShoppingCart(models.Model):
         ordering=['-id']
 
 class WishList_Item(models.Model):
+    wish_user = models.ForeignKey(User,on_delete=models.RESTRICT)
     kode_barang = models.ForeignKey(masterBarang,on_delete=models.RESTRICT,verbose_name="Barang Wishlist")
 
 class Voucher_Ongkir(models.Model):
@@ -32,6 +35,7 @@ class Voucher_Ongkir(models.Model):
         return self.voucher_nama
     
 class Klaim_Voucher_Ongkir(models.Model):
+    voucher_user = models.ForeignKey(User,on_delete=models.RESTRICT)
     voucher_kode = models.CharField(max_length=200,primary_key=True,null=False,blank=False)
     voucher_min_belanja = models.PositiveBigIntegerField(default=0)
     voucher_terpakai = models.PositiveIntegerField(default=0)
@@ -47,6 +51,7 @@ class Klaim_Voucher_Ongkir(models.Model):
         return self.voucher_kode
 
 class Buying_Header(models.Model):
+    buying_user = models.ForeignKey(User,on_delete=models.RESTRICT)
     buying_kode = models.CharField(max_length=10, blank=False, null=False,primary_key=True)
     buying_total = models.PositiveBigIntegerField(null=True,blank=True,default=0)
     buying_kirim_resi = models.CharField(max_length=200, blank=True,null=True)

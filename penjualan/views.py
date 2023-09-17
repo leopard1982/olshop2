@@ -297,39 +297,46 @@ def addCart(request):
 
         id_cart = None
 
-        data = ShoppingCart.objects.all().filter(shopping_barang=masterBarang.objects.get(barang_sku=kode_barang),shopping_warna=warna_barang,shopping_visor=visor_barang)
+        data = ShoppingCart.objects.all().filter(shopping_barang=masterBarang.objects.get(barang_sku=kode_barang),shopping_warna=warna_barang,shopping_visor=visor_barang,shopping_user = User.objects.get(username=request.user.username))
         if(data.count()>0):
             data.update(shopping_jumlah = F('shopping_jumlah')+jumlah_barang)
             id_cart = data[0].id
         else:
-            data = ShoppingCart()
-            data.shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)
-            data.shopping_jumlah = jumlah_barang
-            data.shopping_visor = visor_barang
-            data.shopping_warna = warna_barang
-            data.save()
-            id_cart = ShoppingCart.objects.all().order_by("-id")[0].id
+            try:
+                data = ShoppingCart()
+                data.shopping_user = User.objects.get(username=request.user.username)
+                data.shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)
+                data.shopping_jumlah = jumlah_barang
+                data.shopping_visor = visor_barang
+                data.shopping_warna = warna_barang
+                data.save()
+                id_cart = ShoppingCart.objects.all().order_by("-id")[0].id
 
-            context = {
-                'id_cart':id_cart,
-                'result': True
-            }
-            print(context)
-            return Response (context)
+                context = {
+                    'id_cart':id_cart,
+                    'result': True
+                }
+                print(context)
+                return Response (context)
+            except:
+                pass
     return Response ({'result':False})
 
 @api_view(['POST'])
 def get_cart (request):
     if request.method == 'POST':
-        mydata = ShoppingCart.objects.all()
-        serial = serialShoppingCart(mydata,many=True)
+        try:
+            mydata = ShoppingCart.objects.all().filter(shopping_user = User.objects.get(username=request.user.username))
+            serial = serialShoppingCart(mydata,many=True)
 
-        context= {
-            'result': serial.data,
-            'jumlah_item': mydata.count()
-        }
+            context= {
+                'result': serial.data,
+                'jumlah_item': mydata.count()
+            }
 
-        return Response(context)
+            return Response(context)
+        except:
+            pass
     return Response({})
 
 @api_view(['POST'])
@@ -340,9 +347,9 @@ def get_cart_id (request):
             warna = request.data['warna']
             kode_barang = request.data['kode_barang']
             try:
-                mydata = ShoppingCart.objects.all().get(shopping_visor=visor, shopping_warna=warna, shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)).id
+                mydata = ShoppingCart.objects.all().get(shopping_user = User.objects.get(username=request.user.username) ,shopping_visor=visor, shopping_warna=warna, shopping_barang = masterBarang.objects.get(barang_sku=kode_barang)).id
             except:
-                mydata = ShoppingCart.objects.all()[0].id
+                mydata = ShoppingCart.objects.all().filter(shopping_user=User.objects.get(username=request.user.username))[0].id
             context= {
                 'id_cart': mydata,
                 'result':True
@@ -360,7 +367,7 @@ def addJumlahCart (request):
         # kode_barang = request.data['kode_barang']
         # variasi_visor = request.data['variasi_visor']
         # variasi_warna = request.data['variasi_warna']
-        mydata = ShoppingCart.objects.get(id=idnya)
+        mydata = ShoppingCart.objects.get(Q(id=idnya) & Q(shopping_user=User.objects.get(username=request.user.username)))
         if mydata is not None:
             mydata.shopping_jumlah=mydata.shopping_jumlah+1
             mydata.save()
@@ -380,7 +387,7 @@ def subJumlahCart (request):
         # variasi_visor = request.data['variasi_visor']
         # variasi_warna = request.data['variasi_warna']
         
-        mydata = ShoppingCart.objects.get(id=idnya)
+        mydata = ShoppingCart.objects.get(Q(id=idnya) & Q(username=User.objects.get(username=request.user.username)))
         if mydata is not None:
     
             if(mydata.shopping_jumlah==1):
@@ -401,20 +408,20 @@ def setWishlist (request):
     jumlah=0
     if request.method == 'POST':
         kode_barang = request.data['kode_barang']
-        print(kode_barang)
         try:
-            mydata = WishList_Item.objects.get(kode_barang=masterBarang.objects.get(barang_sku=kode_barang))       
+            mydata = WishList_Item.objects.get(Q(kode_barang=masterBarang.objects.get(barang_sku=kode_barang)) & Q(wish_user=User.objects.get(username=request.user.username)))       
             mydata.delete()
             resultnya=False
         except:       
             mydata1=WishList_Item()
             mydata1.kode_barang = masterBarang.objects.get(barang_sku=kode_barang)
+            mydata1.wish_user = User.objects.get(username=request.user.username)
             mydata1.save()
             
             resultnya=True
         print(kode_barang)
 
-        data = WishList_Item.objects.all()
+        data = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))
         jumlah = data.count()
         serial = serialWishList(data,many=True)
 
@@ -433,7 +440,7 @@ def getWishlist (request):
     if request.method == 'POST':
         kode_barang = request.data['kode_barang']
 
-        mydata = WishList_Item.objects.all().filter(kode_barang=masterBarang.objects.get(barang_sku=kode_barang))       
+        mydata = WishList_Item.objects.all().filter(Q(kode_barang=masterBarang.objects.get(barang_sku=kode_barang)) & Q(wish_user=User.objects.get(username=request.user.username)))       
         if mydata.count()>0:
            resultnya = True
 
@@ -447,11 +454,11 @@ def getWishlist (request):
 @api_view(['POST'])
 def initialWishlist (request):
     if request.method == 'POST':
-        mydata = WishList_Item.objects.all()       
+        mydata = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))       
         
         resultnya=True
 
-        data = WishList_Item.objects.all()
+        data = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))
         jumlah = data.count()
         serial = serialWishList(data,many=True)
 
@@ -466,9 +473,12 @@ def initialWishlist (request):
 @api_view(['POST'])
 def hapusCart(request):
     if request.method == 'POST':
-        id_cart = request.data['id_cart']
-        ShoppingCart.objects.all().filter(id=id_cart).delete()
-        return Response({'result':True})
+        try:
+            id_cart = request.data['id_cart']
+            ShoppingCart.objects.all().filter(id=id_cart,shopping_user=User.objects.get(username=request.user.username)).delete()
+            return Response({'result':True})
+        except:
+            pass
     return Response({})
 
 @api_view(['POST'])
@@ -488,6 +498,7 @@ def proses_bayar(request):
         #buat headernya dulu
         buy_header = Buying_Header()
         buy_header.buying_kode=random_id
+        buy_header.buying_user = User.objects.get(username=request.user.username)
         buy_header.save()
         
         for list in list_json:
@@ -527,8 +538,8 @@ def update_notif_bayar(request):
     if request.method=="POST":
         data = Buying_Detail.objects.all()
         serial = serialBuyingDetail(data,many=True)
-        jumlah_blm_bayar = Buying_Header.objects.all().count()
-        data2 = Buying_Header.objects.all().order_by("-buying_time")
+        jumlah_blm_bayar = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).count()
+        data2 = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).order_by("-buying_time")
         serial2 = serialBuyingHeader(data2,many=True)
         context = {
             'result': True,
@@ -578,6 +589,7 @@ def klaim_voucher_ongkir(request):
             claim.voucher_valid = valid
             claim.voucher_terpakai=False
             claim.voucher_nama=nama_voucher
+            claim.voucher_user = User.objects.get(username=request.user.username)
             claim.save()
             return Response({'result':True})
     return Response({'result':False})
@@ -585,7 +597,7 @@ def klaim_voucher_ongkir(request):
 @api_view(['POST'])
 def get_klaim_voucher_ongkir(request):
     if request.method=="POST":     
-        data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today())
+        data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today(),voucher_user=User.objects.get(username=request.user.username))
         serial = serialKlaimGratisOngkir(data,many=True)
         jumlah = data.count()
         context = {

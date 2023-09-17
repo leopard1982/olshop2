@@ -1094,16 +1094,19 @@
                 console.log(data);
                 $("#jumlah_notif").text(data.jumlah_blm_bayar);
                 $("#my_notif").empty();
-                data.pembayaran_header.forEach(function(mydata){
-                    template = "<div class='notification-box-isi'>Pesanan nomor: <span style='color:red;font-weight:bold'>"+
-                        mydata.buying_kode+"</span> berhasil dibuat. Silakan melakukan pembayaran sebesar: <span style='font-weight:bold;color:green'>" + 
-                            ubahKeUang(mydata.buying_total)+"</span>. <button id='tbl_detail_bayar_" +mydata.buying_kode+ "' style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
-                    $("#my_notif").append(template);
-                    $("#tbl_detail_bayar_" + mydata.buying_kode).click(function() {
-                        notifikasinya("KODE BARANG YANG DIPILIH: " +mydata.buying_kode);
+                if(data.jumlah_blm_bayar==0) {
+                    $("#my_notif").html("<div>belum ada pembelian.. yuk mulai belanja sekarang!</div>");
+                } else {
+                    data.pembayaran_header.forEach(function(mydata){
+                        template = "<div class='notification-box-isi'>Pesanan nomor: <span style='color:red;font-weight:bold'>"+
+                            mydata.buying_kode+"</span> berhasil dibuat. Silakan melakukan pembayaran sebesar: <span style='font-weight:bold;color:green'>" + 
+                                ubahKeUang(mydata.buying_total)+"</span>. <button id='tbl_detail_bayar_" +mydata.buying_kode+ "' style='font-size:13px;background-color:lightblue;font-weight:bold;border-radius:10px' ><i class='fa fa-tags'></i> Detail</button></div>";
+                        $("#my_notif").append(template);
+                        $("#tbl_detail_bayar_" + mydata.buying_kode).click(function() {
+                            notifikasinya("KODE BARANG YANG DIPILIH: " +mydata.buying_kode);
+                        });
                     });
-                });
-
+                }
             }
         });
     }
@@ -1252,6 +1255,9 @@
             },
             success: function(data) {
                 $("#jumlah_notif_voucher").text(data.jumlah);
+                if(data.jumlah==0) {
+                    $("#my_notif").html("<div>Kamu Belum Klaim Voucher Gratis Ongkir!</div>");
+                }
             }
         });
     }
@@ -1470,6 +1476,10 @@
     }
 
     function request_username_password() {
+
+    }
+
+    function profilku_form() {
 
     }
 </script>

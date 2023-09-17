@@ -184,7 +184,7 @@
                         <button type="button" class="btn btn-success mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="addCart('keranjang')"><span class="fa fa-shopping-cart " ></span> Keranjang</button>
                         <button type="button" class="btn btn-primary mx-1" style="font-size:15px !important;padding-top:0px !important" data-bs-dismiss="modal" onclick="beli_sekarang_from_detail()"><span class="fa fa-money "  ></span> Beli</button>
                         {% else%}
-                        <i><strong>Silakan Login pembelian yah...</strong></i>
+                        <i><strong>Silakan Login dulu yah...</strong></i>
                         {% endif%}
                     </div>
                 </div>
@@ -470,10 +470,11 @@
                         {% if user.is_authenticated%}
                         <div  >
                             <div class="garis" onmouseover="show_account()"><i class="fa fa-user-circle"></i> Account</div>
-                            <div class="account-box" onmouseleave="hide_account()" style="height:150px !important;min-height:150px !important;max-height:150px !important">
+                            <div class="account-box" onmouseleave="hide_account()" style="height:190px !important;min-height:190px !important;max-height:190px !important">
                                 <div class="my-1 p-1 rounded bg-danger text-white text-center w-100" style="font-size:12px;">hallo, <strong>{{user.username}}</strong>!</div>
-                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="logout_form()"><i class="fa fa-user-circle-o"></i> Logout</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="profilku_form()"><i class="fa fa-user-circle"></i> Profil-ku</div>
                                 <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="gantipassword_form()"><i class="fa fa-key"></i> Ganti Password</div>
+                                <div class="w-100 py-2 text-center" style="border-bottom:1px solid grey" onclick="logout_form()"><i class="fa fa-user-circle-o"></i> Logout</div>
                             </div>
                         </div>
                         {% else %}
