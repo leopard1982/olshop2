@@ -12,10 +12,10 @@ from administrasi.models import variasiVisor, alamatRumah, emailKonfirm
 
 from penjualan.serializersnya import serialShoppingCart, serialWishList, serialKlaimGratisOngkir
 from penjualan.serializersnya import serialBuyingDetail, serialBuyingHeader, serialGratisOngkir
-from penjualan.serializersnya import serialAlamatRumah
+from penjualan.serializersnya import serialAlamatRumah, serialUserProfile
 
 from penjualan.models import ShoppingCart, WishList_Item, Buying_Header, Buying_Detail
-from penjualan.models import Voucher_Ongkir, Klaim_Voucher_Ongkir
+from penjualan.models import Voucher_Ongkir, Klaim_Voucher_Ongkir, User_Profile
 
 from rest_framework.decorators import api_view
 
@@ -453,22 +453,28 @@ def getWishlist (request):
 
 @api_view(['POST'])
 def initialWishlist (request):
+    resultnya=False
+    jumlah=0
+    
     if request.method == 'POST':
-        mydata = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))       
-        
-        resultnya=True
+        try:
+            mydata = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))       
+            
+            resultnya=True
 
-        data = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))
-        jumlah = data.count()
-        serial = serialWishList(data,many=True)
+            data = WishList_Item.objects.all().filter(wish_user=User.objects.get(username=request.user.username))
+            jumlah = data.count()
+            serial = serialWishList(data,many=True)
 
-        context = {
-            'result': resultnya,
-            'jumlah': jumlah,
-            'data': serial.data
-        }
-        return Response(context)
-    return Response({})
+            context = {
+                'result': resultnya,
+                'jumlah': jumlah,
+                'data': serial.data
+            }
+            return Response(context)
+        except:
+            pass
+    return Response({'result':False,'jumlah':0})
 
 @api_view(['POST'])
 def hapusCart(request):
@@ -536,20 +542,23 @@ def proses_bayar(request):
 @api_view(['POST'])
 def update_notif_bayar(request):
     if request.method=="POST":
-        data = Buying_Detail.objects.all()
-        serial = serialBuyingDetail(data,many=True)
-        jumlah_blm_bayar = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).count()
-        data2 = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).order_by("-buying_time")
-        serial2 = serialBuyingHeader(data2,many=True)
-        context = {
-            'result': True,
-            'pembayaran_detail':serial.data,
-            'pembayaran_header':serial2.data,
-            'jumlah_blm_bayar':jumlah_blm_bayar,
-        }
-        return Response(context)
+        try:
+            data = Buying_Detail.objects.all()
+            serial = serialBuyingDetail(data,many=True)
+            jumlah_blm_bayar = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).count()
+            data2 = Buying_Header.objects.all().filter(buying_user=User.objects.get(username=request.user.username)).order_by("-buying_time")
+            serial2 = serialBuyingHeader(data2,many=True)
+            context = {
+                'result': True,
+                'pembayaran_detail':serial.data,
+                'pembayaran_header':serial2.data,
+                'jumlah_blm_bayar':jumlah_blm_bayar,
+            }
+            return Response(context)
+        except:
+            pass
     
-    return Response({'result':False})
+    return Response({'result':False,'jumlah_blm_bayar':0})
 
 @api_view(['POST'])
 def get_voucher_ongkir(request):
@@ -578,10 +587,11 @@ def klaim_voucher_ongkir(request):
         valid=datetime(tahun,bulan,hari)
         nama_voucher = request.data['nama_voucher']
          
-        claim = Klaim_Voucher_Ongkir.objects.all().filter(voucher_kode=kode_voucher)
+        claim = Klaim_Voucher_Ongkir.objects.all().filter(voucher_kode=kode_voucher,voucher_user=User.objects.get(username=request.user.username))
         if (claim.count() > 0) :
             return Response({'result':False})
         else:
+            print('baru yahhhh')
             claim = Klaim_Voucher_Ongkir()
             claim.voucher_kode = kode_voucher
             claim.voucher_nilai = nilai
@@ -596,17 +606,20 @@ def klaim_voucher_ongkir(request):
 
 @api_view(['POST'])
 def get_klaim_voucher_ongkir(request):
-    if request.method=="POST":     
-        data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today(),voucher_user=User.objects.get(username=request.user.username))
-        serial = serialKlaimGratisOngkir(data,many=True)
-        jumlah = data.count()
-        context = {
-            'result':True,
-            'data':serial.data,
-            'jumlah':jumlah
-        }
-        return Response(context)
-    return Response({'result':False})
+    if request.method=="POST": 
+        try:    
+            data = Klaim_Voucher_Ongkir.objects.all().filter(voucher_terpakai=False,voucher_valid__gte=datetime.today(),voucher_user=User.objects.get(username=request.user.username))
+            serial = serialKlaimGratisOngkir(data,many=True)
+            jumlah = data.count()
+            context = {
+                'result':True,
+                'data':serial.data,
+                'jumlah':jumlah
+            }
+            return Response(context)
+        except:
+            pass
+    return Response({'result':False,'jumlah':0})
 
 @api_view(['POST'])
 def get_alamat_rumah(request):
@@ -723,3 +736,129 @@ def gantiPassword (request):
             
     return Response({'result':False})
 
+@api_view(['POST'])
+def getProvince(request):
+    if request.method == 'POST':
+        import http.client
+
+        conn = http.client.HTTPSConnection('api.rajaongkir.com')
+        headers = {'key': '0e0e978f63109594fe744a1aa2141c38'}
+        conn.request('GET','/starter/province',headers=headers)
+        res = conn.getresponse()
+
+        data_json =  json.loads(res.read())
+        data_json_kirim = data_json['rajaongkir']['results']
+        context = {
+            'result':data_json_kirim
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def getKabupaten(request):
+    if request.method == 'POST':
+        import http.client
+        id=request.data['id']
+        conn = http.client.HTTPSConnection('api.rajaongkir.com')
+        headers = {'key': '0e0e978f63109594fe744a1aa2141c38'}
+        conn.request('GET','/starter/city?province=%s'%id,headers=headers)
+        res = conn.getresponse()
+
+        data_json =  json.loads(res.read())
+        data_json_kirim = data_json['rajaongkir']['results']
+        context = {
+            'result':data_json_kirim
+        }
+        return Response(context)
+    return Response({})
+
+@api_view(['POST'])
+def saveProfile(request):
+    if request.method == 'POST':
+        kode_kabupaten = request.data['kode_kabupaten']
+        tipe_kabupaten = request.data['tipe_kabupaten']
+        nama_kabupaten = request.data['nama_kabupaten']
+        kode_pos = request.data['kode_pos']
+        kode_provinsi = request.data['kode_provinsi']
+        nama_provinsi = request.data['nama_provinsi']
+        nama = request.data['nama']
+        telpon = request.data['telpon']
+        alamat = request.data['alamat']
+
+        data = User_Profile.objects.all().filter(User = User.objects.get(username=request.user.username))
+        if data.count() >0:
+            print('update')
+            print(nama_kabupaten)
+            data = data[0]
+            data.User_Nama = nama
+            data.User_Telpon = telpon
+            data.User_Alamat = alamat
+            data.User_Provinsi = nama_provinsi
+            data.User_Provinsi_id = kode_provinsi
+            data.User_Kabupaten = nama_kabupaten
+            data.User_Kabupaten_id = kode_kabupaten
+            data.User_Kabupaten_tipe = tipe_kabupaten
+            data.User_Kode_Pos = kode_pos
+            data.save()
+        else:
+            data = User_Profile()
+            data.User = User.objects.get(username=request.user.username)
+            data.User_Nama = nama
+            data.User_Telpon = telpon
+            data.User_Alamat = alamat
+            data.User_Provinsi = nama_provinsi
+            data.User_Provinsi_id = kode_provinsi
+            data.User_Kabupaten = nama_kabupaten
+            data.User_Kabupaten_id = kode_kabupaten
+            data.User_Kabupaten_tipe = tipe_kabupaten
+            data.User_Kode_Pos = kode_pos
+            data.save()
+        return Response({'result':True})
+    return Response({'result':False})
+
+@api_view(['POST'])
+def getProfile(request):
+    if request.method == 'POST':
+        try:
+            data = User_Profile.objects.all().filter(User = User.objects.get(username=request.user.username))
+            if data.count() >0:
+                serial = serialUserProfile(data,many=True)
+                context = {
+                    'result': True,
+                    'data': serial.data
+                }
+                return Response(context)
+        except:
+            pass
+    return Response({'result':False})
+
+@api_view(['POST'])
+def cekBiayaOngkir(request):
+    if request.method == 'POST':
+        import http.client
+        kota_tujuan=request.data['kota_tujuan']
+        berat = request.data['berat']
+
+        print(berat)
+
+        import http.client
+
+        payload = "origin=54&destination="+ kota_tujuan+"&weight=" + berat +"&courier=jne"
+
+        headers = {
+            'key': "0e0e978f63109594fe744a1aa2141c38",
+            'content-type': "application/x-www-form-urlencoded"
+            }
+        conn = http.client.HTTPSConnection('api.rajaongkir.com')
+        conn.request("POST", "/starter/cost", payload, headers)
+
+        res = conn.getresponse()
+
+        data_json =  json.loads(res.read())
+        data_json_kirim = data_json['rajaongkir']['results'][0]['costs'][0]['cost'][0]['value']
+
+        context = {
+            'result':data_json_kirim
+        }
+        return Response(context)
+    return Response({'result':False})

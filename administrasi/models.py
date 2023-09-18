@@ -37,6 +37,7 @@ class masterBarang(models.Model):
     barang_sku = models.CharField(max_length=100, primary_key=True, blank=False, null=False, default="",verbose_name="Kode SKU")
     barang_nama = models.CharField(max_length=100, blank=False, null=False, default="", verbose_name="Nama Barang")
     barang_deskripsi = models.TextField(max_length=1000,verbose_name="Deskripsi Barang")
+    barang_berat = models.PositiveIntegerField(default=0,null=False,blank=False,verbose_name="Berat Barang dalam Gram")
     barang_foto1 = models.ImageField(upload_to='barang',verbose_name="Gambar Barang #1",null=True,blank=True)
     barang_foto2 = models.ImageField(upload_to='barang',verbose_name="Gambar Barang #2",null=True,blank=True)
     barang_foto3 = models.ImageField(upload_to='barang',verbose_name="Gambar Barang #3",null=True,blank=True)
@@ -55,6 +56,7 @@ class masterBarang(models.Model):
     barang_dicari = models.PositiveIntegerField(default=0,verbose_name="Jumlah HIT")
     barang_merek = models.ForeignKey(merek,on_delete=models.RESTRICT,null=True,blank=True)
     barang_stok = models.PositiveIntegerField(default=0)
+
 
     class Meta:
         ordering = ['barang_nama','barang_sku']

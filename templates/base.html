@@ -21,8 +21,51 @@
     <input type="hidden" id="kode_barang_detail" value="">
     <input type="hidden" id="id_cart" value="">
     <input type="hidden" id="harga_nett_detail">
+    <input type="hidden" id="berat_total_barang">
+    <input type="hidden" id="profile_user">
        
     {% csrf_token %}
+
+    <div class="modal" tabindex="-1" id="modalProfile">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h5 class="modal-title fw-bold text-white"><i class="fa fa-user-circle"></i> PROFILE - {{user.username}}</h5>
+                <button type="button" class="btn-close border border-primary bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Email:</div>
+                    <div class="col-7 fw-bold">{{user.email}}</div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Nama Lengkap:</div>
+                    <div class="col-7"><input type="text" id="profile_namalengkap" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Nomor Whatsapp:</div>
+                    <div class="col-7"><input type="text" id="profile_whatsapp" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Alamat Lengkap:</div>
+                    <div class="col-7"><input type="text" id="profile_alamat" class="form-control"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Provinsi:</div>
+                    <div class="col-7" id="profile_provinsi"></div>
+                </div>
+                <div class="d-flex justify-content-center align-items-center my-1">
+                    <div class="col-5">Kabupaten:</div>
+                    <div class="col-7" id="profile_kabupaten"></div>
+                </div>
+                
+                <div class="d-flex justify-content-center align-items-center my-2">
+                    <input type="button" class="btn btn-primary"  onclick="simpan_profile()" value="Simpan">
+                </div>
+            </div>
+          </div>
+        </div>
+    </div>
 
     <div class="modal" tabindex="-1" id="modalUserRegister">
         <div class="modal-dialog">
@@ -87,27 +130,29 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header bg-success">
-              <h5 class="modal-title text-white fw-bold"><i class='fa fa-cart-arrow-down'></i> Keranjang Belanjamu - <span style="font-size:15px;font-weight:bold" id="checkout_jumlah"></span> item</h5>
-              <button type="button" class="btn-close bg-white border border-success text-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title text-white fw-bold"><i class='fa fa-cart-arrow-down'></i> Keranjang Belanjamu - <span style="font-size:15px;font-weight:bold" id="checkout_jumlah"></span> item</h5>
+                <button type="button" class="btn-close bg-white border border-success text-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="border border-secondary rounded p-3"> 
-                        <div style="height: 200px" class="overflow-auto " >
-                            <div id="checkout_list"></div>
-                        </div>
+                <div class="border border-secondary rounded p-3">
+                    <div style="height: 200px" class="overflow-auto " >
+                        <div id="checkout_list"></div>
+                    </div>
                 </div>
                 <div id='bayar_detail' class='d-none' >
-                    <div style="font-size:16px">Kamu Hanya Bayar: <span class='text-danger fw-bold' style="font-size:16px" id="bayar_total_pembayaran"></span></div>
-                    <div style="font-size:15px">Total Belanjamu: <span class=' fw-bold'  style="font-size:15px" id="bayar_total_belanja"></span> (<span id="bayar_jumlah_barang" style='font-size:15px; font-weight:bold'></span> item)</div>    
-                    <div style="font-size:15px"><strong>Wow!</strong> Kamu Hemat: <span  class='text-success fw-bold' id="bayar_total_hemat"  style="font-size:15px"></span></div>
+                    <div  style="font-size:15px">Total Belanjamu: <span class=' fw-bold'  style="font-size:15px" id="bayar_total_belanja"></span> (<span id="bayar_jumlah_barang" style='font-size:15px; font-weight:bold'></span> barang)</div>
+                    <div class="d-flex justify-content-between" style="font-size:16px"><div>Kamu Hanya Bayar: <span class='text-danger fw-bold' style="font-size:16px" id="bayar_total_pembayaran"></span></div><div>Hemat: <span  class='text-success fw-bold' id="bayar_total_hemat"  style="font-size:15px"></span></div></div>
                     <div class="d-flex justify-content-between w-100 p-1 rounded border border-info">
                         <div  style="font-size:13px;font-weight:bold" class="py-2 col-5" >Voucher Gratis Ongkirmu: </div>
                         <div class="col-7" style="font-size:15px" id='voucher_gratis_ongkirmu'></div>
                     </div>
-                    <div class="d-flex justify-content-between w-100 p-1 my-1 rounded border border-warning">
-                        <div style="font-size:15px;font-weight:bold" class="py-2  col-5" >Alamat Kirim: </div>
-                        <div class="col-7" style="font-size:15px" id='alamat_kirim'></div>
+                    <div class=" w-100 p-1 my-1 rounded border border-warning">
+                        <div style="font-size:12px"><strong>Alamat:</strong></div>
+                        <div style="font-size:12px" id="beli_alamat_global">
+                    
+                        </div>  
                     </div>
+                    <div>Ongkir JNE: <span id="ongkir_belanja" style="font-size:15px;font-weight:bold">Rp.30.000,00</span></div>
                 </div>
                 <div id="bayar_detail_kosong" class="d-none">
                     <div style="font-size:16px">Barang dikeranjang belum kamu pilih...</div>
@@ -121,7 +166,7 @@
         </div>
       </div>
 
-    <div class="modal" tabindex="-1" id="modalDetailItem">
+      <div class="modal" tabindex="-1" id="modalDetailItem">
         <div class="modal-dialog">
           <div class="modal-content overflow-auto">
             <div class="modal-header bg-danger ">
@@ -595,6 +640,9 @@
 
         let status_beli=1;
 
+        let kabupaten_id_untuk_beli=0;
+        let total_berat_untuk_beli=0;
+
         function set_kategori_page(kategori) {
             window.location.href = "/?cat=" + kategori;
         }
@@ -621,7 +669,8 @@
             initWishList();
             update_notif_bayar();
             jumlah_notif_voucher_ongkir();
-            $.cookie('nama','suryo');
+            //$.cookie('nama','suryo');
+            get_profile() 
             //alert($.cookie('nama'));
         });
 

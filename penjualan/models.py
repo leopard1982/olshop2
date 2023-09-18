@@ -40,7 +40,7 @@ class Klaim_Voucher_Ongkir(models.Model):
     voucher_min_belanja = models.PositiveBigIntegerField(default=0)
     voucher_terpakai = models.PositiveIntegerField(default=0)
     voucher_valid = models.DateField(auto_now_add=False)
-    voucher_klaim = models.DateTimeField(auto_now_add=True)
+    voucher_klaim = models.DateTimeField(auto_now_add=True,null=True,blank=True)
     voucher_nilai = models.PositiveIntegerField(default=0)
     voucher_nama = models.CharField(max_length=200)
 
@@ -68,3 +68,15 @@ class Buying_Detail(models.Model):
     buying_warna = models.CharField(max_length=200, blank=False, null=False)
     buying_visor = models.CharField(max_length=200,blank=False,null=False)
     buying_pesan = models.CharField(max_length=200,blank=False,null=False)
+
+class User_Profile(models.Model):
+    User = models.ForeignKey(User, blank=False,null=False, on_delete=models.RESTRICT)
+    User_Nama = models.CharField(max_length=200, blank=False, null=False)
+    User_Alamat = models.CharField(max_length=200, blank=False, null=False)
+    User_Telpon = models.CharField(max_length=200, blank=False,null=False)
+    User_Provinsi = models.CharField(max_length=200, blank=False,null=False)
+    User_Provinsi_id = models.CharField(max_length=10,blank=False,null=False)
+    User_Kabupaten = models.CharField(max_length=200,blank=False,null=False)
+    User_Kabupaten_id = models.CharField(max_length=10,blank=False,null=False)
+    User_Kabupaten_tipe = models.CharField(max_length=200,blank=False,null=False)
+    User_Kode_Pos = models.CharField(max_length=10,blank=False,null=False)
