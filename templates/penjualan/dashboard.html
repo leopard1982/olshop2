@@ -769,7 +769,7 @@
                             "<div style='font-size:12px'>Variasi Visor: <strong>"+variasi_visor.toUpperCase()+"</strong></div>" +
                             tambahan +"</div></div>"+
                             "<div class='d-flex justify-content-between'  style='margin-top:-20px; margin-bottom:20px'><div class='px-2'><button id='delcart_"+mydata.id+"' class='btn btn-secondary'  style='font-size:15px'><i class='fa fa-window-close'></i> Hapus Keranjang</button></div>"+
-                            "<div class='px-2'><button class='btn btn-primary' id='detailcart_"+mydata.id+"' style='font-size:15px'><i class='fa fa-tags'></i> Detail Barang</button></div>"+
+                            "<div class='px-2'><button class='btn btn-danger' id='detailcart_"+mydata.id+"' style='font-size:15px'><i class='fa fa-tags'></i> Detail Barang</button></div>"+
                             "<div class='px-2'><button id='btn_beli_"+mydata.id+"' class='btn btn-success' style='font-size:15px'><i class='fa fa-money'></i> Beli Sekarang</button></div></div>"+
                             " </div>";
                     $("#detail_cart").append(template);
@@ -847,7 +847,7 @@
                     let nama_barang = datanya.kode_barang.barang_nama;
                     let gambar_barang = datanya.kode_barang.barang_foto1;
                     let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' >"+
-                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
+                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish_"+datanya.kode_barang.barang_sku+"' class='btn btn-danger' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
                         "</div>";
                     $("#wishlist_menu").append(template);
                     $("#mywish_" + datanya.kode_barang.barang_sku).click(function() {
@@ -901,7 +901,7 @@
                     let nama_barang = datanya.kode_barang.barang_nama;
                     let gambar_barang = datanya.kode_barang.barang_foto1;
                     let template = "<div class='d-flex justify-content-between wishlist-box-isi align-items-center' >"+
-                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish2_"+datanya.kode_barang.barang_sku+"' class='btn btn-primary' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
+                        "<img src='"+ gambar_barang+"' style='weight:80px;height:80px;border-radius:10px'><div class='w-100'><div class='col-12' style='font-weight:bold;margin-left:10px;text-align:left'>" + datanya.kode_barang.barang_nama+"</div><div class='col-12 mx-2'><button id='mywish2_"+datanya.kode_barang.barang_sku+"' class='btn btn-danger' style='font-size:12px;'><i class='fa fa-tags'></i> Detail Produk</button></div>" +
                         "</div>";
                     $("#wishlist_menu").append(template);
                     $("#mywish2_" + datanya.kode_barang.barang_sku).click(function() {
@@ -946,6 +946,7 @@
         let total_beli=0;
         let total_diskon=0;
         let template_hidden_total="";
+        let total_berat=0;
 
         $.ajax({
             type: "POST",
@@ -978,6 +979,8 @@
                         total_diskon = 0;
                     }
 
+                    total_berat_untuk_beli = mydata.shopping_barang.barang_berat*mydata.shopping_jumlah;
+
                     if(visor=="") {
                         visor="random available";
                     
@@ -1002,7 +1005,7 @@
                             "</div>" +
                         "</div>";
                     $("#checkout_list").append(template);     
-                    template_hidden_total="<input type='hidden' id='pembayaran_item_"+mydata.id+"'' total_belanja='"+total_belanja+"' total_beli='"+total_beli+"' total_diskon='"+total_diskon+"'>";
+                    template_hidden_total="<input type='hidden' id='pembayaran_item_"+mydata.id+"'' total_belanja='"+total_belanja+"' total_beli='"+total_beli+"' total_diskon='"+total_diskon+"' total_berat='" + total_berat+"'>";
                     $("#checkout_list").append(template_hidden_total);
 
                     if(mydata.id==$("#id_cart").val()) {
@@ -1012,6 +1015,7 @@
                     }           
                 })
                 isi_voucher_ongkir();
+                hitungCostKirim();
                 $("#modalCheckout").modal("show");
             }
         });
@@ -1025,6 +1029,8 @@
         let total_diskon=0;
         let id_cart = 0;
         let jml_item = 0;
+        let total_berat_untuk_beli=0;
+       
         $("input[type=checkbox]").each(function() {
             if($(this).is(":checked")) {
                 jml_item += 1;
@@ -1035,7 +1041,7 @@
                 total_belanja = parseInt($("#pembayaran_item_" + id_cart).attr("total_belanja"))+total_belanja;
                 total_beli = parseInt($("#pembayaran_item_" + id_cart).attr("total_beli"))+total_beli;
                 total_diskon = parseInt($("#pembayaran_item_" + id_cart).attr("total_diskon"))+total_diskon;
-
+                total_berat_untuk_beli = parseInt($("#pembayaran_item_" + id_cart).attr("total_berat"))+total_berat_untuk_beli;
                 $("#bayar_total_belanja").text(ubahKeUang(total_beli));
                 $("#bayar_total_pembayaran").text(ubahKeUang(total_belanja));
                 $("#bayar_total_hemat").text(ubahKeUang(total_diskon));
@@ -1054,7 +1060,13 @@
                 $("#bayar_detail_button").addClass("disabled");
             }
         });
-
+        $("#berat_total_barang").val(total_berat_untuk_beli);
+        if(jml_item==0) {
+            $("#bayar_detail_button").attr("disabled", "disabled");
+        } else {
+            hitungCostKirim();
+            $("#bayar_detail_button").removeAttr("disabled");
+        }
     }
 
     function proses_bayar() {
@@ -1281,6 +1293,7 @@
                 },
                 success: function(data){
                     if(data.result==true) {
+                        notifikasinya("Silakan Cek Email kamu " + email + " di Inbox atau di Spam/Junk Mail");
                         $("#konfirmasi2_register").addClass("visible");
                         $("#konfirmasi2_register").removeClass("invisible");
                     }
@@ -1480,8 +1493,167 @@
     }
 
     function profilku_form() {
+        getProvince();
+        
+    }
+
+    function getProvince() {
+        $("#profile_provinsi").empty();
+        $("#profile_kabupaten").empty();
+
+        let template="<select class='form-select' id='profile_pilih_propinsi'><option value=''>--------</option>";
+        let template2="<select class='form-select' id='profile_pilih_kabupaten'><option value=''>--------</option></select>";
+      
+        $.ajax({
+            type: "POST",
+            url: "/api/get/province/",
+            data: {
+                "csrfmiddlewaretoken":$("input[name=csrfmiddlewaretoken]").val(),
+            },
+            success: function (data) {
+                data.result.forEach(function(mydata){
+                    template = template + "<option value='" + mydata.province_id + "'>" + mydata.province +"</option>";
+                    
+                });
+                template = template + "</select>";
+
+                $("#profile_provinsi").append(template);
+                $("#profile_pilih_propinsi").change(function() {
+                    getKabupaten("no");
+                });
+                $("#profile_kabupaten").append(template2);
+
+                get_profile();
+                
+                $("#modalProfile").modal("show");
+            },
+            error: function() {
+                //alert("error");
+            }
+        });
+    }
+
+    function getKabupaten(indeks) {
+        if($("#profile_pilih_propinsi").val()!="") {
+            $("#profile_kabupaten").empty();
+            let template2="<select class='form-select' id='profile_pilih_kabupaten'><option value=''>--------</option>";
+            
+            $.ajax({
+                type: "POST",
+                url: "/api/get/kabupaten/",
+                data: {
+                    "csrfmiddlewaretoken":$("input[name=csrfmiddlewaretoken]").val(),
+                    "id":$("#profile_pilih_propinsi").val(),
+                },
+                success: function (data) {
+                    data.result.forEach(function(mydata){
+                        template2 = template2 + "<option value='" + mydata.city_id + "^" + mydata.type + "^" +mydata.city_name +"^"+mydata.postal_code+"^"+mydata.province_id+"^"+mydata.province+ "'>" + mydata.type + " " +mydata.city_name + " - " + mydata.postal_code+"</option>";
+                        
+                    });
+                    template2 = template2 + "</select>";
+
+                    $("#profile_kabupaten").append(template2);
+                    if(indeks!="no") {
+                        $("#profile_kabupaten option[value='"+indeks+"']").prop("selected",true)
+                    }
+                },
+                error: function() {
+                    //alert("error");
+                }
+            });
+        }
 
     }
+
+    function simpan_profile() {
+        nama = $("#profile_namalengkap").val().trim();
+        alamat = $("#profile_alamat").val().trim();
+        wa = $("#profile_whatsapp").val().trim();
+    
+        let kode_kota = $("#profile_pilih_kabupaten").val().split("^")[0];
+        let tipe_kota = $("#profile_pilih_kabupaten").val().split("^")[1];
+        let nama_kota = $("#profile_pilih_kabupaten").val().split("^")[2];
+        let kode_pos = $("#profile_pilih_kabupaten").val().split("^")[3];
+        let kode_provinsi = $("#profile_pilih_kabupaten").val().split("^")[4];
+        let nama_provinsi = $("#profile_pilih_kabupaten").val().split("^")[5];
+
+        $.ajax({
+            type: "POST",
+            url: "/api/set/profile/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kode_kabupaten':kode_kota,
+                'nama_kabupaten':nama_kota,
+                'tipe_kabupaten':tipe_kota,
+                'kode_pos':kode_pos,
+                'kode_provinsi': kode_provinsi,
+                'nama_provinsi': nama_provinsi,
+                'nama':nama,
+                'alamat':alamat,
+                'telpon':wa
+            },
+            success: function(data) {
+                if(data.result==true) {
+                    notifikasinya("OK! Profilemu sudah diupdate!");
+                } else {
+                    notifikasinya("Maaf, Profilemu gagal diupdate!");
+                }
+            }
+        });
+    }
+    function get_profile() {
+        $.ajax({
+            type: "POST",
+            url: "/api/get/profile/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya
+            }, 
+            success: function(data) {
+                if (data.result==true) {
+                    console.log(data);
+                    $("#profile_namalengkap").val(data.data[0].User_Nama);
+                    $("#profile_whatsapp").val(data.data[0].User_Telpon);
+                    $("#profile_alamat").val(data.data[0].User_Alamat);
+                    $("#profile_pilih_propinsi option[value='"+data.data[0].User_Provinsi_id+"']").prop("selected",true);
+                    let datafilter = data.data[0].User_Kabupaten_id + "^" + data.data[0].User_Kabupaten_tipe + "^" +data.data[0].User_Kabupaten +"^"+data.data[0].User_Kode_Pos+"^"+data.data[0].User_Provinsi_id+"^"+data.data[0].User_Provinsi; 
+                    getKabupaten(datafilter);
+                    
+                    if(data.data[0].User_Alamat!="") {
+                        alamatnya=data.data[0].User_Alamat + ", " +data.data[0].User_Kabupaten_tipe +  " :  " + data.data[0].User_Kabupaten + ", Propinsi: " + data.data[0].User_Provinsi + ", Kode Pos : " + data.data[0].User_Kode_Pos;
+                    } else {
+                        alamatnya="-";
+                    }
+                    $("#beli_alamat_global").text(alamatnya);
+                    kabupaten_id_untuk_beli=data.data[0].User_Kabupaten_id;
+
+                } else {
+
+                }
+            }
+        });
+    }
+
+    function hitungCostKirim() {
+        $.ajax({
+            type: "POST",
+            url: "/api/get/ongkir/",
+            data: {
+                'csrfmiddlewaretoken':csrfmiddlewaretokennya,
+                'kota_tujuan': kabupaten_id_untuk_beli,
+                'berat':total_berat_untuk_beli
+            },
+            success: function(data) {
+                console.log(data);
+                if(data.result!=false) {
+                    $("#ongkir_belanja").text(ubahKeUang(data.result));
+                } else {
+                    $("#bayar_detail_button").attr("disabled","disabled");
+                }
+
+            }
+        });
+    }
+    
 </script>
 
 {% endblock%}

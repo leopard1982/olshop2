@@ -2,6 +2,19 @@ from rest_framework import serializers
 from penjualan.models import ShoppingCart, WishList_Item, Buying_Detail, Buying_Header, Voucher_Ongkir
 from penjualan.models import Klaim_Voucher_Ongkir
 from administrasi.models import masterBarang, alamatRumah
+from django.contrib.auth.models import User
+from penjualan.models import User_Profile
+
+class serialUser(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = "__all__"
+
+class serialUserProfile(serializers.ModelSerializer):
+    User = serialUser()
+    class Meta:
+        model = User_Profile
+        fields = "__all__"
 
 class serialMasterBarang(serializers.ModelSerializer):
     class Meta:

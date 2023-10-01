@@ -137,5 +137,5 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticroot')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = "sgbackend.SendGridBackend"
-SENDGRID_API_KEY = "SG.fpfw0gUeRtmzHvg_llHBzg.6vBlOt9JZUwCKmzSllt9vir86xzDXuXwvuCxO5X0DH4"
+SENDGRID_API_KEY = "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"
 

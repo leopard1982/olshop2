@@ -6,7 +6,7 @@ from penjualan.views import addCart, get_cart, addJumlahCart, subJumlahCart, set
 from penjualan.views import getWishlist, hapusCart, proses_bayar, update_notif_bayar, get_cart_id
 from penjualan.views import get_voucher_ongkir, klaim_voucher_ongkir, get_klaim_voucher_ongkir
 from penjualan.views import get_alamat_rumah,createKode,getKode,createUser, loginUser, logoutUser
-from penjualan.views import gantiPassword
+from penjualan.views import gantiPassword,getProvince,getKabupaten,saveProfile,getProfile,cekBiayaOngkir
 
 urlpatterns = [
     path('',dashboard,name="dashboard"),
@@ -42,4 +42,9 @@ urlpatterns = [
     path('api/user/login/',loginUser,name="loginUser"),
     path('api/user/logout/',logoutUser,name="logoutUser"),
     path('api/user/ganti/password/',gantiPassword,name="gantiPassword"),
+    path('api/get/province/',getProvince,name="getProvince"),
+    path('api/get/kabupaten/',getKabupaten,name="getKabupaten"),
+    path('api/set/profile/',saveProfile,name="saveProfile"),
+    path('api/get/profile/',getProfile,name="getProfile"),
+    path('api/get/ongkir/',cekBiayaOngkir,name="cekBiayaOngkir"),
 ]
